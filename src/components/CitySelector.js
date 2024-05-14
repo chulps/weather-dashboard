@@ -20,3 +20,5 @@ function CitySelector({ onCityChange }) {
     </form>
   );
 }
+
+export default CitySelector;
