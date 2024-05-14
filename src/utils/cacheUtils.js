@@ -10,6 +10,7 @@ export const saveToCache = (data) => {
     timestamp: new Date().getTime() // Current time in milliseconds
   };
   localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(cacheEntry));
+  console.log('Data saved to cache:', cacheEntry);
 };
 
 // Retrieve data from local storage

@@ -36,7 +36,10 @@ export const useWeatherApi = (city) => {
         saveToCache(mergedWeather);
       } catch (error) {
         console.error("Error fetching weather data:", error);
-        setError("Failed to fetch weather data.");
+        setError("Failed to fetch weather data, using cached data if available.");
+        if (cachedData) {  // Use cached data as a fallback if it's available
+          setWeather(cachedData);
+        }
       } finally {
         setLoading(false);
       }
