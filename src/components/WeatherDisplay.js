@@ -1,39 +1,82 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import '../css/WeatherDisplay.css';
-
-const API_KEY = process.env.REACT_APP_OPEN_WEATHER_API;
+import React, { useEffect, useState } from "react";
+import { useWeatherApi } from "../hooks/useWeatherApi";
+import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
+import "../css/weather-display.css";
 
 function WeatherDisplay({ city }) {
-  const [weather, setWeather] = useState(null);
+  const { weather, loading, error } = useWeatherApi(city);
+  const [advice, setAdvice] = useState("");
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);;
-        setWeather(response.data);
-      } catch (error) {
-        console.error("Failed to fetch weather", error);
-      }
-    };
+    if (weather) {
+      getWeatherAdviceFromGPT(weather)
+        .then((advice) => {
+          console.log("AI-generated advice:", advice);
+          setAdvice(advice);
+        })
+        .catch((error) => {
+          console.error("Error fetching advice from OpenAI:", error);
+          setAdvice("Error fetching advice.");
+        });
+    }
+  }, [weather]);
 
-    fetchWeather();
-  }, [city]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div className="weather-display">
       {weather ? (
-        <div>
-          <h1>{weather.name}</h1>
-          <p>Temperature: {weather.main.temp}°C</p>
-          <p>Humidity: {weather.main.humidity}%</p>
-          <p>Wind Speed: {weather.wind.speed} km/h</p>
+        <div className="weather-content">
+          <div className="weather-top">
+            <h1>{Math.round(weather.temperature)}°C</h1>
+            <img
+              src={weather.icon}
+              alt={weather.condition || "Weather icon"}
+              style={{ width: "var(--space-4)", height: "var(--space-4)" }}
+            />
+            <h3>
+              <i>
+                {weather.city}, {weather.country}
+              </i>
+            </h3>
+          </div>
+          <div className="weather-data">
+            <div>
+              <label>Condition:</label>{" "}
+              <data>
+                {weather.condition.charAt(0).toUpperCase() +
+                  weather.condition.slice(1).toLowerCase()}
+              </data>
+            </div>
+
+            <div>
+              <label>Humidity:</label>{" "}
+              <data>{Math.round(weather.humidity)}%</data>
+            </div>
+
+            <div>
+              <label>Wind Speed:</label>{" "}
+              <data>{Math.round(weather.windSpeed)} km/h</data>
+            </div>
+          </div>
+          <div>
+            <label>Advice:</label> {advice || "Fetching advice..."}
+          </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <div>
+          <label>About the weather...</label>
+          <h3>
+            <i>
+              "Sunshine is delicious, rain is refreshing, wind braces us up,
+              snow is exhilarating; there is really no such thing as bad
+              weather, only different kinds of good weather."
+            </i>
+          </h3>
+          <p>- John Ruskin</p>
+        </div>
       )}
-      <div>
-</div>
     </div>
   );
 }

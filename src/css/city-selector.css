@@ -1,0 +1,30 @@
+.city-selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+.button-wrapper {
+    display: flex;
+    justify-content: end;
+}
+
+.button-wrapper button {
+    width: 100%;
+}
+
+.site-header {
+    font-size: var(--font-size-h2);
+}
+
+@media screen and (min-width: 576px) {
+   .button-wrapper button {
+        width: auto;
+    }
+
+    .site-header {
+        font-size: var(--font-size-h1);
+    }
+}
+
