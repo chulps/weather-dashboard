@@ -7,7 +7,7 @@ function App() {
   const [city, setCity] = useState('');
 
   return (
-    <div className="App">
+    <div className="App auto-grid-large" style={{placeItems: "center"}}>
       <CitySelector setCity={setCity} />
       <WeatherDisplay city={city} />
     </div>

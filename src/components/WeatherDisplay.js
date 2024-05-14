@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useWeatherApi } from '../hooks/useWeatherApi';
-import { getWeatherAdviceFromGPT } from '../utils/openAiUtils';
+import React, { useEffect, useState } from "react";
+import { useWeatherApi } from "../hooks/useWeatherApi";
+import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
+import "../css/weather-display.css";
 
 function WeatherDisplay({ city }) {
   const { weather, loading, error } = useWeatherApi(city);
@@ -8,16 +9,17 @@ function WeatherDisplay({ city }) {
 
   useEffect(() => {
     if (weather) {
-        getWeatherAdviceFromGPT(weather).then(advice => {
-            console.log("AI-generated advice:", advice);
-            setAdvice(advice);
-        }).catch(error => {
-            console.error("Error fetching advice from OpenAI:", error);
-            setAdvice("Error fetching advice.");
+      getWeatherAdviceFromGPT(weather)
+        .then((advice) => {
+          console.log("AI-generated advice:", advice);
+          setAdvice(advice);
+        })
+        .catch((error) => {
+          console.error("Error fetching advice from OpenAI:", error);
+          setAdvice("Error fetching advice.");
         });
     }
-}, [weather]);
-
+  }, [weather]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -25,17 +27,55 @@ function WeatherDisplay({ city }) {
   return (
     <div className="weather-display">
       {weather ? (
-        <div>
-          <h1>{weather.city}, {weather.country}</h1>
-          <img src={weather.icon} alt={weather.condition || "Weather icon"} style={{ width: 50, height: 50 }} />
-          <p>Condition: {weather.condition}</p>
-          <p>Temperature: {Math.round(weather.temperature)}°C</p>
-          <p>Humidity: {Math.round(weather.humidity)}%</p>
-          <p>Wind Speed: {Math.round(weather.windSpeed)} km/h</p>
-          <p>Advice: {advice || "Fetching advice..."}</p>
+        <div className="weather-content">
+          <div>
+            <h1>{Math.round(weather.temperature)}°C</h1>
+            <img
+              src={weather.icon}
+              alt={weather.condition || "Weather icon"}
+              style={{ width: "var(--space-4)", height: "var(--space-4)" }}
+            />
+            <h3>
+              <i>
+                {weather.city}, {weather.country}
+              </i>
+            </h3>
+          </div>
+          <div className="weather-data">
+            <div>
+              <label>Condition:</label>{" "}
+              <data>
+                {weather.condition.charAt(0).toUpperCase() +
+                  weather.condition.slice(1).toLowerCase()}
+              </data>
+            </div>
+
+            <div>
+              <label>Humidity:</label>{" "}
+              <data>{Math.round(weather.humidity)}%</data>
+            </div>
+
+            <div>
+              <label>Wind Speed:</label>{" "}
+              <data>{Math.round(weather.windSpeed)} km/h</data>
+            </div>
+          </div>
+          <div>
+            <label>Advice:</label> {advice || "Fetching advice..."}
+          </div>
         </div>
       ) : (
-        <p>No weather data available.</p>
+        <div>
+          <label>About the weather...</label>
+          <h3>
+            <i>
+              "Sunshine is delicious, rain is refreshing, wind braces us up,
+              snow is exhilarating; there is really no such thing as bad
+              weather, only different kinds of good weather."
+            </i>
+          </h3>
+          <p>- John Ruskin</p>
+        </div>
       )}
     </div>
   );

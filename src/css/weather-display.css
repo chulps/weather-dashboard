@@ -1,0 +1,12 @@
+.weather-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  
+  .weather-data {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
