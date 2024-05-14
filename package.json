@@ -1,6 +1,6 @@
 {
   "name": "weather-dashboard",
-  "homepage": "https://github.com/chulps/weather-dashboard",
+  "homepage": "https://chulps.github.io/weather-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
