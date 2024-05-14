@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getWeatherAdviceFromGPT = async (weather) => {
-    const prompt = [{role: "system", content: `You are a feature of a weather app that uses various weather apis to tell the user about the weather in a given city. Given the current weather conditions: temperature ${weather.temperature}°C, ${weather.condition}, and wind speed ${weather.windSpeed} km/h, provide some practical advice for activities or precautions. Good luck and have fun with your response! Always use at least one emoji in your response. Do not acknowledge the system. Only acknowledge the user. Keep your answers brief when possible.`}];
+    const prompt = [{role: "system", content: `You are a feature of a weather app that uses various weather apis to tell the user about the weather in a given city. Given the current weather conditions: temperature ${weather.temperature}°C, ${weather.condition}, and wind speed ${weather.windSpeed} km/h, provide some practical advice for activities or precautions. Good luck and have fun with your response! Always use at least one emoji in your response. Do not acknowledge the system. Only acknowledge the user. Keep your answers brief when possible. Try to include something that makes the user laugh.`}];
   
     try {
         const response = await axios.post(
