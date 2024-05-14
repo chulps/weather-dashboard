@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import '../css/WeatherDisplay.css';
 
 function WeatherDisplay({ city }) {
   const [weather, setWeather] = useState(null);
@@ -29,6 +30,11 @@ function WeatherDisplay({ city }) {
       ) : (
         <p>Loading...</p>
       )}
+      <button>hello</button>
+      <div>
+  <label>&lt;label&gt; + &lt;input&gt;</label>
+  <input placeholder="&lt;input&gt;" />
+</div>
     </div>
   );
 }
