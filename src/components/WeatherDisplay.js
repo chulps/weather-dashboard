@@ -2,13 +2,15 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import '../css/WeatherDisplay.css';
 
+const API_KEY = process.env.REACT_APP_OPEN_WEATHER_API;
+
 function WeatherDisplay({ city }) {
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_API_KEY`);
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);;
         setWeather(response.data);
       } catch (error) {
         console.error("Failed to fetch weather", error);
@@ -30,10 +32,7 @@ function WeatherDisplay({ city }) {
       ) : (
         <p>Loading...</p>
       )}
-      <button>hello</button>
       <div>
-  <label>&lt;label&gt; + &lt;input&gt;</label>
-  <input placeholder="&lt;input&gt;" />
 </div>
     </div>
   );
