@@ -28,7 +28,7 @@ function WeatherDisplay({ city }) {
     <div className="weather-display">
       {weather ? (
         <div className="weather-content">
-          <div>
+          <div className="weather-top">
             <h1>{Math.round(weather.temperature)}°C</h1>
             <img
               src={weather.icon}

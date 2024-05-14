@@ -7,7 +7,7 @@ function CitySelector({ setCity }) {
       event.preventDefault();
       setCity(event.target.elements.city.value);
     }}>
-      <h1>Daily weather app.</h1>
+      <h1 className="site-header">Daily weather app.</h1>
       <input type="text" name="city" placeholder="Enter city" />
       <div className="button-wrapper"><button type="submit">Get Weather</button></div>
     </form>
