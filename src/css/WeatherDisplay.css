@@ -1,0 +1,62 @@
+/* Base styles - apply to mobile and up */
+.weather-display {
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.weather-display h1 {
+    font-size: 20px; /* Smaller text for mobile */
+    color: #333;
+}
+
+.weather-display p {
+    color: #666;
+}
+
+/* Common layout styles for App */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Base styles applied from the smallest breakpoint (mobile-first approach) */
+
+@media (min-width: 576px) {
+    /* Adjustments for small devices */
+    body {
+      padding: var(--space-1);  /* More padding on larger screens */
+    }
+    .weather-display {
+      padding: var(--space-2); /* Increase padding */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    /* Adjustments for medium devices (tablets) */
+    .weather-display {
+      padding: var(--space-3); /* Even more padding */
+      width: 80%; /* Adjust width for larger display */
+    }
+  }
+  
+  @media (min-width: 992px) {
+    /* Adjustments for large devices (desktops) */
+    .weather-display {
+      width: 75%; /* Optimal width for readability */
+    }
+  }
+  
+  @media (min-width: 1366px) {
+    /* Adjustments for extra large devices */
+    .weather-display {
+      width: 70%; /* Maximum width to maintain design integrity */
+    }
+  }
+  
