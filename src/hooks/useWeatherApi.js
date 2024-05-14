@@ -1,65 +1,48 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { defaultWeather } from '../utils/defaultWeather';
+import { transformOpenWeatherMap, transformWeatherAPI, mergeWeatherData } from '../utils/weatherDataUtils';
 
-const openWeatherMapAPI = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
-const weatherAPIKey = process.env.REACT_APP_WEATHER_API_KEY;
-
-const useWeatherApi = (city) => {
-  const [weather, setWeather] = useState(null);
+export const useWeatherApi = (city) => {
+  const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!city) return;
-
-    const fetchOpenWeatherMap = async () => {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${openWeatherMapAPI}&units=metric`;
-      console.log("Fetching OpenWeatherMap:", url);
-      try {
-        const response = await axios.get(url);
-        console.log("OpenWeatherMap response:", response.data);
-        return response.data;
-      } catch (error) {
-        console.error("Failed to fetch from OpenWeatherMap", error);
-        return null;
-      }
-    };
-
-    const fetchWeatherAPI = async () => {
-      const url = `https://api.weatherapi.com/v1/current.json?key=${weatherAPIKey}&q=${city}&aqi=no`;
-      console.log("Fetching WeatherAPI:", url);
-      try {
-        const response = await axios.get(url);
-        console.log("WeatherAPI response:", response.data);
-        return response.data;
-      } catch (error) {
-        console.error("Failed to fetch from WeatherAPI", error);
-        return null;
-      }
-    };
-
     const fetchWeather = async () => {
       setLoading(true);
-      setError(null);
+      try {
+        const [owmResponse, waResponse] = await Promise.all([
+          axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}&units=metric`),
+          axios.get(`https://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=${city}`)
+        ]);
 
-      const results = await Promise.allSettled([fetchOpenWeatherMap(), fetchWeatherAPI()]);
-      console.log("API call results:", results);
+        console.log('OpenWeatherMap Response:', owmResponse.data);
+        console.log('WeatherAPI Response:', waResponse.data);
 
-      const successfulResults = results.filter(result => result.status === 'fulfilled' && result.value);
-      if (successfulResults.length > 0) {
-        // Example: use the first successful response
-        setWeather(successfulResults[0].value);
-      } else {
-        setError('Failed to fetch weather data from any source.');
+        const weatherDataOwm = transformOpenWeatherMap(owmResponse.data);
+        const weatherDataWa = transformWeatherAPI(waResponse.data);
+
+        console.log('Transformed OpenWeatherMap Data:', weatherDataOwm);
+        console.log('Transformed WeatherAPI Data:', weatherDataWa);
+
+        const mergedWeather = mergeWeatherData(weatherDataOwm, weatherDataWa);
+
+        console.log('Merged Weather Data:', mergedWeather);
+
+        setWeather(mergedWeather);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        setError("Failed to fetch weather data.");
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
-    fetchWeather();
+    if (city) {
+      fetchWeather();
+    }
   }, [city]);
 
   return { weather, loading, error };
 };
-
-export default useWeatherApi;

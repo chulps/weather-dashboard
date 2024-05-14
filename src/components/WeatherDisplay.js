@@ -1,5 +1,5 @@
 import React from 'react';
-import useWeatherApi from '../hooks/useWeatherApi'; // Adjust the path as necessary
+import { useWeatherApi } from '../hooks/useWeatherApi';
 import '../css/WeatherDisplay.css';
 
 function WeatherDisplay({ city }) {
@@ -12,10 +12,10 @@ function WeatherDisplay({ city }) {
     <div className="weather-display">
       {weather ? (
         <div>
-          <h1>{weather.location ? weather.location.name : weather.name}</h1>
-          <p>Temperature: {weather.current ? weather.current.temp_c : weather.main.temp}°C</p>
-          <p>Humidity: {weather.current ? weather.current.humidity : weather.main.humidity}%</p>
-          <p>Wind Speed: {weather.current ? weather.current.wind_kph : weather.wind.speed} km/h</p>
+          <h1>{weather.city}</h1>
+          <p>Temperature: {weather.temperature}°C</p>
+          <p>Humidity: {weather.humidity}%</p>
+          <p>Wind Speed: {weather.windSpeed} km/h</p>
         </div>
       ) : (
         <p>No weather data available.</p>
