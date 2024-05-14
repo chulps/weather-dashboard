@@ -1,14 +1,8 @@
 /* Base styles - apply to mobile and up */
 .weather-display {
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.weather-display h1 {
-    font-size: 20px; /* Smaller text for mobile */
-    color: #333;
+    padding: var(--space-2);
+    border-radius: var(--space-1);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .weather-display p {

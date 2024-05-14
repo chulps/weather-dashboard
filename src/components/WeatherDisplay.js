@@ -1,39 +1,25 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import React from 'react';
+import useWeatherApi from '../hooks/useWeatherApi'; // Adjust the path as necessary
 import '../css/WeatherDisplay.css';
 
-const API_KEY = process.env.REACT_APP_OPEN_WEATHER_API;
-
 function WeatherDisplay({ city }) {
-  const [weather, setWeather] = useState(null);
+  const { weather, loading, error } = useWeatherApi(city);
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`);;
-        setWeather(response.data);
-      } catch (error) {
-        console.error("Failed to fetch weather", error);
-      }
-    };
-
-    fetchWeather();
-  }, [city]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div className="weather-display">
       {weather ? (
         <div>
-          <h1>{weather.name}</h1>
-          <p>Temperature: {weather.main.temp}°C</p>
-          <p>Humidity: {weather.main.humidity}%</p>
-          <p>Wind Speed: {weather.wind.speed} km/h</p>
+          <h1>{weather.location ? weather.location.name : weather.name}</h1>
+          <p>Temperature: {weather.current ? weather.current.temp_c : weather.main.temp}°C</p>
+          <p>Humidity: {weather.current ? weather.current.humidity : weather.main.humidity}%</p>
+          <p>Wind Speed: {weather.current ? weather.current.wind_kph : weather.wind.speed} km/h</p>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>No weather data available.</p>
       )}
-      <div>
-</div>
     </div>
   );
 }
