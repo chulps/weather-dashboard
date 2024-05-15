@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { defaultWeather } from '../utils/defaultWeather';
 import { mergeWeatherData, transformOpenWeatherAPI, transformWeatherMap } from '../utils/weatherDataUtils';
-import getEnv from '../utils/getEnv';
+import getEnv  from '../utils/getEnv';
 
 const currentEnv = getEnv();
 
