@@ -17,6 +17,7 @@ export function transformOpenWeatherAPI(data) {
 // Transformation for WeatherAPI data
 // This function transforms the data received from the WeatherAPI into a standardized format
 export function transformWeatherMap(data) {
+  console.log(data)
   return {
     temperature: data.current.temp_c, // Extract temperature in Celsius from the 'current' object
     humidity: data.current.humidity, // Extract humidity from the 'current' object
@@ -24,6 +25,7 @@ export function transformWeatherMap(data) {
     condition: data.current.condition.text, // Extract weather condition description from the 'condition' object
     icon: `https:${data.current.condition.icon}`, // Construct the URL for the weather icon
     city: data.location.name, // Extract the city name from the 'location' object
+    region: data.location.region, // Extract the region name from the 'location' object
     country: data.location.country, // Extract the country name from the 'location' object
   };
 }
