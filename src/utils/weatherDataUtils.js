@@ -12,7 +12,7 @@ export function transformWeatherMap(data) {
     country: data.sys.country
   };
 }
-
+//
 // Transformation for WeatherAPI data
 export function transformOpenWeatherAPI(data) {
   return {
