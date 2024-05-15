@@ -1,68 +1,90 @@
-# My React App
+# Weather Dashboard
 
-This is a React application built with Create React App. Here are the instructions for other developers to use and work with this app:
+## Overview
+This Weather Dashboard provides real-time weather updates and forecasts for different locations. Utilizing data from OpenWeatherMap and WeatherAPI, it merges and displays temperature, humidity, wind speed, and general weather conditions.
 
-## Prerequisites
+## Features
+- Real-time weather updates
+- Weather forecasts including temperature, humidity, and wind details
+- Supports multiple locations globally
+- Desktop notifications for weather alerts (if implemented)
 
-- Node.js (v14 or later)
-- npm (v6 or later)
+## Technologies Used
+- React.js: For building the user interface
+- Redux: For managing application state
+- Axios: For API requests
+- Node.js and Express: Backend server (if applicable)
+- Heroku: Hosting the backend
+- GitHub Pages: Hosting the frontend
 
 ## Getting Started
 
+### Prerequisites
+- Node.js
+- npm (Node Package Manager)
+- Git
+- React
+
+### Installation
 1. Clone the repository:
+   ```bash
+   git clone https://github.com/chulps/weather-dashboard.git
 
-git clone https://github.com/your-username/my-react-app.git
+   also clone the backend in a separate repository
+   git clone https://github.com/chulps/portfolio-backend.git
 
-2. Navigate to the project directory:
-
-cd my-react-app
-
-3. Install dependencies:
-
+### Navigate to the project directory:
+bash
+cd weather-dashboard
+Install dependencies:
+bash
 npm install
-
-## Development
-
-To start the development server, run:
-
+Start the application:
+bash
 npm start
 
-This will start the app in development mode and open it in your default browser at `http://localhost:3000`. The page will automatically reload when you make changes to the code.
+### Usage
+Enter a city name in the search bar.
+View current weather and forecast data displayed on the dashboard.
 
-## Building for Production
+### API Configuration
+The application requires setup for environment variables to manage API keys securely:
 
-To create a production build, run:
+Create a .env file in the project root.
+Add the following entries:
+plaintext
 
-npm run build
+REACT_APP_OPENWEATHER_API_KEY=your_openweathermap_api_key
+https://home.openweathermap.org/users/sign_in
 
-This will create an optimized build of the app in the `build` folder. You can then deploy this `build` folder to a web server or hosting platform.
+REACT_APP_WEATHER_API_KEY=your_weatherapi_com_key
+https://www.weatherapi.com/
 
-## Testing
+In the backend repo also create a .env file in the project root.
 
-To run the tests, use:
+OPENAI_API_KEY=your_openai_api_key
+https://openai.com/api/
 
-npm test
+OPENAI_API_URL=https://api.openai.com/v1/chat/completions
 
-This will launch the test runner in interactive watch mode.
+### To deploy this application on GitHub Pages:
 
-## Linting
+Run:
+bash
+Copy code
+npm run deploy
+This builds the application and publishes it to the gh-pages branch of your repository.
+Contributing
+Contributions are welcome! Please read the contributing guide for details on our code of conduct and the process for submitting pull requests.
 
-This project uses ESLint for code linting. You can run the linter with:
+### License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-npm run lint
+### Acknowledgments
+Thanks to OpenWeatherMap and WeatherAPI and OpenAI for providing APIs.
+Inspired by the coding challenges at Rehasaku.
 
-## Contributing
+### Contact
+GitHub: @chulps
+Project Links: https://github.com/chulps/weather-dashboard, https://github.com/chulps/portfolio-backend
 
-If you want to contribute to this project, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with descriptive commit messages
-4. Push your changes to your forked repository
-5. Create a pull request against the main repository
-
-Please ensure that your code follows the project's coding style and that all tests pass before submitting a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
