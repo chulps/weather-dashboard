@@ -14,11 +14,13 @@ const fetchWeatherData = async (city, baseUrl) => {
 
     const responseOpenWeather = await axios.get(openWeatherUrl);
     const responseWeather = await axios.get(weatherUrl);
-
+    
+    console.log('openweather');
+    console.log(responseOpenWeather.data);
+    console.log('weather');
+    console.log(responseWeather.data);
     const Wdata = transformWeatherMap(responseWeather.data);
     const Odata = transformOpenWeatherAPI(responseOpenWeather.data);
-
-    console.log(Wdata)
 
 return mergeWeatherData(Odata, Wdata);
   } catch (error) {

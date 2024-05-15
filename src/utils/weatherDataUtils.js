@@ -1,7 +1,7 @@
 // src/utils/weatherDataUtils.js
 
 // Transformation for OpenWeatherMap data
-export function transformWeatherMap(data) {
+export function transformOpenWeatherAPI(data) {
   return {
     temperature: data.main.temp,
     humidity: data.main.humidity,
@@ -14,7 +14,7 @@ export function transformWeatherMap(data) {
 }
 
 // Transformation for WeatherAPI data
-export function transformOpenWeatherAPI(data) {
+export function transformWeatherMap(data) {
   return {
     temperature: data.current.temp_c,
     humidity: data.current.humidity,
@@ -28,6 +28,8 @@ export function transformOpenWeatherAPI(data) {
 
 // Merging function
 export function mergeWeatherData(dataWa, dataOwm ) {
+
+  
   if (!dataOwm && !dataWa) return null;
   if (!dataOwm) return dataWa;
   if (!dataWa) return dataOwm;
