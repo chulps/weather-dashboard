@@ -8,7 +8,7 @@ function WeatherDisplay({ city }) {
   const [advice, setAdvice] = useState("");
 
   useEffect(() => {
-    if (weather) {
+    if (weather.city) {
       getWeatherAdviceFromGPT(weather)
         .then((advice) => {
           setAdvice(advice);
@@ -20,9 +20,9 @@ function WeatherDisplay({ city }) {
     }
   }, [weather]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
+  if (loading) return <data>Loading...</data>;
+  if (error) return <data>Error: {error}</data>;
+console.log('hit')
   return (
     <div className="weather-display">
       {weather.city ? (
