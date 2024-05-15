@@ -1,23 +1,32 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { defaultWeather } from '../utils/defaultWeather';
-import { mergeWeatherData } from '../utils/weatherDataUtils';
+import { mergeWeatherData, transformOpenWeatherAPI, transformWeatherMap } from '../utils/weatherDataUtils';
+import getEnv from '../utils/getEnv';
+
+const currentEnv = getEnv();
 
 // Function to fetch weather data from your API
 const fetchWeatherData = async (city, baseUrl) => {
   try {
-    const weatherUrl = `${baseUrl}/api/weather?q=${city}`;
-    const openWeatherUrl = `${baseUrl}/api/openweather?q=${city}`;
+    const weatherUrl = `${baseUrl}/api/weather?city=${city}`;
+    const openWeatherUrl = `${baseUrl}/api/openweather?city=${city}`;
 
     const responseOpenWeather = await axios.get(openWeatherUrl);
     const responseWeather = await axios.get(weatherUrl);
 
-    return mergeWeatherData(responseOpenWeather.data, responseWeather.data);
+    const Wdata = transformWeatherMap(responseWeather.data);
+    const Odata = transformOpenWeatherAPI(responseOpenWeather.data);
+
+    console.log(Wdata)
+
+return mergeWeatherData(Odata, Wdata);
   } catch (error) {
     console.error('Error fetching weather data:', error);
     throw error;
   }
 };
+
 
 export const useWeatherApi = (city) => {
   const [weather, setWeather] = useState(defaultWeather);
@@ -25,7 +34,7 @@ export const useWeatherApi = (city) => {
   const [error, setError] = useState(null);
 
   // Determine the base URL based on the environment
-  const baseUrl = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PRODUCTION_API_URL : process.env.REACT_APP_LOCAL_API_URL;
+  const baseUrl = currentEnv === 'production' ? 'https://limitless-lake-38337.herokuapp.com/' : 'http://localhost:3001';
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -45,6 +54,5 @@ export const useWeatherApi = (city) => {
 
     fetchWeather();
   }, [city, baseUrl]);
-
   return { weather, loading, error };
 };
