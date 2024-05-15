@@ -1,54 +1,58 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { saveToCache, getFromCache } from '../utils/cacheUtils';
-import { transformOpenWeatherMap, transformWeatherAPI, mergeWeatherData } from '../utils/weatherDataUtils';
+import { defaultWeather } from '../utils/defaultWeather';
+import { mergeWeatherData, transformOpenWeatherAPI, transformWeatherMap } from '../utils/weatherDataUtils';
+import getEnv from '../utils/getEnv';
+
+const currentEnv = getEnv();
+
+// Function to fetch weather data from your API
+const fetchWeatherData = async (city, baseUrl) => {
+  try {
+    const weatherUrl = `${baseUrl}/api/weather?city=${city}`;
+    const openWeatherUrl = `${baseUrl}/api/openweather?city=${city}`;
+
+    const responseOpenWeather = await axios.get(openWeatherUrl);
+    const responseWeather = await axios.get(weatherUrl);
+
+    const Wdata = transformWeatherMap(responseWeather.data);
+    const Odata = transformOpenWeatherAPI(responseOpenWeather.data);
+
+    console.log(Wdata)
+
+return mergeWeatherData(Odata, Wdata);
+  } catch (error) {
+    console.error('Error fetching weather data:', error);
+    throw error;
+  }
+};
+
 
 export const useWeatherApi = (city) => {
-  const [weather, setWeather] = useState(null);
+  const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Determine the base URL based on the environment
+  const baseUrl = currentEnv === 'production' ? 'https://limitless-lake-38337.herokuapp.com/' : 'http://localhost:3001';
+
   useEffect(() => {
     const fetchWeather = async () => {
+      if (!city) return;
+
       setLoading(true);
-      setError(null);
-
-      // Attempt to load cached data
-      const cachedData = getFromCache();
-      if (cachedData && cachedData.city === city) {
-        setWeather(cachedData);
-        setLoading(false);
-        return;
-      }
-
       try {
-        const [owmResponse, waResponse] = await Promise.all([
-          axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}&units=metric`),
-          axios.get(`https://api.weatherapi.com/v1/current.json?q=${city}&key=${process.env.REACT_APP_WEATHER_API_KEY}`)
-        ]);
-
-        const weatherDataOwm = transformOpenWeatherMap(owmResponse.data);
-        const weatherDataWa = transformWeatherAPI(waResponse.data);
-
-        const mergedWeather = mergeWeatherData(weatherDataOwm, weatherDataWa);
-
-        setWeather(mergedWeather);
-        saveToCache(mergedWeather);
+        const weatherData = await fetchWeatherData(city, baseUrl);
+        setWeather(weatherData);
       } catch (error) {
-        console.error("Error fetching weather data:", error);
-        setError("Failed to fetch weather data, using cached data if available.");
-        if (cachedData) {  // Use cached data as a fallback if it's available
-          setWeather(cachedData);
-        }
+        console.error(error);
+        setError('Unable to fetch weather data.');
       } finally {
         setLoading(false);
       }
     };
 
-    if (city) {
-      fetchWeather();
-    }
-  }, [city]);
-
+    fetchWeather();
+  }, [city, baseUrl]);
   return { weather, loading, error };
 };

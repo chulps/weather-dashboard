@@ -11,7 +11,6 @@ function WeatherDisplay({ city }) {
     if (weather) {
       getWeatherAdviceFromGPT(weather)
         .then((advice) => {
-          console.log("AI-generated advice:", advice);
           setAdvice(advice);
         })
         .catch((error) => {
@@ -23,7 +22,6 @@ function WeatherDisplay({ city }) {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
   return (
     <div className="weather-display">
       {weather ? (
@@ -45,8 +43,9 @@ function WeatherDisplay({ city }) {
             <div>
               <label>Condition:</label>{" "}
               <data>
-                {weather.condition.charAt(0).toUpperCase() +
-                  weather.condition.slice(1).toLowerCase()}
+                {/* {weather.condition.charAt(0).toUpperCase() +
+                  weather.condition.slice(1).toLowerCase()} */}
+                   {weather.condition}
               </data>
             </div>
 
