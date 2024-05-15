@@ -22,9 +22,10 @@ function WeatherDisplay({ city }) {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+
   return (
     <div className="weather-display">
-      {weather ? (
+      {weather.city ? (
         <div className="weather-content">
           <div className="weather-top">
             <h1>{Math.round(weather.temperature)}°C</h1>
