@@ -34,7 +34,7 @@ export const useWeatherApi = (city) => {
   const [error, setError] = useState(null);
 
   // Determine the base URL based on the environment
-  const baseUrl = currentEnv === 'production' ? 'https://limitless-lake-38337.herokuapp.com/' : 'http://localhost:3001';
+  const baseUrl = currentEnv === 'production' ? 'https://limitless-lake-38337.herokuapp.com' : 'http://localhost:3001';
 
   useEffect(() => {
     const fetchWeather = async () => {
