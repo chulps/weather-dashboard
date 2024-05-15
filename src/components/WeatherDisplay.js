@@ -22,9 +22,10 @@ function WeatherDisplay({ city }) {
 
   if (loading) return <data>Loading...</data>;
   if (error) return <data>Error: {error}</data>;
-console.log('hit')
+  
   return (
     <div className="weather-display">
+      {console.log('hit')}
       {weather.city ? (
         <div className="weather-content">
           <div className="weather-top">
@@ -43,11 +44,7 @@ console.log('hit')
           <div className="weather-data">
             <div>
               <label>Condition:</label>{" "}
-              <data>
-                {/* {weather.condition.charAt(0).toUpperCase() +
-                  weather.condition.slice(1).toLowerCase()} */}
-                   {weather.condition}
-              </data>
+              <data>{weather.condition}</data>
             </div>
 
             <div>
