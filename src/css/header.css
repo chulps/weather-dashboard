@@ -1,0 +1,16 @@
+header {
+    position: relative;
+    margin-bottom: var(--space-3);
+}
+
+header .logo {
+    aspect-ratio: 1/1;
+    height: var(--space-4);
+}
+
+header .logo-container {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

@@ -187,6 +187,19 @@ i, .italic {
     color: var(--white);
     max-width: var(--space-8);
     margin: 0 auto;
+    padding: var(--space-3);
+  }
+
+  @media screen and (min-width: 576px) {
+    body {
+      padding: var(--space-4);
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    body {
+      padding: var(--space-2) 0;
+    }
   }
   
   /* scrollbar width */
@@ -253,11 +266,11 @@ i, .italic {
   
   a {
     cursor: pointer;
-    color: var(--grey-20);
+    color: var(--royal-400);
   }
   
   a:hover {
-    color: var(--white);
+    filter: brightness(1.3);
   }
   
   p,
@@ -343,7 +356,6 @@ i, .italic {
   }
   
   button:hover,
-  a:hover,
   input[type="submit"]:hover {
     -webkit-filter: brightness(1.1);
     background: var(--royal-400);
@@ -412,7 +424,8 @@ i, .italic {
     outline-offset: -2px;
     transform: scale(1.025);
     transition: none;
-    background: var(--grey-80);
+    background: var(--neutral-800);
+    border-color: var(--neutral-300);
   }
   
   hr {

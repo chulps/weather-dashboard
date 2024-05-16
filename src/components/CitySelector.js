@@ -10,6 +10,29 @@ function CitySelector({ setCity }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [debounceTimer, setDebounceTimer] = useState(null);
+  const cities = [
+    "New York",
+    "London",
+    "Paris",
+    "Tokyo",
+    "Sydney",
+    "Moscow",
+    "Rio de Janeiro",
+    "Cape Town",
+    "Dubai",
+    "Shanghai",
+    "Toronto",
+    "Berlin",
+    "Barcelona",
+    "Rome",
+    "Amsterdam",
+    "Istanbul",
+    "Seoul",
+    "Mexico City",
+    "Buenos Aires",
+    "Cairo",
+  ];
+
 
   // Determine the base URL based on the environment
   const baseUrl =
@@ -62,10 +85,10 @@ function CitySelector({ setCity }) {
         setInput("");
       }}
     >
-      <h1 className="site-header">Weather by City</h1>
+      <h1 className="site-header">Weather Dashboard</h1>
       <div className="city-input-container">
         <input
-          className="city-input"
+          className='city-input'
           type="text"
           name="city"
           placeholder="Enter city"
@@ -84,20 +107,37 @@ function CitySelector({ setCity }) {
             ))}
           </ul>
         )}
-        <button
-          className="clear-button secondary small"
-          type="button"
-          onClick={() => {
-            setInput("");
-            setSuggestions([]);
-          }}
-        >
-          Clear
-        </button>
+        {input && (
+          <button
+            className="clear-button secondary small"
+            type="button"
+            onClick={() => {
+              setInput("");
+              setSuggestions([]);
+            }}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       <div className="button-wrapper">
-        <button type="submit">Get Weather</button>
+        <a
+          className={input === "" ? "secondary" : "secondary disabled"}
+          // type="button"
+          onClick={() => {
+            const randomCity =
+              cities[Math.floor(Math.random() * cities.length)];
+            setCity(randomCity);
+          }}
+        >
+          Random City
+        </a>
+
+        <button className={input === "" ? "disabled" : ""} type="submit">
+          Get Weather
+        </button>
+
       </div>
     </form>
   );
