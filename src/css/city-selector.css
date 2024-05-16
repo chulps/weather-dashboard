@@ -1,70 +1,76 @@
 .city-selector {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
 
 .button-wrapper {
-    display: flex;
-    justify-content: end;
-    gap: var(--space-3);
-    align-items: center;
+  display: flex;
+  justify-content: end;
+  gap: var(--space-3);
+  align-items: center;
+  flex-direction: column-reverse;
 }
 
 .button-wrapper button {
-    width: 100%;
+  width: 100%;
 }
 
 .site-header {
-    font-size: var(--font-size-h2);
+  font-size: var(--font-size-h2);
 }
 
 @media screen and (min-width: 576px) {
-   .button-wrapper button {
-        width: auto;
-    }
+  
+    .button-wrapper {
+    flex-direction: row;
+  }
 
-    .site-header {
-        font-size: var(--font-size-h1);
-    }
+  .button-wrapper button {
+    width: auto;
+  }
+
+  .site-header {
+    font-size: var(--font-size-h1);
+  }
 }
 
 .city-input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .clear-button {
-    position: absolute;
-    right: 0;
-    margin-right: 1em;
+  position: absolute;
+  right: 0;
+  margin-right: 1em;
 }
 
 .suggestions {
-    position: absolute;
-    bottom: 0;
-    top: 100%;
-    height: fit-content;
-    list-style: none;
-    border-radius: 0 0 var(--space-2) var(--space-2);
-    overflow: hidden;
-    z-index: 1;
-    width: 100%;
+  position: absolute;
+  bottom: 0;
+  top: 100%;
+  height: fit-content;
+  list-style: none;
+  border-radius: 0 0 var(--space-2) var(--space-2);
+  overflow: hidden;
+  z-index: 1;
+  width: 100%;
 }
 
 .suggestions li {
-    padding: 0.5em 1em;
-    background: var(--neutral-800);
-    transition: ease-out 0.3s;
+  padding: 0.5em 1em;
+  background: var(--neutral-800);
+  transition: ease-out 0.3s;
 }
 
 .suggestions li:hover {
-    background: var(--neutral-700);
-    transition: none;
+  background: var(--neutral-700);
+  transition: none;
 }
 
 .suggestions li:active {
-    background: var(--neutral-600);
+  background: var(--neutral-600);
 }

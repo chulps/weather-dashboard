@@ -9,6 +9,7 @@ export const defaultWeather = {
     windSpeed: 0,    // km/h
     condition: "",   // Description of weather conditions
     icon: "",        // URL to weather icon image
+    time: "",
     city: "",        // Name of the city
     region: "",      // Region name
     country: "",     // Country name
