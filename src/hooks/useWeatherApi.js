@@ -39,7 +39,7 @@ export const useWeatherApi = (city) => {
   const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [warning, setWarning] = useState(null);
   // Determine the base URL based on the environment
   const baseUrl =
     currentEnv === "production"
@@ -54,6 +54,8 @@ export const useWeatherApi = (city) => {
 
       // Set loading state to true
       setLoading(true);
+      setWarning(null);
+      setError(null);
       try {
         // Fetch weather data and update state
         const weatherData = await fetchWeatherData(city, baseUrl);
@@ -61,7 +63,11 @@ export const useWeatherApi = (city) => {
       } catch (error) {
         console.error(error);
         // Set error state if unable to fetch weather data
-        setError("Unable to fetch weather data.");
+        if (error.response.status === 400) {
+          setWarning("Sorry, we don't have data for that location");
+        } else {
+          setWarning("Sorry, something went wrong");
+        }
       } finally {
         // Set loading state to false after fetching data
         setLoading(false);
@@ -73,5 +79,5 @@ export const useWeatherApi = (city) => {
   }, [city, baseUrl]);
 
   // Return weather data, loading state, and error state
-  return { weather, loading, error };
+  return { weather, loading, warning, error };
 };

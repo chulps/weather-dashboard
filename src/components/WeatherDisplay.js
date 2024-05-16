@@ -6,7 +6,7 @@ import "../css/weather-display.css";
 // WeatherDisplay component displays weather information and advice for a given city
 function WeatherDisplay({ city }) {
   // Use the useWeatherApi hook to fetch weather data for the given city
-  const { weather, loading, error } = useWeatherApi(city);
+  const { weather, loading, warning, error } = useWeatherApi(city);
   // State to store the weather advice fetched from OpenAI
   const [advice, setAdvice] = useState("");
 
@@ -28,6 +28,7 @@ function WeatherDisplay({ city }) {
   if (loading) return <data>Loading...</data>;
   // If there was an error fetching weather data, show an error message
   if (error) return <data>Error: {error}</data>;
+  if (warning) return <data>Oops!: {warning}</data>;
   
   return (
     <div className="weather-display">
@@ -44,9 +45,9 @@ function WeatherDisplay({ city }) {
               style={{ width: "var(--space-4)", height: "var(--space-4)" }}
             />
             {/* Display city and country */}
-            <h3>
+            <h3 className="weather-city">
               <i>
-                {weather.city}, {weather.country}
+                {weather.city}, {weather.region}, {weather.country}
               </i>
             </h3>
           </div>

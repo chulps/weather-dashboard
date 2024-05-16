@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "../css/city-selector.css";
 import axios from "axios";
+import getEnv from "../utils/getEnv";
+
+// Get the current environment (production or development)
+const currentEnv = getEnv();
 
 function CitySelector({ setCity }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [debounceTimer, setDebounceTimer] = useState(null);
+
+  // Determine the base URL based on the environment
+  const baseUrl =
+    currentEnv === "production"
+      ? "https://limitless-lake-38337.herokuapp.com"
+      : "http://localhost:3001";
 
   useEffect(() => {
     const loadSuggestions = async () => {
       if (input.length > 2) {
         try {
-          const response = await axios.get(
-            `https://api.weatherapi.com/v1/search.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=${input}`
-          );
-          setSuggestions(response.data);
+          // URL for fetching city data
+          const citiesUrl = `${baseUrl}/api/cities?city=${input}`;
+
+          // Fetch data from cities APIs
+          const responseCities = await axios.get(citiesUrl);
+
+          setSuggestions(responseCities.data);
         } catch (error) {
           console.error("Failed to fetch suggestions:", error);
         }
@@ -21,8 +35,23 @@ function CitySelector({ setCity }) {
         setSuggestions([]);
       }
     };
-    loadSuggestions();
+
+    const debounceLoadSuggestions = () => {
+      clearTimeout(debounceTimer);
+      const timer = setTimeout(() => {
+        loadSuggestions();
+      }, 2000);
+      setDebounceTimer(timer);
+    };
+
+    debounceLoadSuggestions();
   }, [input]);
+
+  const handleSuggestionClick = (suggestion) => {
+    setInput(suggestion.description.split(",")[0]);
+    setSuggestions([]);
+    setCity(suggestion.description.split(",")[0]);
+  };
 
   return (
     <form
@@ -47,13 +76,10 @@ function CitySelector({ setCity }) {
           <ul className="suggestions">
             {suggestions.map((suggestion) => (
               <li
-                key={suggestion.id}
-                onClick={() => {
-                  setInput(`${suggestion.name}, ${suggestion.region}`);
-                  setSuggestions([]);
-                }}
+                key={suggestion.description}
+                onClick={() => handleSuggestionClick(suggestion)}
               >
-                {suggestion.name}, {suggestion.region}, {suggestion.country}
+                {suggestion.description}
               </li>
             ))}
           </ul>

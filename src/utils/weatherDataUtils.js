@@ -10,6 +10,7 @@ export function transformOpenWeatherAPI(data) {
     condition: data.weather[0].description, // Extract weather condition description from the first element of the 'weather' array
     icon: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`, // Construct the URL for the weather icon
     city: data.name, // Extract the city name
+    region: data.region, // Extract the region name from the 'city' object
     country: data.sys.country, // Extract the country code from the 'sys' object
   };
 }
@@ -17,7 +18,6 @@ export function transformOpenWeatherAPI(data) {
 // Transformation for WeatherAPI data
 // This function transforms the data received from the WeatherAPI into a standardized format
 export function transformWeatherMap(data) {
-  console.log(data)
   return {
     temperature: data.current.temp_c, // Extract temperature in Celsius from the 'current' object
     humidity: data.current.humidity, // Extract humidity from the 'current' object
@@ -46,6 +46,7 @@ export function mergeWeatherData(dataWa, dataOwm) {
     condition: dataOwm.condition, // Use the weather condition from OpenWeatherMap
     icon: dataOwm.icon, // Use the weather icon from OpenWeatherMap
     city: dataOwm.city, // Use the city name from OpenWeatherMap
+    region: dataOwm.region, // Use the region name from OpenWeatherMap
     country: dataOwm.country, // Use the country code from OpenWeatherMap
   };
 }

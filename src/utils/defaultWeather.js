@@ -10,5 +10,6 @@ export const defaultWeather = {
     condition: "",   // Description of weather conditions
     icon: "",        // URL to weather icon image
     city: "",        // Name of the city
+    region: "",      // Region name
     country: "",     // Country name
   };
