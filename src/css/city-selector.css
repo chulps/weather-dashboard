@@ -16,7 +16,7 @@
 .button-wrapper {
   display: flex;
   justify-content: end;
-  gap: var(--space-3);
+  gap: var(--space-2);
   align-items: center;
   flex-direction: column-reverse;
 }
@@ -81,4 +81,26 @@
 
 .suggestions li:active {
   background: var(--neutral-600);
+}
+
+.options-wrapper {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.options-wrapper > * {
+  flex-grow: 1;
+  display: flex;
+  padding: 1em;
+}
+
+@media screen and (min-width: 992px) {
+  .options-wrapper {
+    flex-shrink: 1;
+  }
+
+  .options-wrapper > * {
+    flex-shrink: 1;
+  }
 }
