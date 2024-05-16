@@ -178,6 +178,7 @@ i, .italic {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
   }
   
   body {
@@ -277,18 +278,6 @@ i, .italic {
   a {
     font-size: var(--font-size-p);
     line-height: var(--line-height-default);
-  }
-  
-  p + p,
-  h1 + p,
-  h2 + p,
-  h3 + p,
-  h4 + p,
-  h5 + p,
-  h6 + p,
-  p + small,
-  small + p {
-    margin-top: calc(1em * var(--line-height-default));
   }
   
   small {
