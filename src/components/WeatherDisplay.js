@@ -40,9 +40,9 @@ function WeatherDisplay({ city }) {
     }
   }, [weather]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (warning) return <div>Oops!: {warning}</div>;
+  if (loading) return <data className="system-message">Loading...</data>;
+  if (error) return <data className="system-message">Error: {error}</data>;
+  if (warning) return <data className="system-message">Oops!: {warning}</data>;
 
   return (
     <div className="weather-display">

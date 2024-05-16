@@ -111,56 +111,58 @@ function CitySelector({ setCity }) {
   };
 
   return (
-    <form className="city-selector" onSubmit={handleSubmit}>
-      <h1 className="site-header">Weather Dashboard</h1>
-      <div className="city-input-container">
-        <input
-          className="city-input"
-          type="text"
-          name="city"
-          placeholder="Enter city"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-        />
-        {input.length > 0 && suggestions.length > 0 && (
-          <ul className="suggestions" ref={suggestionsRef}>
-            {suggestions.map((suggestion) => (
-              <li
-                key={suggestion.description}
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion.description}
-              </li>
-            ))}
-          </ul>
-        )}
-        {input && (
-          <button
-            className="clear-button secondary small"
-            type="button"
-            onClick={() => {
-              setInput("");
-              setSuggestions([]);
-            }}
+    <div>
+      <form className="city-selector" onSubmit={handleSubmit}>
+        <h1 className="site-header">Weather Dashboard</h1>
+        <div className="city-input-container">
+          <input
+            className="city-input"
+            type="text"
+            name="city"
+            placeholder="Enter city"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+          {input.length > 0 && suggestions.length > 0 && (
+            <ul className="suggestions" ref={suggestionsRef}>
+              {suggestions.map((suggestion) => (
+                <li
+                  key={suggestion.description}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion.description}
+                </li>
+              ))}
+            </ul>
+          )}
+          {input && (
+            <button
+              className="clear-button secondary small"
+              type="button"
+              onClick={() => {
+                setInput("");
+                setSuggestions([]);
+              }}
+            >
+              Clear
+            </button>
+          )}
+        </div>
+  
+        <div className="button-wrapper">
+          <span
+            className={input === "" ? "link" : "link disabled"}
+            onClick={handleRandomCity}
           >
-            Clear
+            Random City
+          </span>
+  
+          <button className={input === "" ? "disabled" : ""} type="submit">
+            Get Weather
           </button>
-        )}
-      </div>
-
-      <div className="button-wrapper">
-        <span
-          className={input === "" ? "link" : "link disabled"}
-          onClick={handleRandomCity}
-        >
-          Random City
-        </span>
-
-        <button className={input === "" ? "disabled" : ""} type="submit">
-          Get Weather
-        </button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 }
 

@@ -49,3 +49,7 @@
 .weather-temperature small {
   margin: 0;
 }
+
+.system-message {
+  text-align: center;
+}

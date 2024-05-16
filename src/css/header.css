@@ -1,11 +1,27 @@
 header {
     position: relative;
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
 }
 
 header .logo {
     aspect-ratio: 1/1;
     height: var(--space-4);
+}
+
+@media screen and (min-width: 768px) {
+
+    header {
+        margin-bottom: var(--space-2);
+    }
+}
+
+@media screen and (min-width: 992px) {
+
+    header {
+        position: sticky;
+        top: var(--space-3);
+        margin-bottom: var(--space-3);
+    }
 }
 
 header .logo-container {

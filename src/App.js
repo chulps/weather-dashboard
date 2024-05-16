@@ -12,7 +12,7 @@ function App() {
   return (
     <>
 <Header />
-      <main className="App" style={{ placeItems: "center" }}>
+      <main className="App">
         <CitySelector setCity={setCity} />
         <WeatherDisplay city={city} />
       </main>
