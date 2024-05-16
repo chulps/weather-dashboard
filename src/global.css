@@ -618,3 +618,13 @@ i, .italic {
     vertical-align: -0.125em;
     aspect-ratio: 1/1;
   }
+
+  .blink {
+    animation: blinker 0.66s linear infinite;
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

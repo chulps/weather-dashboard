@@ -40,7 +40,7 @@ function WeatherDisplay({ city }) {
     }
   }, [weather]);
 
-  if (loading) return <data className="system-message">Loading...</data>;
+  if (loading) return <data className="system-message blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
   if (warning) return <data className="system-message">Oops!: {warning}</data>;
 
@@ -55,7 +55,7 @@ function WeatherDisplay({ city }) {
             </div>
 
             <img src={weather.icon} alt={weather.condition || "Weather icon"} />
-            <div>
+            <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
               <p>
                 {weather.region}, {weather.country}

@@ -99,8 +99,4 @@
   .options-wrapper {
     flex-shrink: 1;
   }
-
-  .options-wrapper > * {
-    flex-shrink: 1;
-  }
 }
