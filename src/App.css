@@ -10,7 +10,7 @@
 
 @media screen and (min-width: 576px) {
   .App {
-    justify-content: center;
+    justify-content: flex-start;
     gap: var(--space-3);
     flex-direction: column;
   }
@@ -24,6 +24,7 @@
     max-width: unset;
     width: 100%;
     min-height: calc(100vh - 30rem);
+    justify-content: center;
   }
 }
 

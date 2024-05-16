@@ -5,10 +5,10 @@ import "../css/header.css";
 const Header = () => {
   return (
     <header>
-      <div className="logo-container">
+      <a href="https://chulps.github.io/react-gh-pages/" className="logo-container">
           <RotatingText />
           <img className="logo" src={logo} alt="Chuck Howard" />
-      </div>
+      </a>
     </header>
   );
 };

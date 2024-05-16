@@ -13,4 +13,10 @@ header .logo-container {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    width: fit-content;
+}
+
+header .logo-container:hover {
+    transform: scale(1.05);
+    transform-origin: center;
 }

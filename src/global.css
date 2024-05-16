@@ -190,13 +190,13 @@ i, .italic {
     padding: var(--space-3);
   }
 
-  @media screen and (min-width: 576px) {
+  @media screen and (min-width: 768px) {
     body {
       padding: var(--space-4);
     }
   }
 
-  @media screen and (min-width: 992px) {
+  @media screen and (min-width: 1200px) {
     body {
       padding: var(--space-2) 0;
     }
@@ -314,7 +314,7 @@ i, .italic {
     letter-spacing: 1px;
     text-transform: uppercase;
     color: var(--secondary);
-    margin-bottom: 1em;
+    /* margin-bottom: 1em; */
   }
   
   small {
