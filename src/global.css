@@ -264,12 +264,12 @@ i, .italic {
     font-size: var(--font-size-h6);
   }
   
-  a {
+  a, .link {
     cursor: pointer;
     color: var(--royal-400);
   }
   
-  a:hover {
+  a:hover, .link:hover {
     filter: brightness(1.3);
   }
   

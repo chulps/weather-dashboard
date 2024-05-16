@@ -10,7 +10,6 @@ const RotatingText = (props) => {
         fill: 'var(--neutral-300)',
         aspectRatio: '1/1',
         height: '100%',
-        position: 'absolute'
       }}
       viewBox="0 0 100 100"
     >

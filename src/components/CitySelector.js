@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
-
+import debounce from "lodash/debounce";
 // Get the current environment (production or development)
 const currentEnv = getEnv();
 
 function CitySelector({ setCity }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [debounceTimer, setDebounceTimer] = useState(null);
   const cities = [
     "New York",
     "London",
@@ -33,6 +32,7 @@ function CitySelector({ setCity }) {
     "Cairo",
   ];
 
+  const suggestionsRef = useRef(null);
 
   // Determine the base URL based on the environment
   const baseUrl =
@@ -41,6 +41,7 @@ function CitySelector({ setCity }) {
       : "http://localhost:3001";
 
   useEffect(() => {
+    let debounceSearch = null;
     const loadSuggestions = async () => {
       if (input.length > 2) {
         try {
@@ -59,22 +60,41 @@ function CitySelector({ setCity }) {
       }
     };
 
-    const debounceLoadSuggestions = () => {
-      clearTimeout(debounceTimer);
-      const timer = setTimeout(() => {
-        loadSuggestions();
-      }, 2000);
-      setDebounceTimer(timer);
-    };
+    if (!debounceSearch) {
+      debounceSearch = debounce(loadSuggestions, 2000);
+    }
 
-    debounceLoadSuggestions();
-  }, [input]);
+    debounceSearch();
+
+    return () => {
+      if (debounceSearch) {
+        debounceSearch.cancel();
+        debounceSearch = null;
+      }
+    };
+  }, [input, baseUrl]);
 
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
     setSuggestions([]);
     setCity(suggestion.description.split(",")[0]);
   };
+
+  const handleClickOutside = (event) => {
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(event.target)
+    ) {
+      setSuggestions([]);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <form
@@ -88,7 +108,7 @@ function CitySelector({ setCity }) {
       <h1 className="site-header">Weather Dashboard</h1>
       <div className="city-input-container">
         <input
-          className='city-input'
+          className="city-input"
           type="text"
           name="city"
           placeholder="Enter city"
@@ -96,7 +116,7 @@ function CitySelector({ setCity }) {
           onChange={(event) => setInput(event.target.value)}
         />
         {input.length > 0 && suggestions.length > 0 && (
-          <ul className="suggestions">
+          <ul className="suggestions" ref={suggestionsRef}>
             {suggestions.map((suggestion) => (
               <li
                 key={suggestion.description}
@@ -122,9 +142,8 @@ function CitySelector({ setCity }) {
       </div>
 
       <div className="button-wrapper">
-        <a
-          className={input === "" ? "secondary" : "secondary disabled"}
-          // type="button"
+        <span
+          className={input === "" ? "link" : "link disabled"}
           onClick={() => {
             const randomCity =
               cities[Math.floor(Math.random() * cities.length)];
@@ -132,12 +151,11 @@ function CitySelector({ setCity }) {
           }}
         >
           Random City
-        </a>
+        </span>
 
         <button className={input === "" ? "disabled" : ""} type="submit">
           Get Weather
         </button>
-
       </div>
     </form>
   );
