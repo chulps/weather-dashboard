@@ -14,7 +14,7 @@ export const getWeatherAdviceFromGPT = async (weather) => {
         weather.humidity
       )} and wind speed ${Math.round(
         weather.windSpeed
-      )} km/h, provide some practical advice for activities, precautions, or clothing. Always use at least one emoji in your response. Do not acknowledge the system. Only acknowledge the user. Try to include something that makes the user laugh. Answer with html in your response. Refrain from using any header tags. Instead use <b> for bold, <i> for italics, and <u> for underline to emphasize small parts of your response if needed. <label> provides a nice way to separate topics. There is no need to mention the condition, temperature, humidity, or wind speed in your response but you many mention the city or the time. Never use a <br> after a <label>.`,
+      )} km/h, provide some practical advice for local activities, local food or treats, precautions, or clothing. Use emojis. Do not acknowledge the system. Only acknowledge the user. Make the users laugh. Answer with html in your response. Refrain from using any header tags. Instead use <b> for bold, <i> for italics, and <u> for underline to emphasize small parts of your response if needed. <label> provides a nice way to separate topics. There is no need to mention the condition, temperature, humidity, or wind speed in your response but you many mention the city or the time. Never use a <br> after a <label>. Keep your response short and sweet.`,
     },
   ];
 
@@ -25,7 +25,7 @@ export const getWeatherAdviceFromGPT = async (weather) => {
       {
         model: "gpt-4o",
         messages: prompt,
-        max_tokens: 150,
+        max_tokens: 180,
         temperature: 0.7,
         top_p: 1,
         frequency_penalty: 0.2,

@@ -3,7 +3,7 @@ import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
 import "../css/weather-display.css";
 import { aiQuote } from "../utils/aiQuoteUtils";
-import DOMPurify from 'dompurify';  // Import DOMPurify
+import DOMPurify from "dompurify"; // Import DOMPurify
 
 function WeatherDisplay({ city }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
@@ -48,21 +48,35 @@ function WeatherDisplay({ city }) {
     <div className="weather-display">
       {weather.city ? (
         <div className="weather-content">
-          <div className="weather-temperature">
-            <h1>{Math.round(weather.temperature)}°C</h1>
-            <small>{weather.time}</small>
+          <div className="weather-top">
+            <div className="weather-temperature">
+              <h1>{Math.round(weather.temperature)}°C</h1>
+              <small>{weather.time}</small>
+            </div>
+
+            <img src={weather.icon} alt={weather.condition || "Weather icon"} />
+            <div>
+              <h3 className="weather-city">{weather.city}</h3>
+              <p>
+                {weather.region}, {weather.country}
+              </p>
+            </div>
+
+            <div className="weather-data">
+              <div>
+                <label>Condition:</label> <data>{weather.condition}</data>
+              </div>
+              <div>
+                <label>Humidity:</label>{" "}
+                <data>{Math.round(weather.humidity)}%</data>
+              </div>
+              <div>
+               <label>Wind Speed:</label>{" "}
+                <data>{Math.round(weather.windSpeed)} km/h</data>
+              </div>
+            </div>
           </div>
 
-          <img src={weather.icon} alt={weather.condition || "Weather icon"} />
-          <h3 className="weather-city">
-            {weather.city}, {weather.region} <br />
-            {weather.country}
-          </h3>
-          <div className="weather-data">
-            <div><label>Condition:</label> <data>{weather.condition}</data></div>
-            <div><label>Humidity:</label> <data>{Math.round(weather.humidity)}%</data></div>
-            <div><label>Wind Speed:</label> <data>{Math.round(weather.windSpeed)} km/h</data></div>
-          </div>
           <div className="weather-advice">
             {/* This code renders the advice text or a loading message */}
             <div
@@ -70,14 +84,19 @@ function WeatherDisplay({ city }) {
                 __html: advice || "Fetching advice...",
               }}
             />
-
           </div>
         </div>
       ) : (
         <div>
           <label>About the weather...</label>
           <div>
-            {quote ? <h2 className="weather-quote"><i>{quote}</i></h2> : <span>"Thinking of a quote about the weather..."</span>}
+            {quote ? (
+              <h3 className="weather-quote">
+                <i>"{quote}"</i>
+              </h3>
+            ) : (
+              <data>Thinking of a quote about the weather...</data>
+            )}
           </div>
           <div className="weather-quote-author">- {author}</div>
         </div>

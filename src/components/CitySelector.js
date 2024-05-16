@@ -78,6 +78,7 @@ function CitySelector({ setCity }) {
     setInput(suggestion.description.split(",")[0]);
     setSuggestions([]);
     setCity(suggestion.description.split(",")[0]);
+    window.scrollTo(0, 0);
   };
 
   const handleClickOutside = (event) => {
@@ -96,15 +97,21 @@ function CitySelector({ setCity }) {
     };
   }, []);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setCity(event.target.elements.city.value);
+    setInput("");
+    window.scrollTo(0, 0);
+  };
+
+  const handleRandomCity = () => {
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    setCity(randomCity);
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <form
-      className="city-selector"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setCity(event.target.elements.city.value);
-        setInput("");
-      }}
-    >
+    <form className="city-selector" onSubmit={handleSubmit}>
       <h1 className="site-header">Weather Dashboard</h1>
       <div className="city-input-container">
         <input
@@ -144,11 +151,7 @@ function CitySelector({ setCity }) {
       <div className="button-wrapper">
         <span
           className={input === "" ? "link" : "link disabled"}
-          onClick={() => {
-            const randomCity =
-              cities[Math.floor(Math.random() * cities.length)];
-            setCity(randomCity);
-          }}
+          onClick={handleRandomCity}
         >
           Random City
         </span>
