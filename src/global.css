@@ -199,7 +199,7 @@ i, .italic {
 
   @media screen and (min-width: 1200px) {
     body {
-      padding: var(--space-2) 3;
+      padding: var(--space-2) var(--space-3);
     }
   }
   
@@ -220,7 +220,7 @@ i, .italic {
   
   /* Scrollbar Handle */
   ::-webkit-scrollbar-thumb {
-    background: var(--grey-80);
+    background: var(--neutral-800);
     border-radius: var(--space-0);
     cursor: grab;
   }
@@ -333,8 +333,12 @@ i, .italic {
     -webkit-transform-origin: center;
     -ms-transform-origin: center;
     transform-origin: center;
-    word-wrap: wrap;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: var(--space-1);
   }
 
   button.small,
@@ -378,19 +382,19 @@ i, .italic {
   input[type="submit"].dark,
   button.hollow,
   input[type="submit"].hollow {
-    background: var(--dark);
+    background: inherit;
   }
   
   button.dark:hover,
   input[type="submit"].dark:hover,
   button.hollow,
   input[type="submit"].hollow {
-    background: var(--grey-80);
+    background: var(--neutral-800);
   }
   
   button.hollow,
   input[type="submit"].hollow {
-    outline: 1px solid var(--pink);
+    outline: 1px solid var(--primary);
     outline-offset: -1px;
   }
   
@@ -409,7 +413,7 @@ i, .italic {
   }
   
   input:focus {
-    outline: 2px solid var(--pink);
+    outline: 2px solid var(--primary);
     outline-offset: -2px;
     transform: scale(1.025);
     transition: none;
@@ -485,7 +489,7 @@ i, .italic {
     top: 6px;
     width: var(--space-0);
     height: var(--space-1);
-    border: solid var(--pink);
+    border: solid var(--primary);
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -549,7 +553,7 @@ i, .italic {
     width: var(--space-1);
     height: var(--space-1);
     border-radius: 50%;
-    background: var(--pink);
+    background: var(--primary);
   }
   
   /* On mouse-over, add a grey background color */
@@ -606,4 +610,11 @@ i, .italic {
   .disabled {
     opacity: 50%;
     pointer-events: none;
+  }
+
+  .fa-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    aspect-ratio: 1/1;
   }

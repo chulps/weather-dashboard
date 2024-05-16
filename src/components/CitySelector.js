@@ -3,33 +3,52 @@ import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
 import debounce from "lodash/debounce";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot, faShuffle, faSearch } from '@fortawesome/free-solid-svg-icons';
+
 // Get the current environment (production or development)
 const currentEnv = getEnv();
 
 function CitySelector({ setCity }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [latLon, setLatLon] = useState(null);
   const cities = [
-    "New York",
-    "London",
-    "Paris",
-    "Tokyo",
-    "Sydney",
-    "Moscow",
-    "Rio de Janeiro",
-    "Cape Town",
-    "Dubai",
-    "Shanghai",
-    "Toronto",
-    "Berlin",
-    "Barcelona",
-    "Rome",
     "Amsterdam",
-    "Istanbul",
-    "Seoul",
-    "Mexico City",
+    "Athens",
+    "Bangkok",
+    "Barcelona",
+    "Beijing",
+    "Berlin",
     "Buenos Aires",
     "Cairo",
+    "Cape Town",
+    "Chicago",
+    "Dubai",
+    "Hong Kong",
+    "Istanbul",
+    "Jakarta",
+    "Kuala Lumpur",
+    "London",
+    "Los Angeles",
+    "Madrid",
+    "Melbourne",
+    "Mexico City",
+    "Moscow",
+    "Mumbai",
+    "New York",
+    "Paris",
+    "Rio de Janeiro",
+    "Rome",
+    "San Francisco",
+    "Seoul",
+    "Shanghai",
+    "Singapore",
+    "Sydney",
+    "Tokyo",
+    "Toronto",
+    "Vancouver",
+    "Vienna",
   ];
 
   const suggestionsRef = useRef(null);
@@ -97,9 +116,21 @@ function CitySelector({ setCity }) {
     };
   }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setCity(event.target.elements.city.value);
+    if (latLon) {
+      try {
+        const { data } = await axios.get(`${baseUrl}/api/location`, {
+          params: { lat: latLon.latitude, lon: latLon.longitude },
+        });
+        setCity(data.city);
+        setLatLon(null);
+      } catch (error) {
+        console.error("Error fetching city from coordinates:", error);
+      }
+    } else {
+      setCity(event.target.elements.city.value);
+    }
     setInput("");
     window.scrollTo(0, 0);
   };
@@ -111,58 +142,77 @@ function CitySelector({ setCity }) {
   };
 
   return (
-    <div>
-      <form className="city-selector" onSubmit={handleSubmit}>
-        <h1 className="site-header">Weather Dashboard</h1>
-        <div className="city-input-container">
-          <input
-            className="city-input"
-            type="text"
-            name="city"
-            placeholder="Enter city"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-          />
-          {input.length > 0 && suggestions.length > 0 && (
-            <ul className="suggestions" ref={suggestionsRef}>
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.description}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                >
-                  {suggestion.description}
-                </li>
-              ))}
-            </ul>
-          )}
-          {input && (
-            <button
-              className="clear-button secondary small"
-              type="button"
-              onClick={() => {
-                setInput("");
-                setSuggestions([]);
-              }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
-  
-        <div className="button-wrapper">
-          <span
-            className={input === "" ? "link" : "link disabled"}
+    <form className="city-selector" onSubmit={handleSubmit}>
+      <h1 className="site-header">Weather Dashboard</h1>
+      <div className="city-input-container">
+        <input
+          className="city-input"
+          type="text"
+          name="city"
+          placeholder="Enter city"
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+        />
+        {input.length > 0 && suggestions.length > 0 && (
+          <ul className="suggestions" ref={suggestionsRef}>
+            {suggestions.map((suggestion) => (
+              <li
+                key={suggestion.description}
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                {suggestion.description}
+              </li>
+            ))}
+          </ul>
+        )}
+        {input && (
+          <button
+            className="clear-button secondary small"
+            type="button"
+            onClick={() => {
+              setInput("");
+              setSuggestions([]);
+            }}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      <div className="button-wrapper">
+        <div className="options-wrapper">
+          <button
+            className={input === "" ? "hollow" : "hollow disabled"}
             onClick={handleRandomCity}
           >
-            Random City
-          </span>
-  
-          <button className={input === "" ? "disabled" : ""} type="submit">
-            Get Weather
+            <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
+            <span>Random</span>
+          </button>
+
+          <button
+            className="hollow"
+            onClick={() => {
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  const { latitude, longitude } = position.coords;
+                  setLatLon({ latitude, longitude });
+                },
+                (error) => {
+                  console.error("Error getting location:", error);
+                }
+              );
+            }}
+          >
+            <span><FontAwesomeIcon className="fa-icon" icon={faLocationDot} /></span>
+            <span>My Location</span>
           </button>
         </div>
-      </form>
-    </div>
+
+        <button className={input === "" ? "disabled" : ""} type="submit">
+          <FontAwesomeIcon className="fa-icon" icon={faSearch} />
+        </button>
+      </div>
+    </form>
   );
 }
 

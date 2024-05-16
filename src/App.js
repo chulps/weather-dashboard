@@ -11,10 +11,10 @@ function App() {
 
   return (
     <>
-<Header />
+      <Header />
       <main className="App">
-        <CitySelector setCity={setCity} />
-        <WeatherDisplay city={city} />
+        <span className="city-selector-main-wrapper"><CitySelector setCity={setCity} /></span>
+        <span><WeatherDisplay city={city} /></span>
       </main>
       <Footer />
     </>

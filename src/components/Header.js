@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../images/logo.gif";
 import RotatingText from "./RotatingText";
 import "../css/header.css";
+
 const Header = () => {
   return (
     <header>
