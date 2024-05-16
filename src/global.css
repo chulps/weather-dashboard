@@ -114,7 +114,7 @@
   --white: #f6f6f6;
   --neutral-950: #1B1D21;
   --neutral-900: #222429;
-  --netural-800: #2E3035;
+  --neutral-800: #2E3035;
   --neutral-700: #3B3E44;
   --neutral-600: #4C4F55;
   --neutral-500: #5E6167;
@@ -334,6 +334,13 @@ i, .italic {
     word-wrap: wrap;
     cursor: pointer;
   }
+
+  button.small,
+  input[type="submit"].small {
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    font-size: var(--font-size-h6);
+  }
   
   button:hover,
   a:hover,
@@ -363,7 +370,7 @@ i, .italic {
   
   button.secondary:hover,
   input[type="submit"].secondary:hover {
-    background: var(--grey-40);
+    filter: brightness(1.1);
   }
   
   button.dark,
@@ -592,4 +599,9 @@ i, .italic {
   .grid-3 {
     display: grid;
     grid-template-columns: repeat(3,1fr);
+  }
+
+  .disabled {
+    opacity: 50%;
+    pointer-events: none;
   }

@@ -10,6 +10,7 @@ export function transformOpenWeatherAPI(data) {
     condition: data.weather[0].description, // Extract weather condition description from the first element of the 'weather' array
     icon: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`, // Construct the URL for the weather icon
     city: data.name, // Extract the city name
+    region: data.region, // Extract the region name from the 'city' object
     country: data.sys.country, // Extract the country code from the 'sys' object
   };
 }
@@ -24,6 +25,7 @@ export function transformWeatherMap(data) {
     condition: data.current.condition.text, // Extract weather condition description from the 'condition' object
     icon: `https:${data.current.condition.icon}`, // Construct the URL for the weather icon
     city: data.location.name, // Extract the city name from the 'location' object
+    region: data.location.region, // Extract the region name from the 'location' object
     country: data.location.country, // Extract the country name from the 'location' object
   };
 }
@@ -44,6 +46,7 @@ export function mergeWeatherData(dataWa, dataOwm) {
     condition: dataOwm.condition, // Use the weather condition from OpenWeatherMap
     icon: dataOwm.icon, // Use the weather icon from OpenWeatherMap
     city: dataOwm.city, // Use the city name from OpenWeatherMap
+    region: dataOwm.region, // Use the region name from OpenWeatherMap
     country: dataOwm.country, // Use the country code from OpenWeatherMap
   };
 }

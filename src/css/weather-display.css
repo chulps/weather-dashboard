@@ -6,11 +6,19 @@
     width: 100%;
   }
   
-  .weather-data {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
+.weather-data {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.weather-data > * {
+  flex: 1;
+}
+
+.weather-city {
+  text-align: center;
+}
 
   .weather-top {
     display: flex;
