@@ -1,13 +1,15 @@
 .city-selector {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
     width: 100%;
   }
 
 .button-wrapper {
     display: flex;
     justify-content: end;
+    gap: var(--space-3);
+    align-items: center;
 }
 
 .button-wrapper button {
@@ -46,11 +48,23 @@
     top: 100%;
     height: fit-content;
     list-style: none;
-    border-radius: var(--space-2);
+    border-radius: 0 0 var(--space-2) var(--space-2);
     overflow: hidden;
+    z-index: 1;
+    width: 100%;
 }
 
 .suggestions li {
     padding: 0.5em 1em;
     background: var(--neutral-800);
+    transition: ease-out 0.3s;
+}
+
+.suggestions li:hover {
+    background: var(--neutral-700);
+    transition: none;
+}
+
+.suggestions li:active {
+    background: var(--neutral-600);
 }

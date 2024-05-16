@@ -71,8 +71,8 @@ function WeatherDisplay({ city }) {
             </div>
           </div>
           {/* Display weather advice */}
-          <div>
-            <label>Advice:</label> {advice || "Fetching advice..."}
+          <div className="weather-advice">
+            <label>Suggestions:</label> {advice || "Fetching advice..."}
           </div>
         </div>
       ) : (
