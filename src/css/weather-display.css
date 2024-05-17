@@ -52,10 +52,20 @@
   margin-top: var(--space-2);
 }
 
+.weather-temperature {
+  text-align: center;
+}
+
 .weather-temperature small {
   margin: 0;
 }
 
 .system-message {
   text-align: center;
+  width: 100%;
+}
+
+.weather-icon {
+  height: var(--space-4);
+  margin: var(--space-2) auto;
 }

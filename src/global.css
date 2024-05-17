@@ -54,7 +54,7 @@
 
   /* font families */
   --font-family-default: "Roboto", sans-serif;
-  --font-family-data: var(--font-family-data);
+  --font-family-data: "Roboto Mono", monospace;
   --font-family-italic: "Roboto Serif", serif;
   --font-primary: var(--font-family-default);
   --font-family-label: var(--font-family-default);
