@@ -39,3 +39,20 @@ header .logo-container:hover {
     transform: scale(1.05);
     transform-origin: center;
 }
+
+.theme-toggle {
+    padding: 1em;
+    min-width: calc(var(--space-3) + var(--space-2));
+}
+
+.theme-toggle:after {
+    content: "Switch to dark mode";
+    position: absolute;
+    font-size: var(--font-size-small);
+    background: var(--neutral-700);
+    padding: var(--space-0);
+    border-radius: var(--space-0);
+    top: calc(100% + var(--space-0));
+    right: 0;
+    display: none;
+}
