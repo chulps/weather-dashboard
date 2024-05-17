@@ -1,42 +1,16 @@
-// src/components/WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
 import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify"; // Import DOMPurify
-// import { WiDaySunny, WiCloud, WiRain, WiSnow, WiThunderstorm, WiFog } from "react-icons/wi"; // Import specific weather icons
-
 import "../css/weather-display.css";
-
-// Function to get the appropriate icon based on weather condition
-// const getWeatherIcon = (condition) => {
-//   switch (condition.toLowerCase()) {
-//     case "sunny":
-//     case "clear":
-//       return <WiDaySunny size={48} />;
-//     case "cloudy":
-//       return <WiCloud size={48} />;
-//     case "rain":
-//     case "rainy":
-//       return <WiRain size={48} />;
-//     case "snow":
-//     case "snowy":
-//       return <WiSnow size={48} />;
-//     case "thunderstorm":
-//     case "stormy":
-//       return <WiThunderstorm size={48} />;
-//     case "fog":
-//       return <WiFog size={48} />;
-//     default:
-//       return <WiCloud size={48} />;
-//   }
-// };
 
 function WeatherDisplay({ city }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
+  const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
     aiQuote()
@@ -67,6 +41,40 @@ function WeatherDisplay({ city }) {
     }
   }, [weather]);
 
+  useEffect(() => {
+    if (weather.city) {
+      const initialTime = new Date(weather.time);
+      setCurrentTime(formatTime(initialTime));
+
+      const now = new Date();
+      const delay = 60000 - (now % 60000); // Time remaining until the next minute
+
+      const updateCurrentTime = () => {
+        const newTime = new Date();
+        setCurrentTime(formatTime(newTime));
+      };
+
+      const timeoutId = setTimeout(() => {
+        updateCurrentTime();
+        const intervalId = setInterval(updateCurrentTime, 60000);
+        return () => clearInterval(intervalId);
+      }, delay);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [weather.city, weather.time]);
+
+  const formatTime = (date) => {
+    return date.toLocaleString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    });
+  };
+
   if (loading) return <data className="system-message blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
   if (warning) return <data className="system-message">Oops!: {warning}</data>;
@@ -78,10 +86,9 @@ function WeatherDisplay({ city }) {
           <div className="weather-top">
             <div className="weather-temperature">
               <h1>{Math.round(weather.temperature)}°C</h1>
-              <small>{weather.time}</small>
+              <small><data>{currentTime}</data></small>
             </div>
 
-            {/* {getWeatherIcon(weather.condition)} */}
             <img className="weather-icon" src={weather.icon} alt={weather.condition} />
 
             <div className="weather-location">
@@ -107,7 +114,6 @@ function WeatherDisplay({ city }) {
           </div>
 
           <div className="weather-advice">
-            {/* This code renders the advice text or a loading message */}
             <div
               dangerouslySetInnerHTML={{
                 __html: advice || "Fetching advice...",
