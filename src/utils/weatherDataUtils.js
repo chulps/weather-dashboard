@@ -41,13 +41,30 @@ export function transformWeatherMap(data) {
 
 // helper function to format time
 function formatTime(time) {
-  const date = typeof time === 'string' ? new Date(time) : time;
-  return date.toLocaleString('en-US', { weekday: 'short', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+  const date = typeof time === 'string' ? new Date(time) : new Date(time * 1000);
+  const options = {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false // Use 24-hour format
+  };
+
+  const formattedDate = date.toLocaleString('en-US', options);
+  const parts = formattedDate.split(', ');
+
+  // Manually add the commas to ensure the format is "Fri, May 17, 23:49"
+  if (parts.length === 3) {
+    return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
+  }
+
+  return formattedDate;
 }
+
 // Merging function
 // This function merges the weather data from two different sources (OpenWeatherMap and WeatherAPI)
 export function mergeWeatherData(dataWa, dataOwm) {
-
   // Check if both data sources are available
   if (!dataOwm && !dataWa) return null; // If both are unavailable, return null
   if (!dataOwm) return dataWa; // If OpenWeatherMap data is unavailable, return WeatherAPI data
@@ -61,7 +78,7 @@ export function mergeWeatherData(dataWa, dataOwm) {
     condition: dataOwm.condition, // Use the weather condition from OpenWeatherMap
     icon: dataOwm.icon, // Use the weather icon from OpenWeatherMap
     city: dataOwm.city, // Use the city name from OpenWeatherMap
-    time: dataOwm.time ? formatTime(dataOwm.time) : formatTime(new Date(dataWa.time * 1000)),
+    time: dataOwm.time ? formatTime(dataOwm.time) : formatTime(dataWa.time),
     region: dataOwm.region, // Use the region name from OpenWeatherMap
     country: dataOwm.country, // Use the country code from OpenWeatherMap
   };
