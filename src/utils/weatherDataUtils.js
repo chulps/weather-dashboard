@@ -3,9 +3,9 @@
 // Transformation for OpenWeatherMap data
 // This function transforms the data received from the OpenWeatherMap API into a standardized format
 export function transformOpenWeatherAPI(data) {
-  console.log(' ')
-  console.log('transformOpenWeatherAPI')
-  console.log(data)
+  // console.log(' ')
+  // console.log('transformOpenWeatherAPI')
+  // console.log(data)
   return {
     temperature: data.main.temp, // Extract temperature from the 'main' object
     humidity: data.main.humidity, // Extract humidity from the 'main' object
@@ -22,9 +22,9 @@ export function transformOpenWeatherAPI(data) {
 // Transformation for WeatherAPI data
 // This function transforms the data received from the WeatherAPI into a standardized format
 export function transformWeatherMap(data) {
-  console.log(' ')
-  console.log('transformWeatherMap')
-  console.log(data)
+  // console.log(' ')
+  // console.log('transformWeatherMap')
+  // console.log(data)
   return {
     temperature: data.current.temp_c, // Extract temperature in Celsius from the 'current' object
     humidity: data.current.humidity, // Extract humidity from the 'current' object
@@ -42,24 +42,14 @@ export function transformWeatherMap(data) {
 // helper function to format time
 function formatTime(time) {
   const date = typeof time === 'string' ? new Date(time) : new Date(time * 1000);
-  const options = {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false // Use 24-hour format
-  };
 
-  const formattedDate = date.toLocaleString('en-US', options);
-  const parts = formattedDate.split(', ');
+  const dayOptions = { weekday: 'short', month: 'short', day: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: false };
 
-  // Manually add the commas to ensure the format is "Fri, May 17, 23:49"
-  if (parts.length === 3) {
-    return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
-  }
+  const formattedDay = date.toLocaleDateString('en-US', dayOptions);
+  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
 
-  return formattedDate;
+  return `${formattedDay}, ${formattedTime}`;
 }
 
 // Merging function
@@ -83,3 +73,4 @@ export function mergeWeatherData(dataWa, dataOwm) {
     country: dataOwm.country, // Use the country code from OpenWeatherMap
   };
 }
+

@@ -154,13 +154,14 @@ function CitySelector({ setCity }) {
         console.error("Error fetching city from coordinates:", error);
       }
     } else {
-      setCity(event.target.elements.city.value);
+      setCity(input);
     }
     setInput("");
     window.scrollTo(0, 0);
   };
 
-  const handleRandomCity = () => {
+  const handleRandomCity = (event) => {
+    event.preventDefault();
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
     window.scrollTo(0, 0);
@@ -214,6 +215,7 @@ function CitySelector({ setCity }) {
         <div className="options-wrapper">
           <button
             className={input === "" ? "hollow" : "hollow disabled"}
+            type="button"
             onClick={handleRandomCity}
           >
             <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
