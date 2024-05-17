@@ -175,7 +175,15 @@ function CitySelector({ setCity }) {
 
   return (
     <form className="city-selector" onSubmit={handleSubmit}>
-      <h1 className="site-header">Weather Dashboard</h1>
+      <div>
+        <label>about this app...</label>
+        <h1 className="site-header">AI Weather Dashboard</h1>
+        <p>
+          This app provides weather data and uses Artificial Intelligence to
+          make useful suggestions based on that data. Play around with it and
+          enjoy!
+        </p>
+      </div>
       <div className="city-input-container">
         <input
           className="city-input"

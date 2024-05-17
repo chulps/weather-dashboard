@@ -28,6 +28,7 @@
     width: 100%;
     min-height: calc(100vh - 16rem);
     justify-content: center;
+    place-items: center;
   }
 
   /* .city-selector-main-wrapper {

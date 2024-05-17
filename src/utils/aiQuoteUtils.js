@@ -6,7 +6,11 @@ export const aiQuote = async (weather) => {
   const prompt = [
     {
       role: "system",
-      content: `You are a weather quote generator. Provide a quote about the weather from any culture, language, writer, celebrity, character in a movie, poet, or song. You could also create your own as long as your credit yourself as the author. Provide the quote and author as a json object formatted like this {"quote": "The weather is wonderful today.", "author": "<NAME>"}. Only answer with the quote and author object.`,
+      content: 
+        `You are a weather quote generator. 
+        Generate a quote about the weather. 
+        Provide the quote and author as a json object formatted like this {"quote": "The weather is wonderful today.", "author": "<NAME>"}. 
+        Only answer with the quote and author object.`,
     },
   ];
 
