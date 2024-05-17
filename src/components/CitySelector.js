@@ -3,8 +3,12 @@ import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
 import debounce from "lodash/debounce";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faShuffle, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLocationDot,
+  faShuffle,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
 const currentEnv = getEnv();
@@ -13,6 +17,8 @@ function CitySelector({ setCity }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [latLon, setLatLon] = useState(null);
+  const [fetchingLocation, setFetchingLocation] = useState(false);
+  const [locationFound, setLocationFound] = useState(false);
   const cities = [
     "Amsterdam",
     "Athens",
@@ -116,6 +122,25 @@ function CitySelector({ setCity }) {
     };
   }, []);
 
+  const handleLocation = () => {
+    setFetchingLocation(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLatLon({ latitude, longitude });
+        setFetchingLocation(false);
+        setLocationFound(true);
+        setTimeout(() => {
+          setLocationFound(false);
+        }, 3000); // Reset "Found!" text after 3 seconds
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        setFetchingLocation(false);
+      }
+    );
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (latLon) {
@@ -140,6 +165,12 @@ function CitySelector({ setCity }) {
     setCity(randomCity);
     window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    if (latLon) {
+      handleSubmit(new Event("submit"));
+    }
+  }, [latLon]);
 
   return (
     <form className="city-selector" onSubmit={handleSubmit}>
@@ -190,21 +221,23 @@ function CitySelector({ setCity }) {
           </button>
 
           <button
-            className="hollow"
-            onClick={() => {
-              navigator.geolocation.getCurrentPosition(
-                (position) => {
-                  const { latitude, longitude } = position.coords;
-                  setLatLon({ latitude, longitude });
-                },
-                (error) => {
-                  console.error("Error getting location:", error);
-                }
-              );
-            }}
+            className={`hollow ${fetchingLocation ? "disabled" : ""}`}
+            type="button"
+            onClick={handleLocation}
+            disabled={fetchingLocation}
           >
-            <span><FontAwesomeIcon className="fa-icon" icon={faLocationDot} /></span>
-            <span>My Location</span>
+            <span>
+              <FontAwesomeIcon className="fa-icon" icon={faLocationDot} />
+            </span>
+            <span>
+              {fetchingLocation ? (
+                <span className="blink">Locating...</span>
+              ) : locationFound ? (
+                <span className="blink">Found!</span>
+              ) : (
+                "My Location"
+              )}
+            </span>
           </button>
         </div>
 

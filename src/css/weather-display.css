@@ -24,6 +24,10 @@
   flex: 1;
 }
 
+.weather-location {
+  text-align: center;
+}
+
 .weather-city {
   text-align: center;
 }
