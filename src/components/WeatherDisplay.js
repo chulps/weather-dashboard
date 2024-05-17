@@ -21,7 +21,7 @@ function WeatherDisplay({ city }) {
       })
       .catch((error) => {
         console.error("Error fetching quote from OpenAI:", error);
-        setQuote("Error fetching quote.");
+        setQuote("Error fetching quote. Try refreshing the page.");
         setAuthor("");
       });
   }, []);

@@ -43,6 +43,13 @@
     width: 100%;
   }
 
+  .weather-quote {
+    border-left: 1px solid var(--secondary);
+    ;
+    padding-left: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
   .weather-quote-author {
     text-align: right;
   }

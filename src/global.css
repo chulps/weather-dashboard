@@ -342,6 +342,7 @@ i, .italic {
     justify-content: center;
     white-space: nowrap;
     gap: var(--space-1);
+    position: relative;
   }
 
   button.small,
