@@ -243,6 +243,7 @@ function CitySelector({ setCity }) {
 
         <button className={input === "" ? "disabled" : ""} type="submit">
           <FontAwesomeIcon className="fa-icon" icon={faSearch} />
+          Search
         </button>
       </div>
     </form>

@@ -54,7 +54,7 @@
 
   /* font families */
   --font-family-default: "Roboto", sans-serif;
-  --font-family-data: "Roboto Mono", monospace;
+  --font-family-data: var(--font-family-data);
   --font-family-italic: "Roboto Serif", serif;
   --font-primary: var(--font-family-default);
   --font-family-label: var(--font-family-default);
@@ -122,7 +122,7 @@
   --neutral-300: #8D9095;
   --neutral-200: #B2B4B9;
   --neutral-100: #E0E2E4;
-  ----neutral-950: #151515;
+  --neutral-050: #F6F6F6;
 
   /*  semantic ui colors  */
   --danger: #f00048;
@@ -131,12 +131,14 @@
   --info: #7467f7;
   --primary: var(--royal-500);
   --secondary: var(--neutral-500);
-  --light: var(--grey-20);
+  --light: var(--gneutral-200);
   --dark: var(--neutral-900);
+  --background-color: var(--neutral-950);
+  --font-color: var(--neutral-100);
 }
 
 i, .italic {
-    font-family: "Roboto Serif", serif;
+    font-family: var(--font-family-italic);
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: italic;
@@ -147,27 +149,27 @@ i, .italic {
   
   
   data, .data {
-    font-family: "Roboto Mono", monospace;
+    font-family: var(--font-family-data);
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
   }
   
   .text-regular, body {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-family-default);
     font-weight: 400;
     font-style: normal;
     text-transform: math-auto;
   }
   
   .text-bold{
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-family-default);
     font-weight: 500;
     font-style: normal;
   }
   
   .p-bold {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-family-default);
     font-weight: 700;
     font-style: normal;
   }
@@ -184,11 +186,12 @@ i, .italic {
   body {
     font-size: var(--font-size-default);
     font-family: var(--font-family-default);
-    background: var(----neutral-950);
+    background: var(--background-color);
     color: var(--white);
     max-width: var(--space-8);
     margin: 0 auto;
     padding: var(--space-3);
+    transition: all 0.3s;
   }
 
   @media screen and (min-width: 768px) {
@@ -293,7 +296,7 @@ i, .italic {
   h4 + small,
   h5 + small,
   h6 + small {
-    margin-top: calc(var(--font-size-small) * 2);
+    margin-top: var(--font-scale-ratio);
   }
   
   label {
@@ -375,7 +378,7 @@ i, .italic {
   
   button.secondary:hover,
   input[type="submit"].secondary:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.2);
   }
   
   button.dark,
@@ -389,7 +392,7 @@ i, .italic {
   input[type="submit"].dark:hover,
   button.hollow,
   input[type="submit"].hollow {
-    background: var(--neutral-800);
+    background: var(--dark);
   }
   
   button.hollow,
@@ -467,7 +470,7 @@ i, .italic {
   /* When the checkbox is checked, add a blue background */
   label.checkbox input:checked ~ .checkmark,
   label.radio input:checked ~ .checkmark {
-    background: var(--dark-grey-90);
+    background: var(--neutral-900);
     transition: 0.3s ease-out;
   }
   
@@ -627,4 +630,41 @@ i, .italic {
     50% {
       opacity: 0;
     }
+  }
+
+  /* light theme */
+
+  :root.light {
+  --neutral-800: var(--neutral-100);
+  --white: var(--neutral-600);
+  --neutral-700: var(--neutral-200);
+  --primary: var(--royal-300);
+  --secondary: var(--neutral-800);
+  --light: var(--neutral-100);
+  --dark: var(--neutral-050);
+  --background-color: #fff;
+  --font-color: var(--neutral-950);
+  }
+
+  html.light body {
+    background-color: var(--background-color);
+    transition: all 0.3s;
+  }
+
+  html.light button:not(.secondary):not(.dark):not(.hollow) {
+    color: white;
+  }
+
+  html.light label {
+    color: var(--neutral-200);
+  }
+
+  html.light button.hollow,
+  html.light input[type="submit"].hollow {
+    outline: 1px solid var(--neutral-100);
+  }
+
+  html.light button.hollow:hover,
+  html.light input[type="submit"].hollow:hover {
+    outline: 1px solid var(--neutral-200);
   }

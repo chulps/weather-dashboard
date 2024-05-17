@@ -1,9 +1,36 @@
+// src/components/WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
-import "../css/weather-display.css";
 import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify"; // Import DOMPurify
+import { WiDaySunny, WiCloud, WiRain, WiSnow, WiThunderstorm, WiFog } from "react-icons/wi"; // Import specific weather icons
+
+import "../css/weather-display.css";
+
+// Function to get the appropriate icon based on weather condition
+const getWeatherIcon = (condition) => {
+  switch (condition.toLowerCase()) {
+    case "sunny":
+    case "clear":
+      return <WiDaySunny size={48} />;
+    case "cloudy":
+      return <WiCloud size={48} />;
+    case "rain":
+    case "rainy":
+      return <WiRain size={48} />;
+    case "snow":
+    case "snowy":
+      return <WiSnow size={48} />;
+    case "thunderstorm":
+    case "stormy":
+      return <WiThunderstorm size={48} />;
+    case "fog":
+      return <WiFog size={48} />;
+    default:
+      return <WiCloud size={48} />;
+  }
+};
 
 function WeatherDisplay({ city }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
@@ -54,7 +81,8 @@ function WeatherDisplay({ city }) {
               <small>{weather.time}</small>
             </div>
 
-            <img src={weather.icon} alt={weather.condition || "Weather icon"} />
+            {getWeatherIcon(weather.condition)}
+
             <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
               <p>
