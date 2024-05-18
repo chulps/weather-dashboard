@@ -155,7 +155,7 @@ function WeatherDisplay({ city }) {
             <div
               dangerouslySetInnerHTML={{
                 __html: advice || (
-                  <data className="blink">{advice}</data>
+                  {advice}
                 ),
               }}
             />
