@@ -672,7 +672,7 @@ input:hover {
   width:fit-content;
   max-width: var(--space-7);
   text-align: left;
-  /* white-space: wrap; */
+  white-space: nowrap;
 }
 
 .tooltip:hover::after {

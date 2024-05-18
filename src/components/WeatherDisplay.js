@@ -154,9 +154,7 @@ function WeatherDisplay({ city }) {
           <div className="weather-advice">
             <div
               dangerouslySetInnerHTML={{
-                __html: advice || (
-                  {advice}
-                ),
+                __html: advice || advice ? advice : "Please wait...",
               }}
             />
           </div>
@@ -189,6 +187,8 @@ function WeatherDisplay({ city }) {
               {"- " + author + " | "}
               {author && author !== "Unknown" && (
                 <a
+                  className="tooltip bottom-left"
+                  tooltip="Who said this?"
                   target={quote !== errorMessage ? "_blank" : "_self"}
                   rel="noreferrer"
                   href={quote ? link : "/"}

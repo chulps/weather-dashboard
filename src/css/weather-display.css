@@ -120,6 +120,12 @@
   position: absolute;
   right: 0;
   color: white;
+  cursor: pointer;
+  color: var(--secondary);
+}
+
+.refresh-quote:hover {
+  color: var(--neutral-200);
 }
 
 .show-quotes-button {
