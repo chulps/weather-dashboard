@@ -132,7 +132,7 @@ function WeatherDisplay({ city }) {
             <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
               <p>
-                {weather.region}, {weather.country}
+                {weather.region + ', '}{weather.country}
               </p>
             </div>
 
@@ -188,7 +188,7 @@ function WeatherDisplay({ city }) {
               {author && author !== "Unknown" && (
                 <a
                   className="tooltip bottom-left"
-                  tooltip="Who said this?"
+                  tooltip="Search for this person on Google"
                   target={quote !== errorMessage ? "_blank" : "_self"}
                   rel="noreferrer"
                   href={quote ? link : "/"}
