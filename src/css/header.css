@@ -5,17 +5,16 @@ header {
     align-items: center;
 }
 
-header .logo {
-    aspect-ratio: 1/1;
-    height: var(--space-4);
-}
-
-@media screen and (min-width: 992px) {
-
+/* @media screen and (min-width: 992px) {
     header {
         position: sticky;
         top: var(--space-3);
     }
+} */
+
+header .logo {
+    aspect-ratio: 1/1;
+    height: var(--space-4);
 }
 
 header .logo-container {
