@@ -13,8 +13,10 @@ function App() {
     <>
       <Header />
       <main className="App">
-        <span className="city-selector-main-wrapper"><CitySelector setCity={setCity} /></span>
-        <span><WeatherDisplay city={city} /></span>
+        <div className="content">
+          <WeatherDisplay city={city} />
+          <CitySelector setCity={setCity} />
+        </div>
       </main>
       <Footer />
     </>

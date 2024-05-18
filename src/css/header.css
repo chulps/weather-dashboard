@@ -1,6 +1,5 @@
 header {
     position: relative;
-    margin-bottom: var(--space-3);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,19 +10,11 @@ header .logo {
     height: var(--space-4);
 }
 
-@media screen and (min-width: 768px) {
-
-    header {
-        margin-bottom: var(--space-2);
-    }
-}
-
 @media screen and (min-width: 992px) {
 
     header {
         position: sticky;
         top: var(--space-3);
-        margin-bottom: var(--space-3);
     }
 }
 

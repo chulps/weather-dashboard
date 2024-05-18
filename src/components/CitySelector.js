@@ -181,11 +181,11 @@ function CitySelector({ setCity }) {
       <div>
         <label>about this app...</label>
         <h1 className="site-header">AI Weather Dashboard</h1>
-        <p>
+        <small>
           This app provides weather data and uses Artificial Intelligence to
           make useful suggestions based on that data. Play around with it and
           enjoy!
-        </p>
+        </small>
       </div>
       <div className="city-input-container">
         <input
