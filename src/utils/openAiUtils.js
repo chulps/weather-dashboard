@@ -12,29 +12,20 @@ const baseUrl =
 
 // Function to get weather advice from GPT
 export const getWeatherAdviceFromGPT = async (weather) => {
-  
   // Prompt for GPT to provide weather advice based on given conditions
   const prompt = [
     {
       role: "system",
-      content: `You are a feature of a weather app that uses various weather apis to tell the user about the weather in a given city. Given the current weather conditions: city is ${
-        weather.city
-      }, the local time is ${weather.time}, temperature ${Math.round(
-        weather.temperature
-      )}°C, ${weather.condition}, humidity of ${Math.round(
-        weather.humidity
-      )} and wind speed ${Math.round(
-        weather.windSpeed
-      )} km/h, provide some practical advice for local activities, 
-      local food or treats, precautions, or clothing. Use emojis. 
-      Do not acknowledge the system. Only acknowledge the user. 
-      Make the users laugh. Answer with html in your response. 
-      Refrain from using any header tags. 
-      Instead use <b> for bold, <i> for italics, and <u> for underline to emphasize single words in your response if needed. 
-      <label> provides a nice way to separate topics. 
-      Don't use <i> or <b> inside a <label>.
-      There is no need to mention the condition, temperature, humidity, or the exact wind speed in your response but you many mention the city or the time. 
-      Never use <br>.`,
+      content: `You are a weather advice generator for "AI Weather Dashboard".
+      Based on the current weather in ${weather.city} at ${weather.time}: 
+      Temperature: ${Math.round(weather.temperature)}°C, 
+      Condition: ${weather.condition}, 
+      Humidity: ${Math.round(weather.humidity)}%, 
+      Wind Speed: ${Math.round(weather.windSpeed)} km/h.
+      
+      Provide practical advice on local activities, food, precautions, or clothing using emojis.
+      Make the users laugh. Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
+      Use <label> to separate topics. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.`,
     },
   ];
 
@@ -43,9 +34,9 @@ export const getWeatherAdviceFromGPT = async (weather) => {
     const response = await axios.post(
       `${baseUrl}/api/openai`,
       {
-        model: "gpt-4o",
+        model: "gpt-4",
         messages: prompt,
-        max_tokens: 300,
+        max_tokens: 200,
         temperature: 0.7,
         top_p: 1,
         frequency_penalty: 0.2,
@@ -62,3 +53,5 @@ export const getWeatherAdviceFromGPT = async (weather) => {
     return "Unable to fetch advice at this time.";
   }
 };
+
+export default getWeatherAdviceFromGPT;
