@@ -2,35 +2,42 @@
 
 /* Roboto Regular */
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Roboto'), local('Roboto-Regular'),
-       url('https://path_to_your_fonts/roboto-v20-latin-regular.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: local("Roboto"), local("Roboto-Regular"),
+    url("https://path_to_your_fonts/roboto-v20-latin-regular.woff2")
+      format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
 }
 
 /* Roboto Mono Regular for data display */
 @font-face {
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Roboto Mono'), local('RobotoMono-Regular'),
-       url('https://path_to_your_fonts/robotomono-regular.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: local("Roboto Mono"), local("RobotoMono-Regular"),
+    url("https://path_to_your_fonts/robotomono-regular.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
 }
 
 /* Roboto Serif for italic text */
 @font-face {
-  font-family: 'Roboto Serif';
+  font-family: "Roboto Serif";
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: local('Roboto Serif'), local('RobotoSerif-Italic'),
-       url('https://path_to_your_fonts/robotoserif-italic.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: local("Roboto Serif"), local("RobotoSerif-Italic"),
+    url("https://path_to_your_fonts/robotoserif-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
 }
 
 :root {
@@ -100,29 +107,29 @@
   font-family: var(--font-family-default);
   line-height: var(--line-height-default);
 
-  --royal-950: #00061A;
+  --royal-950: #00061a;
   --royal-900: #041341;
-  --royal-800: #0C2369;
+  --royal-800: #0c2369;
   --royal-700: #193791;
-  --royal-600: #2B4EB9;
-  --royal-500: #4169E1;
-  --royal-400: #6183E9;
-  --royal-300: #839EF0;
-  --royal-200: #A6BBF8;
-  --royal-100: #CCD9FF;
+  --royal-600: #2b4eb9;
+  --royal-500: #4169e1;
+  --royal-400: #6183e9;
+  --royal-300: #839ef0;
+  --royal-200: #a6bbf8;
+  --royal-100: #ccd9ff;
 
   --white: #f6f6f6;
-  --neutral-950: #1B1D21;
+  --neutral-950: #1b1d21;
   --neutral-900: #222429;
-  --neutral-800: #2E3035;
-  --neutral-700: #3B3E44;
-  --neutral-600: #4C4F55;
-  --neutral-500: #5E6167;
-  --neutral-400: #74777D;
-  --neutral-300: #8D9095;
-  --neutral-200: #B2B4B9;
-  --neutral-100: #E0E2E4;
-  --neutral-050: #F6F6F6;
+  --neutral-800: #2e3035;
+  --neutral-700: #3b3e44;
+  --neutral-600: #4c4f55;
+  --neutral-500: #5e6167;
+  --neutral-400: #74777d;
+  --neutral-300: #8d9095;
+  --neutral-200: #b2b4b9;
+  --neutral-100: #e0e2e4;
+  --neutral-050: #f6f6f6;
 
   /*  semantic ui colors  */
   --danger: #f00048;
@@ -137,505 +144,610 @@
   --font-color: var(--neutral-100);
 }
 
-i, .italic {
-    font-family: var(--font-family-italic);
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: italic;
-    font-variation-settings:
-      "wdth" 100,
-      "GRAD" 0;
-  }
-  
-  
-  data, .data {
-    font-family: var(--font-family-data);
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-  .text-regular, body {
-    font-family: var(--font-family-default);
-    font-weight: 400;
-    font-style: normal;
-    text-transform: math-auto;
-  }
-  
-  .text-bold{
-    font-family: var(--font-family-default);
-    font-weight: 500;
-    font-style: normal;
-  }
-  
-  .p-bold {
-    font-family: var(--font-family-default);
-    font-weight: 700;
-    font-style: normal;
-  }
-  
-  *,
-  [class*="auto-grid"] > * {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-  }
-  
+i,
+.italic {
+  font-family: var(--font-family-italic);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-variation-settings: "wdth" 100, "GRAD" 0;
+}
+
+data,
+.data {
+  font-family: var(--font-family-data);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.text-regular,
+body {
+  font-family: var(--font-family-default);
+  font-weight: 400;
+  font-style: normal;
+  text-transform: math-auto;
+}
+
+.text-bold {
+  font-family: var(--font-family-default);
+  font-weight: 500;
+  font-style: normal;
+}
+
+.p-bold {
+  font-family: var(--font-family-default);
+  font-weight: 700;
+  font-style: normal;
+}
+
+*,
+[class*="auto-grid"] > * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-size: var(--font-size-default);
+  font-family: var(--font-family-default);
+  background: var(--background-color);
+  color: var(--white);
+  max-width: var(--space-8);
+  margin: 0 auto;
+  padding: var(--space-3);
+  transition: all 0.3s;
+}
+
+@media screen and (min-width: 768px) {
   body {
-    font-size: var(--font-size-default);
-    font-family: var(--font-family-default);
-    background: var(--background-color);
-    color: var(--white);
-    max-width: var(--space-8);
-    margin: 0 auto;
-    padding: var(--space-3);
-    transition: all 0.3s;
+    padding: var(--space-3) var(--space-4);
   }
+}
 
-  @media screen and (min-width: 768px) {
-    body {
-      padding: var(--space-3) var(--space-4);
-    }
+@media screen and (min-width: 1200px) {
+  body {
+    padding: var(--space-2) var(--space-3);
   }
+}
 
-  @media screen and (min-width: 1200px) {
-    body {
-      padding: var(--space-2) var(--space-3);
-    }
-  }
-  
-  /* scrollbar width */
-  
-  ::-webkit-scrollbar {
-    --scrollbar-thickness: var(--space-1);
-    width: var(--scrollbar-thickness);
-    height: var(--space-1);
-    background: var(----neutral-950);
-  }
-  
-  /* Scrollbar Track */
-  ::-webkit-scrollbar-track {
-    border-radius: var(--space-0);
-    background: var(--dark);
-  }
-  
-  /* Scrollbar Handle */
-  ::-webkit-scrollbar-thumb {
-    background: var(--neutral-800);
-    border-radius: var(--space-0);
-    cursor: grab;
-  }
-  
-  /* Scrollbar Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--grey-70);
-  }
-  
-  /* ------------- typography ------------*/
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: var(--line-height-header);
-    font-family: var(--font-family-default);
-  }
-  
-  h1 {
-    font-size: var(--font-size-h1);
-  }
-  
-  h2 {
-    font-size: var(--font-size-h2);
-  }
-  
-  h3 {
-    font-size: var(--font-size-h3);
-  }
-  
-  h4 {
-    font-size: var(--font-size-h4);
-  }
-  
-  h5 {
-    font-size: var(--font-size-h5);
-  }
-  
-  h6 {
-    font-size: var(--font-size-h6);
-  }
-  
-  a, .link {
-    cursor: pointer;
-    color: var(--royal-400);
-  }
-  
-  a:hover, .link:hover {
-    filter: brightness(1.3);
-  }
-  
-  p,
-  a {
-    font-size: var(--font-size-p);
-    line-height: var(--line-height-default);
-  }
-  
-  small {
-    font-size: var(--font-size-small);
-    line-height: var(--line-height-small);
-  }
-  
-  small + small,
-  p + small,
-  h1 + small,
-  h2 + small,
-  h3 + small,
-  h4 + small,
-  h5 + small,
-  h6 + small {
-    margin-top: var(--font-scale-ratio);
-  }
-  
-  label {
-    font-size: var(--font-size-label);
-    display: block;
-    line-height: var(--line-height-label);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--secondary);
-    /* margin-bottom: 1em; */
-  }
-  
-  small {
-    font-size: var(--font-size-small);
-    line-height: var(--line-height-small);
-    display: block;
-  }
-  
-  strong {
-    font-weight: 700;
-  }
-  
-  /* ------------ UI elements -----------*/
-  
-  button,
-  input[type="submit"] {
-    background: var(--primary);
-    padding: 1em 2em;
-    border-radius: 1em;
-    font-size: var(--font-size-default);
-    color: var(--white);
-    font-family: var(--font-family-default);
-    border: none;
-    -webkit-transition: 0.2s ease-out;
-    -o-transition: 0.2s ease-out;
-    transition: 0.2s ease-out;
-    -webkit-transform-origin: center;
-    -ms-transform-origin: center;
-    transform-origin: center;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    gap: var(--space-1);
-    position: relative;
-  }
+/* scrollbar width */
 
-  button.small,
-  input[type="submit"].small {
-    padding: 0.5em 1em;
-    border-radius: 0.5em;
-    font-size: var(--font-size-h6);
-  }
-  
-  button:hover,
-  input[type="submit"]:hover {
-    -webkit-filter: brightness(1.1);
-    background: var(--royal-400);
-    -webkit-transform: scale(1.025);
-    -ms-transform: scale(1.025);
-    transform: scale(1.025);
-    -webkit-transition: none;
-    -o-transition: none;
-    transition: none;
-    -webkit-transform-origin: center;
-    -ms-transform-origin: center;
-    transform-origin: center;
-  }
-  
-  button:active {
-    transform: scale(1);
-    filter: brightness(0.9);
-  }
-  
-  button.secondary,
-  input[type="submit"].secondary {
-    background: var(--secondary);
-  }
-  
-  button.secondary:hover,
-  input[type="submit"].secondary:hover {
-    filter: brightness(1.2);
-  }
-  
-  button.dark,
-  input[type="submit"].dark,
-  button.hollow,
-  input[type="submit"].hollow {
-    background: inherit;
-  }
-  
-  button.dark:hover,
-  input[type="submit"].dark:hover,
-  button.hollow,
-  input[type="submit"].hollow {
-    background: var(--dark);
-  }
-  
-  button.hollow,
-  input[type="submit"].hollow {
-    outline: 1px solid var(--primary);
-    outline-offset: -1px;
-  }
-  
-  /* normal inputs */
-  
-  input {
-    padding: 1em;
-    outline: none;
-    border: none;
-    border-bottom: 2px solid var(--secondary);
-    background: var(--dark);
-    color: inherit;
-    font-size: var(--font-size-default);
-    width: 100%;
-    transition: 0.3s ease;
-  }
-  
-  input:focus {
-    outline: 2px solid var(--primary);
-    outline-offset: -2px;
-    transform: scale(1.025);
-    transition: none;
-    background: var(--neutral-800);
-    border-color: var(--neutral-300);
-  }
-  
-  hr {
-    border: none;
-    border-bottom: 1px solid var(--dark);
-  }
-  
-  /* Checkbox */
-  
-  /* Customize the label (the container) */
-  label.checkbox,
-  label.radio {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    font-size: var(--font-size-default);
-    text-transform: unset;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: inherit;
-  }
-  
-  /* Hide the browser's default checkbox */
-  label.checkbox input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  label.checkbox .checkmark,
-  label.radio .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: calc(var(--space-3) - var(--space-0));
-    width: calc(var(--space-3) - var(--space-0));
-    border: 1px solid var(--secondary);
-    background: var(--dark);
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  label.checkbox input:checked ~ .checkmark,
-  label.radio input:checked ~ .checkmark {
-    background: var(--neutral-900);
-    transition: 0.3s ease-out;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  label.checkbox .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  label.checkbox input:checked ~ .checkmark:after {
-    display: block;
-  }
-  
-  /* Style the checkmark/indicator */
-  label.checkbox .checkmark:after {
-    left: 11px;
-    top: 6px;
-    width: var(--space-0);
-    height: var(--space-1);
-    border: solid var(--primary);
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-  
-  label.checkbox .text,
-  label.radio .text {
-    padding: 0 0 0 calc(var(--space-3) + var(--space-2));
-  }
-  
-  /* ---------radio button --------*/
-  /* The container */
-  label.radio {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* Hide the browser's default radio button */
-  label.radio input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-  }
-  
-  /* Create a custom radio button */
-  label.radio .checkmark {
-    position: absolute;
-    height: calc(var(--space-3) - var(--space-0));
-    width: calc(var(--space-3) - var(--space-0));
-    border-radius: 50%;
-  }
-  
-  /* When the radio button is checked, add a blue background */
-  label.radio input:checked ~ .checkmark,
-  label.checkbox input:checked ~ .checkmark {
-    background-color: var(--dark);
-  }
-  
-  /* Create the indicator (the dot/circle - hidden when not checked) */
-  label.radio .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Show the indicator (dot/circle) when checked */
-  label.radio input:checked ~ .checkmark:after {
-    display: block;
-  }
-  
-  /* Style the indicator (dot/circle) */
-  label.radio .checkmark:after {
-    top: 10px;
-    left: 10px;
-    width: var(--space-1);
-    height: var(--space-1);
-    border-radius: 50%;
-    background: var(--primary);
-  }
-  
-  /* On mouse-over, add a grey background color */
-  label.checkbox:hover input ~ .checkmark,
-  label.radio:hover input ~ .checkmark,
-  input:hover {
-    background: var(--neutral-700);
-    transition: none;
-  }
-  
-  /* auto grid */
-  .auto-grid-5,
-  .auto-grid-small,
-  .auto-grid,
-  .auto-grid-medium,
-  .auto-grid-6,
-  .auto-grid-large,
-  .auto-grid-7 {
-    display: -ms-grid;
-    display: grid;
-    grid-gap: var(--space-3);
-  }
-  
-  .auto-grid-5,
-  .auto-grid-small {
-    grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
-    grid-gap: var(--space-2);
-  }
-  
-  .auto-grid,
-  .auto-grid-6,
-  .auto-grid-medium {
-    grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
-  }
-  
+::-webkit-scrollbar {
+  --scrollbar-thickness: var(--space-1);
+  width: var(--scrollbar-thickness);
+  height: var(--space-1);
+  background: var(----neutral-950);
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+  border-radius: var(--space-0);
+  background: var(--dark);
+}
+
+/* Scrollbar Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-800);
+  border-radius: var(--space-0);
+  cursor: grab;
+}
+
+/* Scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-70);
+}
+
+/* ------------- typography ------------*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: var(--line-height-header);
+  font-family: var(--font-family-default);
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+h4 {
+  font-size: var(--font-size-h4);
+}
+
+h5 {
+  font-size: var(--font-size-h5);
+}
+
+h6 {
+  font-size: var(--font-size-h6);
+}
+
+a,
+.link {
+  cursor: pointer;
+  color: var(--royal-400);
+}
+
+a:hover,
+.link:hover {
+  filter: brightness(1.3);
+}
+
+p,
+a {
+  font-size: var(--font-size-p);
+  line-height: var(--line-height-default);
+}
+
+small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+small + small,
+p + small,
+h1 + small,
+h2 + small,
+h3 + small,
+h4 + small,
+h5 + small,
+h6 + small {
+  margin-top: var(--font-scale-ratio);
+}
+
+label {
+  font-size: var(--font-size-label);
+  display: block;
+  line-height: var(--line-height-label);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--secondary);
+  /* margin-bottom: 1em; */
+}
+
+small {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  display: block;
+}
+
+strong {
+  font-weight: 700;
+}
+
+/* ------------ UI elements -----------*/
+
+button,
+input[type="submit"] {
+  background: var(--primary);
+  padding: 1em 2em;
+  border-radius: 1em;
+  font-size: var(--font-size-default);
+  color: var(--white);
+  font-family: var(--font-family-default);
+  border: none;
+  -webkit-transition: 0.2s ease-out;
+  -o-transition: 0.2s ease-out;
+  transition: 0.2s ease-out;
+  -webkit-transform-origin: center;
+  -ms-transform-origin: center;
+  transform-origin: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: var(--space-1);
+  position: relative;
+}
+
+button.small,
+input[type="submit"].small {
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  font-size: var(--font-size-h6);
+}
+
+button:hover,
+input[type="submit"]:hover {
+  -webkit-filter: brightness(1.1);
+  background: var(--royal-400);
+  -webkit-transform: scale(1.025);
+  -ms-transform: scale(1.025);
+  transform: scale(1.025);
+  -webkit-transition: none;
+  -o-transition: none;
+  transition: none;
+  -webkit-transform-origin: center;
+  -ms-transform-origin: center;
+  transform-origin: center;
+}
+
+button:active {
+  transform: scale(1);
+  filter: brightness(0.9);
+}
+
+button.secondary,
+input[type="submit"].secondary {
+  background: var(--secondary);
+}
+
+button.secondary:hover,
+input[type="submit"].secondary:hover {
+  filter: brightness(1.2);
+}
+
+button.dark,
+input[type="submit"].dark,
+button.hollow,
+input[type="submit"].hollow {
+  background: inherit;
+}
+
+button.dark:hover,
+input[type="submit"].dark:hover,
+button.hollow,
+input[type="submit"].hollow {
+  background: var(--dark);
+}
+
+button.hollow,
+input[type="submit"].hollow {
+  outline: 1px solid var(--primary);
+  outline-offset: -1px;
+}
+
+/* normal inputs */
+
+input {
+  padding: 1em;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid var(--secondary);
+  background: var(--dark);
+  color: inherit;
+  font-size: var(--font-size-default);
+  width: 100%;
+  transition: 0.3s ease;
+}
+
+input:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  transform: scale(1.025);
+  transition: none;
+  background: var(--neutral-800);
+  border-color: var(--neutral-300);
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid var(--dark);
+}
+
+/* Checkbox */
+
+/* Customize the label (the container) */
+label.checkbox,
+label.radio {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: var(--font-size-default);
+  text-transform: unset;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: inherit;
+}
+
+/* Hide the browser's default checkbox */
+label.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+label.checkbox .checkmark,
+label.radio .checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: calc(var(--space-3) - var(--space-0));
+  width: calc(var(--space-3) - var(--space-0));
+  border: 1px solid var(--secondary);
+  background: var(--dark);
+}
+
+/* When the checkbox is checked, add a blue background */
+label.checkbox input:checked ~ .checkmark,
+label.radio input:checked ~ .checkmark {
+  background: var(--neutral-900);
+  transition: 0.3s ease-out;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+label.checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+label.checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+label.checkbox .checkmark:after {
+  left: 11px;
+  top: 6px;
+  width: var(--space-0);
+  height: var(--space-1);
+  border: solid var(--primary);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+label.checkbox .text,
+label.radio .text {
+  padding: 0 0 0 calc(var(--space-3) + var(--space-2));
+}
+
+/* ---------radio button --------*/
+/* The container */
+label.radio {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+label.radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+label.radio .checkmark {
+  position: absolute;
+  height: calc(var(--space-3) - var(--space-0));
+  width: calc(var(--space-3) - var(--space-0));
+  border-radius: 50%;
+}
+
+/* When the radio button is checked, add a blue background */
+label.radio input:checked ~ .checkmark,
+label.checkbox input:checked ~ .checkmark {
+  background-color: var(--dark);
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+label.radio .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+label.radio input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+label.radio .checkmark:after {
+  top: 10px;
+  left: 10px;
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* On mouse-over, add a grey background color */
+label.checkbox:hover input ~ .checkmark,
+label.radio:hover input ~ .checkmark,
+input:hover {
+  background: var(--neutral-700);
+  transition: none;
+}
+
+/* auto grid */
+.auto-grid-5,
+.auto-grid-small,
+.auto-grid,
+.auto-grid-medium,
+.auto-grid-6,
+.auto-grid-large,
+.auto-grid-7 {
+  display: -ms-grid;
+  display: grid;
+  grid-gap: var(--space-3);
+}
+
+.auto-grid-5,
+.auto-grid-small {
+  grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
+  grid-gap: var(--space-2);
+}
+
+.auto-grid,
+.auto-grid-6,
+.auto-grid-medium {
+  grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
+}
+
+.auto-grid-7,
+.auto-grid-large {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 786px) {
   .auto-grid-7,
   .auto-grid-large {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: var(--space-3);
   }
-  
-  @media screen and (min-width: 786px) {
-    .auto-grid-7,
-    .auto-grid-large {
-      grid-template-columns: 1fr 1fr;
-      grid-gap: var(--space-3);
-    }
-  }
-  
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-  }
+}
 
-  .disabled {
-    opacity: 50%;
-    pointer-events: none;
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.disabled {
+  opacity: 50%;
+  pointer-events: none;
+}
+
+.fa-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  aspect-ratio: 1/1;
+}
+
+.blink {
+  animation: blinker 0.66s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
   }
+}
 
-  .fa-icon {
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
-    aspect-ratio: 1/1;
-  }
+/*  */
 
-  .blink {
-    animation: blinker 0.66s linear infinite;
-  }
+.tooltip {
+  position: relative;
+}
 
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
+/* appears bottom center by default */
+/* if used on buttons it will always try to appear center */
+/* any "flex-centered" element will center the tooltip */
+.tooltip::after {
+  content: attr(tooltip);
+  position: absolute;
+  font-size: var(--font-size-small);
+  background: inherit;
+  padding: var(--space-0);
+  border-radius: var(--space-0);
+  visibility: hidden;
+  color: inherit;
+  opacity: 0;
+  pointer-events: none;
+  top: calc(100% + var(--space-0));
+  transition: opacity 0.3s ease-in-out;
+  font-family: var(--font-family-data);
+  width:fit-content;
+  max-width: var(--space-7);
+  text-align: left;
+  /* white-space: wrap; */
+}
 
-  /* light theme */
+.tooltip:hover::after {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 1s;
+  filter: brightness(0.5) grayscale(0.75);
+}
 
-  :root.light {
+.tooltip.bottom::after {
+  top: calc(100% + var(--space-0));
+  right: unset;
+  left: unset;
+  bottom: unset;
+}
+
+.tooltip.bottom-left::after {
+  top: calc(100% + var(--space-0));
+  right: 0;
+  left: unset;
+  bottom: unset;
+}
+
+.tooltip.bottom-right::after {
+  top: calc(100% + var(--space-0));
+  right: unset;
+  left: 0;
+  bottom: unset;
+}
+
+.tooltip.top::after {
+  top: unset;
+  right: unset;
+  left: unset;
+  bottom: calc(100% + var(--space-0));
+}
+
+.tooltip.top-left::after {
+  top: unset;
+  right: 0;
+  left: unset;
+  bottom: calc(100% + var(--space-0));
+}
+
+.tooltip.top-right::after {
+  top: unset;
+  right: unset;
+  left: 0;
+  bottom: calc(100% + var(--space-0));
+}
+
+.tooltip.left::after {
+  top: unset;
+  left: unset;
+  right: calc(100% + var(--space-0));
+  bottom: unset;
+}
+
+.tooltip.right::after {
+  top: unset;
+  left: calc(100% + var(--space-0));
+  right: unset;
+  bottom: unset;
+}
+
+.tooltip.center::after {
+  top: unset;
+  left: unset;
+  right: unset;
+  bottom: unset;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+
+
+/* light theme */
+
+:root.light {
   --neutral-800: var(--neutral-100);
   --white: var(--neutral-600);
   --neutral-700: var(--neutral-200);
@@ -645,27 +757,31 @@ i, .italic {
   --dark: var(--neutral-050);
   --background-color: #fff;
   --font-color: var(--neutral-950);
-  }
+}
 
-  html.light body {
-    background-color: var(--background-color);
-    transition: all 0.3s;
-  }
+html.light body {
+  background-color: var(--background-color);
+  transition: all 0.3s;
+}
 
-  html.light button:not(.secondary):not(.dark):not(.hollow) {
-    color: white;
-  }
+html.light button:not(.secondary):not(.dark):not(.hollow) {
+  color: white;
+}
 
-  html.light label {
-    color: var(--neutral-200);
-  }
+html.light label {
+  color: var(--neutral-200);
+}
 
-  html.light button.hollow,
-  html.light input[type="submit"].hollow {
-    outline: 1px solid var(--neutral-100);
-  }
+html.light button.hollow,
+html.light input[type="submit"].hollow {
+  outline: 1px solid var(--neutral-100);
+}
 
-  html.light button.hollow:hover,
-  html.light input[type="submit"].hollow:hover {
-    outline: 1px solid var(--neutral-200);
-  }
+html.light button.hollow:hover,
+html.light input[type="submit"].hollow:hover {
+  outline: 1px solid var(--neutral-200);
+}
+
+html.light .tooltip:hover::after {
+  filter: brightness(1.5) grayscale(0.75);
+}

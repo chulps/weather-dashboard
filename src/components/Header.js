@@ -19,6 +19,7 @@ const Header = () => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+    console.log(theme)
   };
 
   useEffect(() => {
@@ -35,7 +36,8 @@ const Header = () => {
         <img className="logo" src={logo} alt="Chuck Howard" />
       </a>
       <div className="header-right">
-        <button onClick={toggleTheme} className="theme-toggle">
+        <button onClick={toggleTheme} className="theme-toggle tooltip left" tooltip={theme === 'dark' ? "Switch to light mode" : "Switch to dark mode"}>
+
           {theme === "dark" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
         </button>
       </div>
