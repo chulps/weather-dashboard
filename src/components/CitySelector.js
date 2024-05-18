@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
@@ -141,24 +141,27 @@ function CitySelector({ setCity }) {
     );
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (latLon) {
-      try {
-        const { data } = await axios.get(`${baseUrl}/api/location`, {
-          params: { lat: latLon.latitude, lon: latLon.longitude },
-        });
-        setCity(data.city);
-        setLatLon(null);
-      } catch (error) {
-        console.error("Error fetching city from coordinates:", error);
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (latLon) {
+        try {
+          const { data } = await axios.get(`${baseUrl}/api/location`, {
+            params: { lat: latLon.latitude, lon: latLon.longitude },
+          });
+          setCity(data.city);
+          setLatLon(null);
+        } catch (error) {
+          console.error("Error fetching city from coordinates:", error);
+        }
+      } else {
+        setCity(input);
       }
-    } else {
-      setCity(input);
-    }
-    setInput("");
-    window.scrollTo(0, 0);
-  };
+      setInput("");
+      window.scrollTo(0, 0);
+    },
+    [latLon, baseUrl, input, setCity]
+  );
 
   const handleRandomCity = (event) => {
     event.preventDefault();
@@ -171,7 +174,7 @@ function CitySelector({ setCity }) {
     if (latLon) {
       handleSubmit(new Event("submit"));
     }
-  }, [latLon]);
+  }, [latLon, handleSubmit]);
 
   return (
     <form className="city-selector" onSubmit={handleSubmit}>
@@ -222,7 +225,8 @@ function CitySelector({ setCity }) {
       <div className="button-wrapper">
         <div className="options-wrapper">
           <button
-            className={input === "" ? "hollow" : "hollow disabled"}
+            className={`tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"}`}
+            tooltip="🎲 Roll the dice and see what happens!"
             type="button"
             onClick={handleRandomCity}
           >
@@ -231,7 +235,8 @@ function CitySelector({ setCity }) {
           </button>
 
           <button
-            className={`hollow ${fetchingLocation ? "disabled" : ""}`}
+            className={`hollow tooltip bottom ${fetchingLocation ? "disabled" : ""}`}
+            tooltip="Get weather data for your current location."
             type="button"
             onClick={handleLocation}
             disabled={fetchingLocation}
@@ -251,7 +256,11 @@ function CitySelector({ setCity }) {
           </button>
         </div>
 
-        <button className={input === "" ? "disabled" : ""} type="submit">
+        <button
+          className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
+          type="submit"
+          tooltip="↖︎ Enter a city into the input field above"
+        >
           <FontAwesomeIcon className="fa-icon" icon={faSearch} />
           Search
         </button>
