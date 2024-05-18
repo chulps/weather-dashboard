@@ -40,6 +40,10 @@
     U+FEFF, U+FFFD;
 }
 
+/* html {
+  overflow-x: hidden;
+} */
+
 :root {
   --root-size: 56.25%; /* equal to 9px = 1em = 1rem */
   font-size: var(--root-size);
@@ -98,11 +102,11 @@
   --font-size-default: var(--font-size-p);
 
   /* lineheight || "letting" */
-  --line-height-default: 2;
-  --line-height-header: calc(0.79 * 5 / 3);
+  --line-height-default: calc(1 * 5 / 3);
+  --line-height-header: 1;
   --line-height-p: var(--line-height-default);
-  --line-height-small: 2;
-  --line-height-label: var(--font-size-h6);
+  --line-height-small: var(--line-height-default);
+  --line-height-label: var(--font-size-h5);
 
   font-family: var(--font-family-default);
   line-height: var(--line-height-default);
@@ -142,6 +146,13 @@
   --dark: var(--neutral-900);
   --background-color: var(--neutral-950);
   --font-color: var(--neutral-100);
+
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
 }
 
 i,
@@ -159,14 +170,6 @@ data,
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-}
-
-.text-regular,
-body {
-  font-family: var(--font-family-default);
-  font-weight: 400;
-  font-style: normal;
-  text-transform: math-auto;
 }
 
 .text-bold {
@@ -190,26 +193,26 @@ body {
   scroll-behavior: smooth;
 }
 
+.text-regular,
 body {
   font-size: var(--font-size-default);
-  font-family: var(--font-family-default);
+  font-family: var(--font-family-default); /* Duplicate declaration */
   background: var(--background-color);
   color: var(--white);
   max-width: var(--space-8);
   margin: 0 auto;
   padding: var(--space-3);
   transition: all 0.3s;
+  font-weight: 400;
+  font-style: normal;
+  text-transform: math-auto;
+  /* overflow-x: hidden; */
+  display: grid;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1198px) {
   body {
-    padding: var(--space-3) var(--space-4);
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  body {
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-3) 0;
   }
 }
 
@@ -290,6 +293,7 @@ p,
 a {
   font-size: var(--font-size-p);
   line-height: var(--line-height-default);
+  text-decoration: none;
 }
 
 small {
@@ -783,5 +787,19 @@ html.light input[type="submit"].hollow:hover {
 }
 
 html.light .tooltip:hover::after {
-  filter: brightness(1.5) grayscale(0.75);
+  filter: grayscale(0.75) invert(.25);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

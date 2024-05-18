@@ -177,95 +177,98 @@ function CitySelector({ setCity }) {
   }, [latLon, handleSubmit]);
 
   return (
-    <form className="city-selector" onSubmit={handleSubmit}>
-      <div>
-        <label>about this app...</label>
-        <h1 className="site-header">AI Weather Dashboard</h1>
-        <p>
-          This app provides weather data and uses Artificial Intelligence to
-          make useful suggestions based on that data. Play around with it and
-          enjoy!
-        </p>
-      </div>
-      <div className="city-input-container">
-        <input
-          className="city-input"
-          type="text"
-          name="city"
-          placeholder="Enter city"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-        />
-        {input.length > 0 && suggestions.length > 0 && (
-          <ul className="suggestions" ref={suggestionsRef}>
-            {suggestions.map((suggestion) => (
-              <li
-                key={suggestion.description}
-                onClick={() => handleSuggestionClick(suggestion)}
-              >
-                {suggestion.description}
-              </li>
-            ))}
-          </ul>
-        )}
-        {input && (
+    <div className="city-selector-container">
+      <form className="city-selector" onSubmit={handleSubmit}>
+        <div>
+          <label>about this app...</label>
+          <h1 className="site-header">AI Weather Dashboard</h1>
+          <p className="app-description">
+            This app provides weather data and uses Artificial Intelligence to
+            make useful suggestions based on that data. Play around with it and
+            enjoy!
+          </p>
+        </div>
+        <div className="city-input-container">
+          <input
+            className="city-input"
+            type="text"
+            name="city"
+            placeholder="Enter city"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+          {input.length > 0 && suggestions.length > 0 && (
+            <ul className="suggestions" ref={suggestionsRef}>
+              {suggestions.map((suggestion) => (
+                <li
+                  key={suggestion.description}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  {suggestion.description}
+                </li>
+              ))}
+            </ul>
+          )}
+          {input && (
+            <button
+              className="clear-button secondary small"
+              type="button"
+              onClick={() => {
+                setInput("");
+                setSuggestions([]);
+              }}
+            >
+              Clear
+            </button>
+          )}
+        </div>
+  
+        <div className="button-wrapper">
+          <div className="options-wrapper">
+            <button
+              className={`tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"}`}
+              tooltip="🎲 Roll the dice and see what happens!"
+              type="button"
+              onClick={handleRandomCity}
+            >
+              <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
+              <span>Random</span>
+            </button>
+  
+            <button
+              className={`hollow tooltip bottom ${fetchingLocation ? "disabled" : ""}`}
+              tooltip="Get weather data for your current location."
+              type="button"
+              onClick={handleLocation}
+              disabled={fetchingLocation}
+            >
+              <span>
+                <FontAwesomeIcon className="fa-icon" icon={faLocationDot} />
+              </span>
+              <span>
+                {fetchingLocation ? (
+                  <span className="blink">Locating...</span>
+                ) : locationFound ? (
+                  <span className="blink">Found!</span>
+                ) : (
+                  "My Location"
+                )}
+              </span>
+            </button>
+          </div>
+  
           <button
-            className="clear-button secondary small"
-            type="button"
-            onClick={() => {
-              setInput("");
-              setSuggestions([]);
-            }}
+            style={{padding: '1em'}}
+            className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
+            type="submit"
+            tooltip="↖︎ Enter a city into the input field above"
           >
-            Clear
-          </button>
-        )}
-      </div>
-
-      <div className="button-wrapper">
-        <div className="options-wrapper">
-          <button
-            className={`tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"}`}
-            tooltip="🎲 Roll the dice and see what happens!"
-            type="button"
-            onClick={handleRandomCity}
-          >
-            <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
-            <span>Random</span>
-          </button>
-
-          <button
-            className={`hollow tooltip bottom ${fetchingLocation ? "disabled" : ""}`}
-            tooltip="Get weather data for your current location."
-            type="button"
-            onClick={handleLocation}
-            disabled={fetchingLocation}
-          >
-            <span>
-              <FontAwesomeIcon className="fa-icon" icon={faLocationDot} />
-            </span>
-            <span>
-              {fetchingLocation ? (
-                <span className="blink">Locating...</span>
-              ) : locationFound ? (
-                <span className="blink">Found!</span>
-              ) : (
-                "My Location"
-              )}
-            </span>
+            <FontAwesomeIcon className="fa-icon" icon={faSearch} />
+            Search
           </button>
         </div>
-
-        <button
-          className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
-          type="submit"
-          tooltip="↖︎ Enter a city into the input field above"
-        >
-          <FontAwesomeIcon className="fa-icon" icon={faSearch} />
-          Search
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
 

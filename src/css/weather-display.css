@@ -1,7 +1,7 @@
 .weather-display {
   width: 100%;
-  /* display: flex;
-  align-items: center; */
+  display: flex;
+  flex-grow: 1;
 }
 
 .weather-content {
@@ -43,15 +43,43 @@
     width: 100%;
   }
 
+  .quote-container {
+    margin-inline: 0;
+    width: 100%;
+    padding: var(--space-2);
+  }
+
+  @media screen and (min-width: 576px) {
+    .quote-container {
+      margin-inline: var(--space-3);
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    .quote-container {
+      margin-inline: 0;
+      padding: 0;
+    }
+  }
+
   .weather-quote {
     border-left: 1px solid var(--secondary);
-    ;
-    padding-left: var(--space-2);
-    margin-top: var(--space-2);
+    padding-inline: var(--space-2);
+    margin-top: var(--space-1);
+    font-size: var(--font-size-h3);
+    line-height: calc(1 * 4 / 3);
+  }
+
+  @media screen and (min-width: 576px) {
+    .weather-quote {
+      font-size: var(--font-size-h3);
+    }
   }
 
   .weather-quote-author {
+    margin-top: var(--space-2);
     text-align: right;
+
   }
 
   
@@ -75,4 +103,26 @@
 .weather-icon {
   height: var(--space-4);
   margin: var(--space-2) auto;
+}
+
+.quote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  position: relative;
+}
+
+.refresh-quote {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  position: absolute;
+  right: 0;
+  color: white;
+}
+
+.show-quotes-button {
+  position: absolute;
+  left: 0;
 }
