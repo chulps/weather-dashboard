@@ -36,9 +36,9 @@ export const aiQuote = async (weather) => {
   try {
     // Send a POST request to the OpenAI API endpoint
     const response = await axios.post(`${baseUrl}/api/openai`, {
-      model: "gpt-4",
+      model: "gpt-4o",
       messages: prompt,
-      max_tokens: 150,
+      max_tokens: 100,
       temperature: 0.9,
       top_p: 1,
       frequency_penalty: 0.2,

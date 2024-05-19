@@ -40,10 +40,6 @@
     U+FEFF, U+FFFD;
 }
 
-/* html {
-  overflow-x: hidden;
-} */
-
 :root {
   --root-size: 56.25%; /* equal to 9px = 1em = 1rem */
   font-size: var(--root-size);
@@ -206,8 +202,8 @@ body {
   font-weight: 400;
   font-style: normal;
   text-transform: math-auto;
-  /* overflow-x: hidden; */
   display: grid;
+  overflow-x: hidden;
 }
 
 @media screen and (min-width: 1198px) {
@@ -326,6 +322,10 @@ small {
   font-size: var(--font-size-small);
   line-height: var(--line-height-small);
   display: block;
+}
+
+.font-family-data {
+  font-family: var(--font-family-data);
 }
 
 strong {

@@ -156,7 +156,7 @@ function WeatherDisplay({ city }) {
           <div className="weather-header">
             <label>Current conditions</label>
             <span
-              tooltip="More quotes?"
+              tooltip="Back to quotes"
               className="toggle-view-button tooltip left"
               onClick={toggleView}
             >
@@ -216,7 +216,7 @@ function WeatherDisplay({ city }) {
             <label>About the weather...</label>
             <span
               tooltip="Get a fresh quote"
-              className={`refresh-quote tooltip left ${refreshTimeout? "disabled" : ""}`}
+              className={`refresh-quote tooltip left ${refreshingQuote ? "disabled" : ""} ${refreshTimeout ? "disabled" : ""}`}
               onClick={handleRefreshQuote}
             >
               {!refreshTimeout && refreshingQuote && (
