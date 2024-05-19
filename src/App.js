@@ -16,8 +16,8 @@ function App() {
       <Header />
       <main className="App">
         <div className="content">
-          <WeatherDisplay city={city} />
           <CitySelector setCity={setCity} />
+          <WeatherDisplay city={city} />
         </div>
       </main>
       <Footer />

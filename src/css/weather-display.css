@@ -78,9 +78,9 @@
   margin-top: var(--space-2);
 }
 
-.system-message {
-  text-align: center;
-  width: 100%;
+.warning {
+  color: var(--warning);
+  background: var(--background-color);
 }
 
 .weather-icon {
@@ -118,5 +118,12 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
+}
 
+.warning-bomb {
+  background: var(--warning);
+  padding: var(--space-0) var(--space-1);
+  color: var(--background-color);
+  margin-right: var(--space-1);
+  border-radius: var(--space-0);
 }
