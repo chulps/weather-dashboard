@@ -25,7 +25,8 @@ export const getWeatherAdviceFromGPT = async (weather) => {
       
       Provide practical advice on local activities, food, precautions, or clothing using emojis.
       Make the users laugh. Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
-      Use <label> to separate topics. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
+      Use <label> to separate topics. No <b>, <i>, or <u> tags within a <label>. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
+      Perhaps add a link to do a google search for some attraction or event in the city encased in an <a> tag with target="_blank".
       Keep sections concise for easy reading.`,
     },
   ];

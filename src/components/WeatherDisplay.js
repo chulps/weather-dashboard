@@ -156,7 +156,7 @@ function WeatherDisplay({ city }) {
           <div className="weather-header">
             <label>Current conditions</label>
             <span
-              tooltip="Back to quotes"
+              tooltip="←Back to quotes"
               className="toggle-view-button tooltip left"
               onClick={toggleView}
             >
