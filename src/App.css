@@ -11,7 +11,6 @@
   display: grid;
   gap: var(--space-3);
   max-width: var(--space-7);
-  grid-template-rows: 1fr 1fr;
 }
 
 @media screen and (min-width: 576px) {
@@ -34,7 +33,6 @@
     max-width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: unset;
   }
 }
 

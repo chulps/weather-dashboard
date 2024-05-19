@@ -42,10 +42,6 @@
   width: 100%;
 }
 
-.quote-container {
-  padding: var(--space-2);
-}
-
 @media screen and (min-width: 576px) {
   .quote-container {
     margin-inline: var(--space-3);
@@ -120,6 +116,7 @@
 .weather-header {
   display: flex;
   width: 100%;
-  text-align: left;
+  justify-content: space-between;
   align-items: center;
+
 }

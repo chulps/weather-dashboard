@@ -17,8 +17,8 @@ const RotatingText = (props) => {
         <animateTransform
           attributeName="transform"
           type="rotate"
-          from="0 50 50"
-          to="360 50 50"
+          from="360 50 50"
+          to="0 50 50"
           dur="12s"
           repeatCount="indefinite"
         ></animateTransform>
