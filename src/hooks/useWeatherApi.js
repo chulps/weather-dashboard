@@ -29,17 +29,26 @@ const fetchWeatherData = async (city, baseUrl) => {
     // Merge the data from both APIs
     return mergeWeatherData(Odata, Wdata);
   } catch (error) {
-    console.error("Error fetching weather data:", error);
+    // Handle errors based on the API that failed
+    if (error.config && error.config.url) {
+      const apiName = error.config.url.includes("openweather")
+        ? "OpenWeather API"
+        : "WeatherMap API";
+      console.error(`Error fetching weather data from ${apiName}:`, error);
+    } else {
+      console.error("Error fetching weather data:", error);
+    }
     throw error;
   }
 };
 
 export const useWeatherApi = (city) => {
-  // State variables for weather data, loading state, and error
+  // State variables for weather data, loading state, error, and warning
   const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(null);
+
   // Determine the base URL based on the environment
   const baseUrl =
     currentEnv === "production"
@@ -52,21 +61,36 @@ export const useWeatherApi = (city) => {
       // Return if no city is provided
       if (!city) return;
 
-      // Set loading state to true
+      // Set loading state to true, clear warning and error
       setLoading(true);
       setWarning(null);
       setError(null);
+
       try {
         // Fetch weather data and update state
         const weatherData = await fetchWeatherData(city, baseUrl);
         setWeather(weatherData);
       } catch (error) {
         console.error(error);
-        // Set error state if unable to fetch weather data
-        if (error.response.status === 400) {
-          setWarning("Sorry, we don't have data for that location");
+        // Set warning state with a descriptive message based on the error
+        if (error.response && error.response.status === 400) {
+          setWarning(
+            `Sorry, we couldn't find weather data for "${city}". Please check the city name and try again.`
+          );
+        } else if (error.response && error.response.status === 500) {
+          setWarning(
+            "There is a problem with our data source, please check back later."
+          );
+        } else if (error.code === "ECONNABORTED") {
+          setWarning("Sorry, the request timed out. Please try again later.");
+        } else if (error.code === "EAI_AGAIN") {
+          setWarning(
+            "Sorry, there was a temporary failure in name resolution. Please try again later."
+          );
         } else {
-          setWarning("Sorry, something went wrong");
+          setWarning(
+            "Sorry, an unexpected error occurred while fetching weather data. Please try again later."
+          );
         }
       } finally {
         // Set loading state to false after fetching data
@@ -78,6 +102,6 @@ export const useWeatherApi = (city) => {
     fetchWeather();
   }, [city, baseUrl]);
 
-  // Return weather data, loading state, and error state
+  // Return weather data, loading state, warning, and error state
   return { weather, loading, warning, error };
 };

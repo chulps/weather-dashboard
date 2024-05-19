@@ -5,13 +5,13 @@
 }
 
 .weather-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    width: 100%;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
 .weather-data {
   width: 100%;
   display: flex;
@@ -24,75 +24,62 @@
   flex: 1;
 }
 
-.weather-location {
-  text-align: center;
-}
-
-.weather-city {
-  text-align: center;
-}
-
-  .weather-top {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  .weather-advice {
-    width: 100%;
-  }
-
-  .quote-container {
-    margin-inline: 0;
-    width: 100%;
-    padding: var(--space-2);
-  }
-
-  @media screen and (min-width: 576px) {
-    .quote-container {
-      margin-inline: var(--space-3);
-    }
-  }
-
-  @media screen and (min-width: 992px) {
-    .quote-container {
-      margin-inline: 0;
-      padding: 0;
-    }
-  }
-
-  .weather-quote {
-    border-left: 1px solid var(--secondary);
-    padding-inline: var(--space-2);
-    margin-top: var(--space-1);
-    font-size: var(--font-size-h3);
-    line-height: calc(1 * 4 / 3);
-  }
-
-  @media screen and (min-width: 576px) {
-    .weather-quote {
-      font-size: var(--font-size-h3);
-    }
-  }
-
-  .weather-quote-author {
-    margin-top: var(--space-2);
-    text-align: right;
-
-  }
-
-  
-.weather-advice label:not(:first-child) {
-  margin-top: var(--space-2);
-}
-
+.weather-location,
+.weather-city,
 .weather-temperature {
   text-align: center;
 }
 
-.weather-temperature small {
-  margin: 0;
+.weather-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.weather-advice,
+.quote-container {
+  width: 100%;
+}
+
+.quote-container {
+  padding: var(--space-2);
+}
+
+@media screen and (min-width: 576px) {
+  .quote-container {
+    margin-inline: var(--space-3);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .quote-container {
+    margin-inline: 0;
+    padding: 0;
+  }
+}
+
+.weather-quote {
+  border-left: 1px solid var(--secondary);
+  padding-inline: var(--space-2);
+  margin-top: var(--space-1);
+  font-size: var(--font-size-h3);
+  line-height: calc(1 * 4 / 3);
+}
+
+@media screen and (min-width: 576px) {
+  .weather-quote {
+    font-size: var(--font-size-h3);
+  }
+}
+
+.weather-quote-author {
+  margin-top: var(--space-2);
+  text-align: right;
+}
+
+.weather-advice label:not(:first-child) {
+  margin-top: var(--space-2);
 }
 
 .system-message {
@@ -113,22 +100,26 @@
   position: relative;
 }
 
-.refresh-quote {
+.refresh-quote,
+.toggle-view-button {
   display: flex;
   align-items: center;
   gap: var(--space-1);
   position: absolute;
   right: 0;
-  color: white;
   cursor: pointer;
   color: var(--secondary);
+  z-index: 1;
 }
 
-.refresh-quote:hover {
+.refresh-quote:hover,
+.toggle-view-button:hover {
   color: var(--neutral-200);
 }
 
-.show-quotes-button {
-  position: absolute;
-  left: 0;
+.weather-header {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  align-items: center;
 }

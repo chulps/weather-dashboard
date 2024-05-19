@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
 import { aiQuote } from "../utils/aiQuoteUtils";
-import DOMPurify from "dompurify"; // Import DOMPurify
+import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 
 function WeatherDisplay({ city }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
@@ -15,6 +15,10 @@ function WeatherDisplay({ city }) {
   const [link, setLink] = useState("");
   const [currentTime, setCurrentTime] = useState("");
   const [refreshingQuote, setRefreshingQuote] = useState(false);
+  const [showWeather, setShowWeather] = useState(false);
+  const [refreshCount, setRefreshCount] = useState(0);
+  const [refreshTimeout, setRefreshTimeout] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(0);
 
   const errorMessage = "Error fetching quote.";
   const refreshMessage = "Try refreshing the page.";
@@ -36,23 +40,48 @@ function WeatherDisplay({ city }) {
   }, []);
 
   const handleRefreshQuote = () => {
-    setRefreshingQuote(true);
-    aiQuote()
-      .then((response) => {
-        const { quote, author, link } = JSON.parse(response);
-        setQuote(quote);
-        setAuthor(author);
-        setLink(link);
-        setRefreshingQuote(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching quote from OpenAI:", error);
-        setQuote(errorMessage);
-        setAuthor(refreshMessage);
-        setLink("");
-        setRefreshingQuote(false);
-      });
+    if (refreshTimeout) return; // Prevent click if in cooldown period
+
+    if (refreshCount < 3) {
+      setRefreshingQuote(true);
+      setRefreshCount(refreshCount + 1);
+      aiQuote()
+        .then((response) => {
+          const { quote, author, link } = JSON.parse(response);
+          setQuote(quote);
+          setAuthor(author);
+          setLink(link);
+          setRefreshingQuote(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching quote from OpenAI:", error);
+          setQuote(errorMessage);
+          setAuthor(refreshMessage);
+          setLink("");
+          setRefreshingQuote(false);
+        });
+    } else {
+      const timeout = 60;
+      setRefreshTimeout(Date.now() + timeout * 1000);
+      setRemainingTime(timeout);
+    }
   };
+
+  useEffect(() => {
+    if (refreshTimeout) {
+      const intervalId = setInterval(() => {
+        const timeLeft = Math.ceil((refreshTimeout - Date.now()) / 1000);
+        setRemainingTime(timeLeft);
+        if (timeLeft <= 0) {
+          setRefreshCount(0);
+          setRefreshTimeout(null);
+          clearInterval(intervalId);
+        }
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [refreshTimeout]);
 
   useEffect(() => {
     if (weather.city) {
@@ -61,7 +90,6 @@ function WeatherDisplay({ city }) {
       } else {
         getWeatherAdviceFromGPT(weather)
           .then((advice) => {
-            // Sanitize the HTML content
             const sanitizedAdvice = DOMPurify.sanitize(advice);
             setAdvice(sanitizedAdvice);
           })
@@ -79,7 +107,7 @@ function WeatherDisplay({ city }) {
       setCurrentTime(formatTime(initialTime));
 
       const now = new Date();
-      const delay = 60000 - (now % 60000); // Time remaining until the next minute
+      const delay = 60000 - (now % 60000);
 
       const updateCurrentTime = () => {
         const newTime = new Date();
@@ -107,14 +135,37 @@ function WeatherDisplay({ city }) {
     });
   };
 
+  const toggleView = () => {
+    setShowWeather(!showWeather);
+  };
+
+  useEffect(() => {
+    if (weather.city) {
+      setShowWeather(true);
+    }
+  }, [weather.city]);
+
   if (loading) return <data className="system-message blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
   if (warning) return <data className="system-message">Oops!: {warning}</data>;
 
   return (
     <div className="weather-display">
-      {weather.city ? (
+      {showWeather ? (
         <div className="weather-content">
+          <div className="weather-header">
+            <label>Current conditions</label>
+            <span
+              tooltip="More quotes?"
+              className="toggle-view-button tooltip left"
+              onClick={toggleView}
+            >
+              <FontAwesomeIcon
+                className={refreshingQuote ? "spin" : ""}
+                icon={faQuoteLeft}
+              />
+            </span>
+          </div>
           <div className="weather-top">
             <div className="weather-temperature">
               <h1>{Math.round(weather.temperature)}°C</h1>
@@ -132,7 +183,8 @@ function WeatherDisplay({ city }) {
             <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
               <p>
-                {weather.region + ', '}{weather.country}
+                {weather.region + ", "}
+                {weather.country}
               </p>
             </div>
 
@@ -150,7 +202,6 @@ function WeatherDisplay({ city }) {
               </div>
             </div>
           </div>
-
           <div className="weather-advice">
             <div
               dangerouslySetInnerHTML={{
@@ -163,8 +214,15 @@ function WeatherDisplay({ city }) {
         <div className="quote-container">
           <div className="quote-header">
             <label>About the weather...</label>
-            <span className="refresh-quote" onClick={handleRefreshQuote}>
-              {refreshingQuote ? <small>It's time for a freshy...</small> : ""}
+            <span
+              tooltip="Get a fresh quote"
+              className={`refresh-quote tooltip left ${refreshTimeout? "disabled" : ""}`}
+              onClick={handleRefreshQuote}
+            >
+              {!refreshTimeout && refreshingQuote && (
+                <small>Getting fresh quote...</small>
+              )}
+              {refreshTimeout && <small>Please wait {remainingTime} seconds</small>}
               <FontAwesomeIcon
                 className={refreshingQuote ? "spin" : ""}
                 icon={faArrowsRotate}
