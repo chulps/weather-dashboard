@@ -1,18 +1,21 @@
+// utils/openAiUtils.js
 import axios from "axios";
 import getEnv from "../utils/getEnv";
 
-// Get the current environment (production or development)
 const currentEnv = getEnv();
-
-// Determine the base URL based on the environment
 const baseUrl =
   currentEnv === "production"
     ? "https://limitless-lake-38337.herokuapp.com"
     : "http://localhost:3001";
 
-// Function to get weather advice from GPT
+const cache = new Map();
+
 export const getWeatherAdviceFromGPT = async (weather) => {
-  // Prompt for GPT to provide weather advice based on given conditions
+  const cacheKey = JSON.stringify(weather);
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
+
   const prompt = [
     {
       role: "system",
@@ -26,13 +29,12 @@ export const getWeatherAdviceFromGPT = async (weather) => {
       Provide practical advice on local activities, food, precautions, or clothing using emojis.
       Make the users laugh. Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
       Use <label> to separate topics. No <b>, <i>, or <u> tags within a <label>. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
-      Perhaps add a link to do a google search for some attraction or event in the city encased in an <a> tag with target="_blank".
+      Perhaps add a link to do a google search for some attraction or event in the city encased in an <a href="EXAMPLE" target="_blank" > tag.
       Keep sections concise for easy reading.`,
     },
   ];
 
   try {
-    // Send a POST request to the OpenAI API endpoint
     const response = await axios.post(`${baseUrl}/api/openai`, {
       model: "gpt-4o",
       messages: prompt,
@@ -43,16 +45,15 @@ export const getWeatherAdviceFromGPT = async (weather) => {
       presence_penalty: 0.1,
     });
 
-    // Return the response from GPT
-    return response.data.choices[0].message.content;
+    const advice = response.data.choices[0].message.content;
+    cache.set(cacheKey, advice);
+    return advice;
   } catch (error) {
-    // Log the error if the request fails
     console.error("Failed to fetch AI-generated advice:", error);
-    // Return a thoughtful error message based on the status code
     if (error.response && error.response.status === 400) {
       return "The request was invalid. Please check your input and try again.";
     } else if (error.response && error.response.status === 500) {
-      return "We couldn't get advice because of a problem with the OpenAI API. Please try again later. Maybe chuck needs to add some credits to his API?";
+      return "We couldn't get advice because of a problem with the OpenAI API. Please try again later.";
     } else {
       return "Unable to fetch advice at this time. Please check your internet connection and try again.";
     }

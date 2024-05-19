@@ -1,3 +1,4 @@
+// components/WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
@@ -40,7 +41,7 @@ function WeatherDisplay({ city }) {
   }, []);
 
   const handleRefreshQuote = () => {
-    if (refreshTimeout) return; // Prevent click if in cooldown period
+    if (refreshTimeout) return;
 
     if (refreshCount < 3) {
       setRefreshingQuote(true);
@@ -216,13 +217,17 @@ function WeatherDisplay({ city }) {
             <label>About the weather...</label>
             <span
               tooltip="Get a fresh quote"
-              className={`refresh-quote tooltip left ${refreshingQuote ? "disabled" : ""} ${refreshTimeout ? "disabled" : ""}`}
+              className={`refresh-quote tooltip left ${
+                refreshingQuote ? "disabled" : ""
+              } ${refreshTimeout ? "disabled" : ""}`}
               onClick={handleRefreshQuote}
             >
               {!refreshTimeout && refreshingQuote && (
                 <small>Getting fresh quote...</small>
               )}
-              {refreshTimeout && <small>Please wait {remainingTime} seconds</small>}
+              {refreshTimeout && (
+                <small>Please wait {remainingTime} seconds</small>
+              )}
               <FontAwesomeIcon
                 className={refreshingQuote ? "spin" : ""}
                 icon={faArrowsRotate}

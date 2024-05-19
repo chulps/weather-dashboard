@@ -118,10 +118,21 @@
   --royal-200: #a6bbf8;
   --royal-100: #ccd9ff;
 
-  --white: #f6f6f6;
+  --electric-950: #001d1f;
+  --electric-900: #0a5f65;
+  --electric-800: #209aa2;
+  --electric-700: #3fc9d3;
+  --electric-600: #60e8f1;
+  --electric-500: #80f9ff;
+  --electric-400: #99f9ff;
+  --electric-300: #b3fbff;
+  --electric-200: #ccfcff;
+  --electric-100: #e6feff;
+
+  --black: #000;
   --neutral-950: #1b1d21;
   --neutral-900: #222429;
-  --neutral-800: #2e3035;
+  --netural-800: #2e3035;
   --neutral-700: #3b3e44;
   --neutral-600: #4c4f55;
   --neutral-500: #5e6167;
@@ -129,13 +140,63 @@
   --neutral-300: #8d9095;
   --neutral-200: #b2b4b9;
   --neutral-100: #e0e2e4;
-  --neutral-050: #f6f6f6;
+  --neutral-050: #f0f1f2;
+  --white: #ffffff;
+
+  --danger-950: #1a0000;
+  --danger-900: #330000;
+  --danger-800: #600505;
+  --danger-700: #8c0e0e;
+  --danger-600: #b91c1c;
+  --danger-500: #e62e2e;
+  --danger-400: #ff5a5a;
+  --danger-300: #ff8080;
+  --danger-200: #ffa6a6;
+  --danger-100: #ffcccc;
+
+  --success-950: #03140a;
+  --success-900: #062814;
+  --success-800: #0c5129;
+  --success-700: #12793d;
+  --success-600: #18a251;
+  --success-500: #1eca6b;
+  --success-400: #43d585;
+  --success-300: #6ddfa0;
+  --success-200: #9aeabe;
+  --success-100: #cbf4dd;
+
+  --warning-950: #1a170a;
+  --warning-900: #332e14;
+  --warning-800: #665c29;
+  --warning-700: #99893d;
+  --warning-600: #ccb751;
+  --warning-500: #ffe565;
+  --warning-400: #fff184;
+  --warning-300: #fffaa3;
+  --warning-200: #ffffc1;
+  --warning-100: #fdffe0;
+
+  --info-950: #090217;
+  --info-900: #14072e;
+  --info-800: #2c145b;
+  --info-700: #472689;
+  --info-600: #663eb7;
+  --info-500: #895be4;
+  --info-400: #9f79ea;
+  --info-300: #b699ef;
+  --info-200: #cdbaf4;
+  --info-100: #e6dcfa;
 
   /*  semantic ui colors  */
-  --danger: #f00048;
-  --warning: #f5ef00;
-  --success: #00f95a;
-  --info: #7467f7;
+  --danger: var(--danger-500);
+  --warning: var(--warning-500);
+  --success: var(--success-500);
+  --info: var(--info-500);
+  --primary: var(--royal-500);
+  --secondary: var(--neutral-500);
+  --light: var(--neutral-200);
+  --dark: var(--neutral-900);
+
   --primary: var(--royal-500);
   --secondary: var(--neutral-500);
   --light: var(--gneutral-200);
@@ -659,11 +720,11 @@ input:hover {
   content: attr(tooltip);
   position: absolute;
   font-size: var(--font-size-small);
-  background: inherit;
-  padding: var(--space-0);
+  background: var(--background-color);
+  padding: var(--space-0) var(--space-1);
   border-radius: var(--space-0);
   visibility: hidden;
-  color: inherit;
+  color: var(--font-color);
   opacity: 0;
   pointer-events: none;
   top: calc(100% + var(--space-0));
@@ -762,6 +823,7 @@ input:hover {
   --dark: var(--neutral-050);
   --background-color: #fff;
   --font-color: var(--neutral-950);
+  --warning: var(--warning-600);
 }
 
 html.light body {
@@ -788,7 +850,7 @@ html.light input[type="submit"].hollow:hover {
 }
 
 html.light .tooltip:hover::after {
-  filter: grayscale(0.75) invert(.25);
+  filter: grayscale(0.25) invert(.25);
 }
 
 .spin {
@@ -803,4 +865,26 @@ html.light .tooltip:hover::after {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.system-message {
+  font-family: var(--font-family-data);
+  gap: var(--space-1);
+  display: flex;
+  background: transparent;
+}
+
+.system-message.warning {
+  color: var(--warning);
+}
+
+.system-message .icon {
+  background: var(--warning);
+  color: var(--background-color);
+  aspect-ratio: 1/1;
+  height: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--space-0);
 }

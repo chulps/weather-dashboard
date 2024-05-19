@@ -8,6 +8,7 @@ import {
   faLocationDot,
   faShuffle,
   faSearch,
+  faBomb,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
@@ -58,6 +59,9 @@ function CitySelector({ setCity }) {
   ];
 
   const suggestionsRef = useRef(null);
+  const [randomButtonClicks, setRandomButtonClicks] = useState(0);
+  const [randomButtonDisabled, setRandomButtonDisabled] = useState(false);
+  const [countdownTime, setCountdownTime] = useState(300); // 5 minutes in seconds
 
   // Determine the base URL based on the environment
   const baseUrl =
@@ -168,6 +172,9 @@ function CitySelector({ setCity }) {
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
     window.scrollTo(0, 0);
+
+    // Increment the random button click count
+    setRandomButtonClicks((prevClicks) => prevClicks + 1);
   };
 
   useEffect(() => {
@@ -175,6 +182,35 @@ function CitySelector({ setCity }) {
       handleSubmit(new Event("submit"));
     }
   }, [latLon, handleSubmit]);
+
+  useEffect(() => {
+    let timeout;
+
+    if (randomButtonClicks >= 5) {
+      setRandomButtonDisabled(true);
+      timeout = setTimeout(() => {
+        setRandomButtonClicks(0);
+        setRandomButtonDisabled(false);
+        setCountdownTime(300); // Reset countdown to 5 minutes
+      }, 300000); // 5 minutes in milliseconds
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [randomButtonClicks]);
+
+  useEffect(() => {
+    const countdownInterval = setInterval(() => {
+      if (countdownTime > 0 && randomButtonDisabled) {
+        setCountdownTime((prevTime) => prevTime - 1);
+      }
+    }, 1000); // Update countdown every second
+
+    return () => {
+      clearInterval(countdownInterval);
+    };
+  }, [countdownTime, randomButtonDisabled]);
 
   return (
     <div className="city-selector-container">
@@ -226,10 +262,11 @@ function CitySelector({ setCity }) {
         <div className="button-wrapper">
           <div className="options-wrapper">
             <button
-              className={`tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"}`}
+              className={`random-city-button tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"} ${randomButtonDisabled ? "disabled" : ""}`}
               tooltip="🎲 Roll the dice and see what happens!"
               type="button"
               onClick={handleRandomCity}
+              disabled={randomButtonDisabled}
             >
               <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
               <span>Random</span>
@@ -267,6 +304,13 @@ function CitySelector({ setCity }) {
             Search
           </button>
         </div>
+        {randomButtonDisabled && (
+          <div className="system-message warning">
+            <span className="icon"><FontAwesomeIcon icon={faBomb} /></span>
+            Warning: Too many requests in a short amount of time. 
+            Please wait 0{Math.floor(countdownTime / 60)}:{String(countdownTime % 60).padStart(2, "0")} seconds
+          </div>
+        )}
       </form>
     </div>
   );
