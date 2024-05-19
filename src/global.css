@@ -871,6 +871,7 @@ html.light .tooltip:hover::after {
   font-family: var(--font-family-data);
   gap: var(--space-1);
   display: flex;
+  background: transparent;
 }
 
 .system-message.warning {
