@@ -729,6 +729,7 @@ input:hover {
   left: unset;
   right: calc(100% + var(--space-0));
   bottom: unset;
+  text-align: right;
 }
 
 .tooltip.right::after {
