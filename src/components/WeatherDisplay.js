@@ -261,7 +261,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
               {author && author !== "Unknown" && (
                 <a
                   className="tooltip bottom-left"
-                  tooltip="Find out who said this quote"
+                  tooltip="Find out who said this."
                   target={quote !== errorMessage ? "_blank" : "_self"}
                   rel="noreferrer"
                   href={quote ? link : "/"}

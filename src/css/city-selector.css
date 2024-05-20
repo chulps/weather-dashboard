@@ -1,11 +1,12 @@
 .city-selector-container {
   place-content: end;
+  order: 1;
 }
 
 .city-selector {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
   width: 100%;
   position: relative;
 }
@@ -16,6 +17,13 @@
   gap: var(--space-2);
 }
 
+@media screen and (min-width: 576px) {
+  .city-selector-container {
+    order: -1;
+    place-content: start;
+  }
+}
+
 @media screen and (min-width: 992px) {
   .city-selector-container {
     place-content: unset;
@@ -24,6 +32,7 @@
   .city-selector {
     position: sticky;
     top: var(--space-4);
+    gap: var(--space-4);
     height: fit-content
   }
 }
