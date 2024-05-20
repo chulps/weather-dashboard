@@ -739,7 +739,6 @@ input:hover {
 .tooltip:hover::after {
   visibility: visible;
   opacity: 1;
-  transition-delay: 1s;
   filter: brightness(0.5) grayscale(0.75);
 }
 
