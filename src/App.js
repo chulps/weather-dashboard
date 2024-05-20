@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import CitySelector from "./components/CitySelector";
 import WeatherDisplay from "./components/WeatherDisplay";
@@ -18,8 +16,16 @@ function App() {
       <Header />
       <main className="App">
         <div className="content">
-          <CitySelector setCity={setCity} results={results} advice={advice} />
-          <WeatherDisplay city={city} onResults={setResults} onAdvice={setAdvice} />
+          <CitySelector 
+            setCity={setCity} 
+            results={results} 
+            advice={advice} 
+          />
+          <WeatherDisplay
+            city={city}
+            onResults={setResults}
+            onAdvice={setAdvice}
+          />
         </div>
       </main>
       <Footer />
