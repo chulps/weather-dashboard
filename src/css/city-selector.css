@@ -137,11 +137,14 @@
   border: 1px solid var(--secondary);
   padding: var(--space-1);
   border-radius: var(--space-1);
+  cursor: pointer;
+  transition: ease-out 0.3s;
 }
 
 .recent-city:hover {
   background: var(--neutral-800);
-  transition: ease-out 0.3s;
+  transform: scale(1.05);
+  transition: none;
 }
 
 .recent-city-header {

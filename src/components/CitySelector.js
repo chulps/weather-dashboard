@@ -51,10 +51,12 @@ function CitySelector({ setCity, results, advice }) {
     "Rio de Janeiro",
     "Rome",
     "San Francisco",
+    "Sapporo",
     "Seoul",
     "Shanghai",
     "Singapore",
     "Sydney",
+    "Taipei",
     "Tokyo",
     "Toronto",
     "Vancouver",
@@ -248,8 +250,12 @@ function CitySelector({ setCity, results, advice }) {
               and enjoy!
             </p>
           </div>
-          <div className="city-input-container">
+          <div 
+            tooltip="Enter a the name of the city you want to search ↓"
+
+          className="city-input-container  tooltip top-right">
             <input
+              tooltip="Enter a city name or click the button below to get your location ↓"
               className="city-input"
               type="text"
               name="city"
