@@ -10,14 +10,16 @@ import "./global.css";
 
 function App() {
   const [city, setCity] = useState("");
+  const [results, setResults] = useState([]);
+  const [advice, setAdvice] = useState("");
 
   return (
     <>
       <Header />
       <main className="App">
         <div className="content">
-          <CitySelector setCity={setCity} />
-          <WeatherDisplay city={city} />
+          <CitySelector setCity={setCity} results={results} advice={advice} />
+          <WeatherDisplay city={city} onResults={setResults} onAdvice={setAdvice} />
         </div>
       </main>
       <Footer />

@@ -38,7 +38,7 @@ const fetchWeatherData = async (city, baseUrl) => {
 };
 
 const cache = new Map();
-
+console.log(cache)
 export const useWeatherApi = (city) => {
   const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);
@@ -67,6 +67,10 @@ export const useWeatherApi = (city) => {
         if (error.response && error.response.status === 400) {
           setWarning(
             `Sorry, we couldn't find weather data for "${city}". Please check the city name and try again.`
+          );
+        } else if (error.response && error.response.status === 429) {
+          setWarning(
+            "Too many requests. Please wait a while before trying again." // TODO: add a countdown timer
           );
         } else if (error.response && error.response.status === 500) {
           setWarning(

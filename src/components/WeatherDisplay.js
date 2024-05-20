@@ -6,9 +6,9 @@ import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faQuoteLeft, faQuoteRight } from "@fortawesome/free-solid-svg-icons";
 
-function WeatherDisplay({ city }) {
+function WeatherDisplay({ city, onResults, onAdvice }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
@@ -39,6 +39,10 @@ function WeatherDisplay({ city }) {
         setLink("");
       });
   }, []);
+
+  useEffect(() => {
+    onResults(weather);
+  }, [weather, onResults]);
 
   const handleRefreshQuote = () => {
     if (refreshTimeout) return;
@@ -93,6 +97,7 @@ function WeatherDisplay({ city }) {
           .then((advice) => {
             const sanitizedAdvice = DOMPurify.sanitize(advice);
             setAdvice(sanitizedAdvice);
+            onAdvice(sanitizedAdvice);
           })
           .catch((error) => {
             console.error("Error fetching advice from OpenAI:", error);
@@ -157,13 +162,17 @@ function WeatherDisplay({ city }) {
           <div className="weather-header">
             <label>Current conditions</label>
             <span
-              tooltip="←Back to quotes"
+              tooltip="← Back to quotes"
               className="toggle-view-button tooltip left"
               onClick={toggleView}
             >
               <FontAwesomeIcon
                 className={refreshingQuote ? "spin" : ""}
                 icon={faQuoteLeft}
+              />
+              <FontAwesomeIcon
+                className={refreshingQuote ? "spin" : ""}
+                icon={faQuoteRight}
               />
             </span>
           </div>

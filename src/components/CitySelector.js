@@ -8,18 +8,21 @@ import {
   faLocationDot,
   faShuffle,
   faSearch,
-  faBomb,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
 const currentEnv = getEnv();
 
-function CitySelector({ setCity }) {
+function CitySelector({ setCity, results, advice }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [latLon, setLatLon] = useState(null);
   const [fetchingLocation, setFetchingLocation] = useState(false);
   const [locationFound, setLocationFound] = useState(false);
+  const suggestionsRef = useRef(null);
+  const [randomButtonClicks, setRandomButtonClicks] = useState(0);
+  const [randomButtonDisabled, setRandomButtonDisabled] = useState(false);
+  const [countdownTime, setCountdownTime] = useState(300); // 5 minutes in seconds
   const cities = [
     "Amsterdam",
     "Athens",
@@ -57,11 +60,6 @@ function CitySelector({ setCity }) {
     "Vancouver",
     "Vienna",
   ];
-
-  const suggestionsRef = useRef(null);
-  const [randomButtonClicks, setRandomButtonClicks] = useState(0);
-  const [randomButtonDisabled, setRandomButtonDisabled] = useState(false);
-  const [countdownTime, setCountdownTime] = useState(300); // 5 minutes in seconds
 
   // Determine the base URL based on the environment
   const baseUrl =
@@ -102,6 +100,25 @@ function CitySelector({ setCity }) {
       }
     };
   }, [input, baseUrl]);
+
+  const [cachedCities, setCachedCities] = useState([]);
+  useEffect(() => {
+    setRandomButtonDisabled(false);
+    const mergedData = { results, advice: advice };
+    const existingCity = cachedCities.find(
+      (city) => city.results.city === results.city
+    );
+    if (!existingCity) {
+      setCachedCities((prevCachedCities) => [...prevCachedCities, mergedData]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, advice]);
+
+  const filteredCachedData = cachedCities.filter(
+    (city) => city.results && city.advice
+  );
+
+  console.log(filteredCachedData);
 
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
@@ -169,12 +186,18 @@ function CitySelector({ setCity }) {
 
   const handleRandomCity = (event) => {
     event.preventDefault();
+    setRandomButtonDisabled(true);
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
     window.scrollTo(0, 0);
 
     // Increment the random button click count
     setRandomButtonClicks((prevClicks) => prevClicks + 1);
+  };
+
+  const handleCachedCity = (city) => {
+    setCity(city);
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -214,104 +237,125 @@ function CitySelector({ setCity }) {
 
   return (
     <div className="city-selector-container">
-      <form className="city-selector" onSubmit={handleSubmit}>
-        <div>
-          <label>about this app...</label>
-          <h1 className="site-header">AI Weather Dashboard</h1>
-          <p className="app-description">
-            This app provides weather data and uses Artificial Intelligence to
-            make useful suggestions based on that data. Play around with it and
-            enjoy!
-          </p>
-        </div>
-        <div className="city-input-container">
-          <input
-            className="city-input"
-            type="text"
-            name="city"
-            placeholder="Enter city"
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-          />
-          {input.length > 0 && suggestions.length > 0 && (
-            <ul className="suggestions" ref={suggestionsRef}>
-              {suggestions.map((suggestion) => (
-                <li
-                  key={suggestion.description}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                >
-                  {suggestion.description}
-                </li>
-              ))}
-            </ul>
-          )}
-          {input && (
+      <div className="city-selector">
+        <form className="city-selector-form" onSubmit={handleSubmit}>
+          <div>
+            <label>about this app...</label>
+            <h1 className="site-header">AI Weather Dashboard</h1>
+            <p className="app-description">
+              This app provides weather data and uses Artificial Intelligence to
+              make useful suggestions based on that data. Play around with it
+              and enjoy!
+            </p>
+          </div>
+          <div className="city-input-container">
+            <input
+              className="city-input"
+              type="text"
+              name="city"
+              placeholder="Enter city"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+            />
+            {input.length > 0 && suggestions.length > 0 && (
+              <ul className="suggestions" ref={suggestionsRef}>
+                {suggestions.map((suggestion) => (
+                  <li
+                    key={suggestion.description}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion.description}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {input && (
+              <button
+                className="clear-button secondary small"
+                type="button"
+                onClick={() => {
+                  setInput("");
+                  setSuggestions([]);
+                }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          <div className="button-wrapper">
+            <div className="options-wrapper">
+              <button
+                className={`random-city-button tooltip bottom-right ${
+                  input === "" ? "hollow" : "hollow disabled"
+                } ${randomButtonDisabled ? "disabled" : ""}`}
+                tooltip="🎲 Roll the dice and see what happens!"
+                type="button"
+                onClick={handleRandomCity}
+                disabled={randomButtonDisabled}
+              >
+                <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
+                <span>Random</span>
+              </button>
+
+              <button
+                className={`hollow tooltip bottom ${
+                  fetchingLocation ? "disabled" : ""
+                }`}
+                tooltip="Get weather data for your current location."
+                type="button"
+                onClick={handleLocation}
+                disabled={fetchingLocation}
+              >
+                <span>
+                  <FontAwesomeIcon className="fa-icon" icon={faLocationDot} />
+                </span>
+                <span>
+                  {fetchingLocation ? (
+                    <span className="blink">Locating...</span>
+                  ) : locationFound ? (
+                    <span className="blink">Found!</span>
+                  ) : (
+                    "My Location"
+                  )}
+                </span>
+              </button>
+            </div>
+
             <button
-              className="clear-button secondary small"
-              type="button"
-              onClick={() => {
-                setInput("");
-                setSuggestions([]);
-              }}
+              style={{ padding: "1em" }}
+              className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
+              type="submit"
+              tooltip="↖︎ Enter a city into the input field above"
             >
-              Clear
-            </button>
-          )}
-        </div>
-  
-        <div className="button-wrapper">
-          <div className="options-wrapper">
-            <button
-              className={`random-city-button tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"} ${randomButtonDisabled ? "disabled" : ""}`}
-              tooltip="🎲 Roll the dice and see what happens!"
-              type="button"
-              onClick={handleRandomCity}
-              disabled={randomButtonDisabled}
-            >
-              <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
-              <span>Random</span>
-            </button>
-  
-            <button
-              className={`hollow tooltip bottom ${fetchingLocation ? "disabled" : ""}`}
-              tooltip="Get weather data for your current location."
-              type="button"
-              onClick={handleLocation}
-              disabled={fetchingLocation}
-            >
-              <span>
-                <FontAwesomeIcon className="fa-icon" icon={faLocationDot} />
-              </span>
-              <span>
-                {fetchingLocation ? (
-                  <span className="blink">Locating...</span>
-                ) : locationFound ? (
-                  <span className="blink">Found!</span>
-                ) : (
-                  "My Location"
-                )}
-              </span>
+              <FontAwesomeIcon className="fa-icon" icon={faSearch} />
+              Search
             </button>
           </div>
-  
-          <button
-            style={{padding: '1em'}}
-            className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
-            type="submit"
-            tooltip="↖︎ Enter a city into the input field above"
-          >
-            <FontAwesomeIcon className="fa-icon" icon={faSearch} />
-            Search
-          </button>
-        </div>
-        {randomButtonDisabled && (
-          <div className="system-message warning">
-            <span className="icon"><FontAwesomeIcon icon={faBomb} /></span>
-            Warning: Too many requests in a short amount of time. 
-            Please wait 0{Math.floor(countdownTime / 60)}:{String(countdownTime % 60).padStart(2, "0")} seconds
+        </form>
+        {filteredCachedData.length > 0 && (
+          <div className="recent-searches">
+            <label>Recent Searches</label>
+            <div className="recent-cities-grid">
+              {filteredCachedData.map((city) => (
+                <div
+                  className="recent-city"
+                  onClick={() => handleCachedCity(city.results.city)}
+                  key={city.results.city}
+                >
+                  <h5 className="recent-city-header">{city.results.city}</h5>
+                  <small className="font-family-data">
+                    {Math.round(city.results.temperature)}°C
+                  </small>
+                  <small className="font-family-data">
+                    {city.results.time}
+                  </small>
+                </div>
+              ))}
+            </div>
           </div>
         )}
-      </form>
+      </div>
     </div>
   );
 }
