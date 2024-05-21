@@ -126,6 +126,9 @@ function CitySelector({ setCity, results, advice }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, advice]);
 
+  const trimmedCachedCities = cachedCities.slice(2);
+
+
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
     setSuggestions([]);
@@ -345,14 +348,13 @@ function CitySelector({ setCity, results, advice }) {
             </button>
           </div>
         </form>
-        {cachedCities.length > 3 && (
+        {console.log(trimmedCachedCities)}
+        {trimmedCachedCities.length > 1 && (
           <div className="recent-searches">
             <label>Recent Searches</label>
             <div className="recent-cities-grid">
-              {cachedCities.length >= 3 &&
-                cachedCities
-                  // .slice(2, cachedCities.length - 1)
-                  .slice(2, cachedCities.length)
+              {trimmedCachedCities.length >= 1 &&
+                trimmedCachedCities
                   .map((city, index) => (
                     <div
                       className="recent-city-card"

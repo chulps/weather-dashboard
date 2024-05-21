@@ -137,7 +137,7 @@
 
 .recent-cities-grid {
   display: grid;
-  gap: var(--space-0);
+  gap: var(--space-2);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
   margin-top: var(--space-1);
   place-content: center;
