@@ -106,21 +106,27 @@ function CitySelector({ setCity, results, advice }) {
   const [cachedCities, setCachedCities] = useState([]);
   useEffect(() => {
     setRandomButtonDisabled(false);
-    const mergedData = { results, advice: advice };
+    const mergedData = { results, advice };
     const existingCity = cachedCities.find(
       (city) => city.results.city === results.city
     );
     if (!existingCity) {
-      setCachedCities((prevCachedCities) => [...prevCachedCities, mergedData]);
+      setCachedCities((prevCachedCities) =>
+        [...prevCachedCities, mergedData].filter(
+          (city, index, self) =>
+            index ===
+            self.findIndex(
+              (c) =>
+                c.results.city === city.results.city && c.advice === city.advice
+            )
+        )
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, advice]);
 
-  const filteredCachedData = cachedCities.filter(
-    (city) => city.results && city.advice
-  );
-
-  console.log(filteredCachedData);
+  console.log(cachedCities)
+  
 
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
@@ -339,25 +345,30 @@ function CitySelector({ setCity, results, advice }) {
             </button>
           </div>
         </form>
-        {filteredCachedData.length > 0 && (
+        {cachedCities.length > 0 && (
           <div className="recent-searches">
             <label>Recent Searches</label>
             <div className="recent-cities-grid">
-              {filteredCachedData.map((city) => (
-                <div
-                  className="recent-city"
-                  onClick={() => handleCachedCity(city.results.city)}
-                  key={city.results.city}
-                >
-                  <h5 className="recent-city-header">{city.results.city}</h5>
-                  <small className="font-family-data">
-                    {Math.round(city.results.temperature)}°C
-                  </small>
-                  <small className="font-family-data">
-                    {city.results.time}
-                  </small>
-                </div>
-              ))}
+              {cachedCities.length >= 4 &&
+                cachedCities
+                  .slice(2, cachedCities.length - 1)
+                  .map((city, index) => (
+                    <div
+                      className="recent-city"
+                      onClick={() => handleCachedCity(city.results.city)}
+                      key={index}
+                    >
+                      <h5 className="recent-city-header">
+                        {city.results.city}
+                      </h5>
+                      <small className="font-family-data">
+                        {Math.round(city.results.temperature)}°C
+                      </small>
+                      <small className="font-family-data">
+                        {city.results.time}
+                      </small>
+                    </div>
+                  ))}
             </div>
           </div>
         )}
