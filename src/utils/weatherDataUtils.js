@@ -19,7 +19,6 @@ const offsetToTimezone = (offsetInSeconds) => {
 
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
-
   return {
     temperature: data.main.temp,
     humidity: data.main.humidity,
@@ -42,7 +41,6 @@ export function transformOpenWeatherAPI(data) {
 
 // Function to transform WeatherAPI data
 export function transformWeatherMap(data) {
-
   return {
     temperature: data.current.temp_c,
     humidity: data.current.humidity,
@@ -79,8 +77,7 @@ function formatTime(time) {
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
 
-  console.log(dataWa);
-  console.log(dataOwm);
+  const dataTimeStamp = new Date().toISOString()
 
   if (!dataOwm && !dataWa) return null;
   if (!dataOwm) return dataWa;
@@ -106,5 +103,6 @@ export function mergeWeatherData(dataWa, dataOwm) {
     timezone: dataOwm.timezone ? dataOwm.timezone : dataWa.timezone,
     region: dataOwm.region ? dataOwm.region : dataWa.region,
     country: dataOwm.country ? dataOwm.country : dataWa.country,
+    timestamp: dataTimeStamp,
   };
 }

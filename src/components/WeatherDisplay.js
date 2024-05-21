@@ -6,8 +6,9 @@ import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faQuoteLeft, faQuoteRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faQuoteLeft, faQuoteRight, faClock } from "@fortawesome/free-solid-svg-icons";
 import moment from 'moment-timezone';
+import useTimePassed from "../hooks/useTimePassed";
 
 function WeatherDisplay({ city, onResults, onAdvice }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
@@ -21,6 +22,8 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
   const [refreshCount, setRefreshCount] = useState(0);
   const [refreshTimeout, setRefreshTimeout] = useState(null);
   const [remainingTime, setRemainingTime] = useState(0);
+
+  const timePassed = useTimePassed(weather.timestamp);
 
   const errorMessage = "Error fetching quote.";
   const refreshMessage = "Try refreshing the page.";
@@ -177,7 +180,18 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
       {showWeather ? (
         <div id="weather-content" className="weather-content">
           <div className="weather-header">
-            <label>Current conditions</label>
+          <div>
+              <label>Last updated:</label>
+              <small className="weather-refresh font-family-data">
+                <span
+                  className="tooltip bottom-right"
+                  tooltip="Update weather data"
+                >
+                  <FontAwesomeIcon icon={faClock} />
+                </span>
+                &nbsp;{timePassed}
+              </small>
+            </div>
             <span
               tooltip="← Back to quotes"
               className="toggle-view-button tooltip left"
