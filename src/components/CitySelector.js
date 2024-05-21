@@ -8,6 +8,7 @@ import {
   faLocationDot,
   faShuffle,
   faSearch,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
@@ -201,12 +202,11 @@ function CitySelector({ setCity, results, advice }) {
     document.getElementById("weather-content").scrollIntoView();
   };
 
-  // TODO: Add a function that allows the user to delete a recently searched city
-  // const deleteCachedCity = (city) => {
-  //   setCachedCities((prevCachedCities) =>
-  //     prevCachedCities.filter((cachedCity) => cachedCity.results.city!== city)
-  //   );
-  // };
+  const handleDeleteCachedCity = (cityToDelete) => {
+    setCachedCities((prevCachedCities) =>
+      prevCachedCities.filter((city) => city.results.city !== cityToDelete)
+    );
+  };
 
   useEffect(() => {
     if (latLon) {
@@ -351,9 +351,9 @@ function CitySelector({ setCity, results, advice }) {
             <div className="recent-cities-grid">
               {cachedCities.length >= 3 &&
                 cachedCities
-                // .slice(2, cachedCities.length - 1)
-                .slice(2, cachedCities.length)
-                .map((city, index) => (
+                  // .slice(2, cachedCities.length - 1)
+                  .slice(2, cachedCities.length)
+                  .map((city, index) => (
                     <div
                       className="recent-city-card"
                       onClick={() => handleCachedCity(city.results.city)}
@@ -366,17 +366,29 @@ function CitySelector({ setCity, results, advice }) {
                         }
                       />
                       <div>
-                          <p className="recent-city-header">
-                            {city.results.city}
-                          </p>
+                        <p className="recent-city-header">
+                          {city.results.city}
+                        </p>
+                        <div className="recent-city-data">
                           <small className="font-family-data">
                             {Math.round(city.results.temperature)}°C
                           </small>
-                        <small className="font-family-data">
-                          {city.results.condition}
-                        </small>
-                        {/* TODO: Add a button that allows the user to delete a recently searched city */}
+                          <small className="font-family-data">
+                            {city.results.condition.charAt(0).toUpperCase() + city.results.condition.slice(1).toLowerCase()}
+                          </small>
+                        </div>
                       </div>
+                      <span
+                        className="delete-recent-city-button"
+                        onClick={() => handleDeleteCachedCity(city.results.city)}
+                      >
+                        <small
+                          tooltip="Remove this city from your recent searches"
+                          className="tooltip"
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </small>
+                      </span>
                     </div>
                   ))}
             </div>

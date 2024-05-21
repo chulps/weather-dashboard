@@ -744,6 +744,7 @@ input:hover {
   max-width: var(--space-7);
   text-align: left;
   white-space: nowrap;
+  z-index: 1;
 }
 
 .tooltip:hover::after {
@@ -896,4 +897,8 @@ html.light .tooltip:hover::after {
   justify-content: center;
   align-items: center;
   border-radius: var(--space-0);
+}
+
+.sentence-case {
+  text-transform: math-auto;
 }

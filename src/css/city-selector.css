@@ -137,7 +137,7 @@
 
 .recent-cities-grid {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-0);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
   margin-top: var(--space-1);
   place-content: center;
@@ -152,12 +152,8 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-}
-
-.recent-city-card img {
-  aspect-ratio: 1/1;
-  width: var(--space-3);
-  height: var(--space-3);
+  position: relative;
+  background: var(--background-color);
 }
 
 .recent-city-card:hover {
@@ -166,8 +162,51 @@
   transition: none;
 }
 
+.recent-city-card:active {
+  transform: scale(1);
+  background: var(--background-color);
+}
+
+.recent-city-card img {
+  aspect-ratio: 1/1;
+  width: var(--space-3);
+  height: var(--space-3);
+}
+
+
 .recent-city-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
+.delete-recent-city-button {
+  color: var(--danger-400);
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  display: none;
+  cursor: pointer;
+}
+
+.delete-recent-city-button:hover {
+  color: var(--danger-300);
+  transform: scale(1.1);
+}
+
+.recent-city-card:hover .delete-recent-city-button {
+  display: flex;
+}
+
+.recent-city-data {
+  display: flex;
+  gap: 0 var(--space-1);
+  flex-wrap: wrap;
+}
+
+@media (hover:none){
+  .delete-recent-city-button {
+    display: flex;
+  }
+}
+

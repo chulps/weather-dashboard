@@ -234,7 +234,11 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
 
             <div className="weather-data">
               <div>
-                <label>Condition:</label> <data>{weather.condition}</data>
+                <label>Condition:</label>
+                <data className="sentence-case">
+                  {weather.condition.charAt(0).toUpperCase() +
+                    weather.condition.slice(1).toLowerCase()}
+                </data>
               </div>
               <div>
                 <label>Humidity:</label>{" "}
