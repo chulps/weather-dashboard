@@ -131,8 +131,24 @@
 .weather-refresh {
   color: var(--success-600);
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .weather-refresh:hover {
   color: var(--success-400);
+}
+
+.weather-refresh-arrows {
+  color: var(--white);
+  display: none;
+}
+
+
+.weather-refresh:hover .weather-refresh-arrows {
+  display: block;
+}
+
+.weather-refresh:hover .weather-refresh-clock {
+  display: none;
 }
