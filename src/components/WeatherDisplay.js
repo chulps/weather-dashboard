@@ -7,6 +7,7 @@ import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faQuoteLeft, faQuoteRight } from "@fortawesome/free-solid-svg-icons";
+import moment from 'moment-timezone';
 
 function WeatherDisplay({ city, onResults, onAdvice }) {
   const { weather, loading, warning, error } = useWeatherApi(city);
@@ -109,26 +110,21 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
 
   useEffect(() => {
     if (weather.city) {
-      const initialTime = new Date(weather.time);
+      const initialTime = moment()
+        .tz(weather.timezone)
+        .format("ddd, D MMMM H:mm:ss");
       setCurrentTime(formatTime(initialTime));
 
-      const now = new Date();
-      const delay = 60000 - (now % 60000);
-
       const updateCurrentTime = () => {
-        const newTime = new Date();
+        const newTime = moment().tz(weather.timezone).format("ddd, D MMMM H:mm:ss");
         setCurrentTime(formatTime(newTime));
       };
 
-      const timeoutId = setTimeout(() => {
-        updateCurrentTime();
-        const intervalId = setInterval(updateCurrentTime, 60000);
-        return () => clearInterval(intervalId);
-      }, delay);
+      const intervalId = setInterval(updateCurrentTime, 1000);
 
-      return () => clearTimeout(timeoutId);
+      return () => clearInterval(intervalId);
     }
-  }, [weather.city, weather.time]);
+  }, [weather.city, weather.timezone, weather]);
 
   const formatTime = (date) => {
     return date.toLocaleString("en-US", {
@@ -137,6 +133,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
+      second: "numeric",
       hour12: false,
     });
   };
