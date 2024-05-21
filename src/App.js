@@ -10,6 +10,7 @@ function App() {
   const [city, setCity] = useState("");
   const [results, setResults] = useState([]);
   const [advice, setAdvice] = useState("");
+  const [showWeather, setShowWeather] = useState(false);
 
   return (
     <>
@@ -20,11 +21,14 @@ function App() {
             setCity={setCity} 
             results={results} 
             advice={advice} 
+            setShowWeather={setShowWeather}  // Pass setShowWeather here
           />
           <WeatherDisplay
             city={city}
             onResults={setResults}
             onAdvice={setAdvice}
+            showWeather={showWeather}        // Pass showWeather here
+            setShowWeather={setShowWeather}  // Pass setShowWeather here
           />
         </div>
       </main>

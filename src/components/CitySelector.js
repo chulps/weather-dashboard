@@ -14,7 +14,7 @@ import {
 // Get the current environment (production or development)
 const currentEnv = getEnv();
 
-function CitySelector({ setCity, results, advice }) {
+function CitySelector({ setCity, results, advice, setShowWeather }) {  // Add setShowWeather to props
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [latLon, setLatLon] = useState(null);
@@ -75,12 +75,8 @@ function CitySelector({ setCity, results, advice }) {
     const loadSuggestions = async () => {
       if (input.length > 2) {
         try {
-          // URL for fetching city data
           const citiesUrl = `${baseUrl}/api/cities?city=${input}`;
-
-          // Fetch data from cities APIs
           const responseCities = await axios.get(citiesUrl);
-
           setSuggestions(responseCities.data);
         } catch (error) {
           console.error("Failed to fetch suggestions:", error);
@@ -105,6 +101,7 @@ function CitySelector({ setCity, results, advice }) {
   }, [input, baseUrl]);
 
   const [cachedCities, setCachedCities] = useState([]);
+
   useEffect(() => {
     setRandomButtonDisabled(false);
     const mergedData = { results, advice };
@@ -126,8 +123,8 @@ function CitySelector({ setCity, results, advice }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, advice]);
 
+  // Trim the initial useless entries (first 2 entries)
   const trimmedCachedCities = cachedCities.slice(2);
-
 
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
@@ -196,13 +193,18 @@ function CitySelector({ setCity, results, advice }) {
     setRandomButtonDisabled(true);
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
-    // Increment the random button click count
     setRandomButtonClicks((prevClicks) => prevClicks + 1);
   };
 
   const handleCachedCity = (city) => {
     setCity(city);
-    document.getElementById("weather-content").scrollIntoView();
+    setShowWeather(true); // Ensure showWeather is set to true
+    setTimeout(() => {
+      const weatherContent = document.getElementById("weather-content");
+      if (weatherContent) {
+        weatherContent.scrollIntoView();
+      }
+    }, 0); // Ensure DOM is updated before scrolling
   };
 
   const handleDeleteCachedCity = (cityToDelete) => {
@@ -260,8 +262,8 @@ function CitySelector({ setCity, results, advice }) {
             </p>
           </div>
           <div
-            tooltip="Enter a the name of the city you want to search ↓"
-            className="city-input-container  tooltip top-right"
+            tooltip="Enter the name of the city you want to search ↓"
+            className="city-input-container tooltip top-right"
           >
             <input
               tooltip="Enter a city name or click the button below to get your location ↓"
@@ -348,51 +350,48 @@ function CitySelector({ setCity, results, advice }) {
             </button>
           </div>
         </form>
-        {console.log(trimmedCachedCities)}
         {trimmedCachedCities.length > 1 && (
           <div className="recent-searches">
             <label>Recent Searches</label>
             <div className="recent-cities-grid">
-              {trimmedCachedCities.length >= 1 &&
-                trimmedCachedCities
-                  .map((city, index) => (
-                    <div
-                      className="recent-city-card"
-                      onClick={() => handleCachedCity(city.results.city)}
-                      key={index}
-                    >
-                      <img
-                        src={city.results.icon}
-                        alt={
-                          city.results.condition + " in " + city.results.city
-                        }
-                      />
-                      <div>
-                        <p className="recent-city-header">
-                          {city.results.city}
-                        </p>
-                        <div className="recent-city-data">
-                          <small className="font-family-data">
-                            {Math.round(city.results.temperature)}°C
-                          </small>
-                          <small className="font-family-data">
-                            {city.results.condition.charAt(0).toUpperCase() + city.results.condition.slice(1).toLowerCase()}
-                          </small>
-                        </div>
-                      </div>
-                      <span
-                        className="delete-recent-city-button"
-                        onClick={() => handleDeleteCachedCity(city.results.city)}
-                      >
-                        <small
-                          tooltip="Remove this city from your recent searches"
-                          className="tooltip"
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                        </small>
-                      </span>
+              {trimmedCachedCities.map((city, index) => (
+                <div
+                  className="recent-city-card"
+                  onClick={() => handleCachedCity(city.results.city)}
+                  key={index}
+                >
+                  <img
+                    src={city.results.icon}
+                    alt={
+                      city.results.condition + " in " + city.results.city
+                    }
+                  />
+                  <div>
+                    <p className="recent-city-header">
+                      {city.results.city}
+                    </p>
+                    <div className="recent-city-data">
+                      <small className="font-family-data">
+                        {Math.round(city.results.temperature)}°C
+                      </small>
+                      <small className="font-family-data">
+                        {city.results.condition.charAt(0).toUpperCase() + city.results.condition.slice(1).toLowerCase()}
+                      </small>
                     </div>
-                  ))}
+                  </div>
+                  <span
+                    className="delete-recent-city-button"
+                    onClick={() => handleDeleteCachedCity(city.results.city)}
+                  >
+                    <small
+                      tooltip="Remove this city from your recent searches"
+                      className="tooltip"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </small>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         )}
