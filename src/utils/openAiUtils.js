@@ -27,6 +27,7 @@ export const getWeatherAdviceFromGPT = async (weather) => {
       Wind Speed: ${Math.round(weather.windSpeed)} km/h.
       
       Consider the time of day before giving practical advice on local activities, food, precautions, or clothing using emojis.
+      If it's late at night suggest an indoor activity or nighttime activities instead of outdoor activities.
       Make the users laugh. Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
       Use <label> to separate topics. No <b>, <i>, or <u> tags within a <label>. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
       Perhaps add a link to do a google search for some attraction or event in the city encased in an <a href="EXAMPLE" target="_blank" > tag.

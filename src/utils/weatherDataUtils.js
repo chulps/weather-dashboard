@@ -96,7 +96,13 @@ export function mergeWeatherData(dataWa, dataOwm) {
       dataOwm.windSpeed && dataWa.windSpeed
         ? Math.round((dataOwm.windSpeed + dataWa.windSpeed) / 2)
         : dataOwm.windSpeed || dataWa.windSpeed || null,
-    condition: dataOwm.condition ? dataOwm.condition : dataWa.condition,
+    condition:
+      dataOwm.condition && dataWa.condition
+        ? dataOwm.condition.length < dataWa.condition.length
+          ? dataOwm.condition
+          : dataWa.condition
+        : dataOwm.condition || dataWa.condition,
+
     icon: dataOwm.icon ? dataOwm.icon : dataWa.icon,
     city: dataOwm.city ? dataOwm.city : dataWa.city,
     time: dataOwm.time ? formatTime(dataOwm.time) : formatTime(dataWa.time),
