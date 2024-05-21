@@ -37,6 +37,7 @@ const fetchWeatherData = async (city, baseUrl) => {
   }
 };
 
+// TODO: Cached data persists on refresh
 const cache = new Map();
 export const useWeatherApi = (city) => {
   const [weather, setWeather] = useState(defaultWeather);
