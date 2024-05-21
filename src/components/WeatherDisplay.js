@@ -1,3 +1,4 @@
+// Inside WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
@@ -9,8 +10,8 @@ import { faArrowsRotate, faQuoteLeft, faQuoteRight, faClock } from "@fortawesome
 import moment from 'moment-timezone';
 import useTimePassed from "../hooks/useTimePassed";
 
-function WeatherDisplay({ city, onResults, onAdvice }) {
-  const { weather, loading, warning, error } = useWeatherApi(city);
+function WeatherDisplay({ city, onResults, onAdvice}) {
+  const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
@@ -169,6 +170,12 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
     }
   }, [showWeather]);
 
+  // New function to refresh weather data
+  const handleRefreshWeather = () => {
+    if (city) {
+      refreshWeather(city);
+    }
+  };
 
   if (loading) return <data className="system-message blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
@@ -181,7 +188,8 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           <div className="weather-header">
           <div>
               <label>Last updated:</label>
-              <small className="weather-refresh font-family-data">
+              {/* Click event to refresh the data for the city */}
+              <small className="weather-refresh font-family-data" onClick={handleRefreshWeather}>
                 <span
                   className="tooltip bottom-right"
                   tooltip="Update weather data"

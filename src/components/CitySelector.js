@@ -1,3 +1,4 @@
+// Inside CitySelector.js
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "../css/city-selector.css";
 import axios from "axios";
@@ -14,7 +15,7 @@ import {
 // Get the current environment (production or development)
 const currentEnv = getEnv();
 
-function CitySelector({ setCity, results, advice, setShowWeather }) {  // Add setShowWeather to props
+function CitySelector({ setCity, results, advice, setShowWeather }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [latLon, setLatLon] = useState(null);
@@ -120,7 +121,6 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {  // Add se
         )
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, advice]);
 
   // Trim the initial useless entries (first 2 entries)
@@ -395,7 +395,6 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {  // Add se
             </div>
           </div>
         )}
-        {/* TODO: Add a section where users can save their favorite cities */}
       </div>
     </div>
   );

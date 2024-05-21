@@ -1,4 +1,4 @@
-// hooks/useWeatherApi.js
+// Inside useWeatherApi.js
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { defaultWeather } from "../utils/defaultWeather";
@@ -45,55 +45,60 @@ export const useWeatherApi = (city) => {
   const [error, setError] = useState(null);
   const [warning, setWarning] = useState(null);
 
+  const fetchWeather = async (city) => {
+    if (!city) return;
+
+    if (cache.has(city)) {
+      setWeather(cache.get(city));
+      return;
+    }
+
+    setLoading(true);
+    setWarning(null);
+    setError(null);
+
+    try {
+      const weatherData = await fetchWeatherData(city, baseUrl);
+      cache.set(city, weatherData);
+      setWeather(weatherData);
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 400) {
+        setWarning(
+          `Sorry, we couldn't find weather data for "${city}". Please check the city name and try again.`
+        );
+      } else if (error.response && error.response.status === 429) {
+        setWarning(
+          "Too many requests. Please wait a while before trying again." // TODO: add a countdown timer
+        );
+      } else if (error.response && error.response.status === 500) {
+        setWarning(
+          "There is a problem with our data source, please check back later."
+        );
+      } else if (error.code === "ECONNABORTED") {
+        setWarning("Sorry, the request timed out. Please try again later.");
+      } else if (error.code === "EAI_AGAIN") {
+        setWarning(
+          "Sorry, there was a temporary failure in name resolution. Please try again later."
+        );
+      } else {
+        setWarning(
+          "Sorry, an unexpected error occurred while fetching weather data. Please try again later."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchWeather = async () => {
-      if (!city) return;
-
-      if (cache.has(city)) {
-        setWeather(cache.get(city));
-        return;
-      }
-
-      setLoading(true);
-      setWarning(null);
-      setError(null);
-
-      try {
-        const weatherData = await fetchWeatherData(city, baseUrl);
-        cache.set(city, weatherData);
-        setWeather(weatherData);
-      } catch (error) {
-        console.error(error);
-        if (error.response && error.response.status === 400) {
-          setWarning(
-            `Sorry, we couldn't find weather data for "${city}". Please check the city name and try again.`
-          );
-        } else if (error.response && error.response.status === 429) {
-          setWarning(
-            "Too many requests. Please wait a while before trying again." // TODO: add a countdown timer
-          );
-        } else if (error.response && error.response.status === 500) {
-          setWarning(
-            "There is a problem with our data source, please check back later."
-          );
-        } else if (error.code === "ECONNABORTED") {
-          setWarning("Sorry, the request timed out. Please try again later.");
-        } else if (error.code === "EAI_AGAIN") {
-          setWarning(
-            "Sorry, there was a temporary failure in name resolution. Please try again later."
-          );
-        } else {
-          setWarning(
-            "Sorry, an unexpected error occurred while fetching weather data. Please try again later."
-          );
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWeather();
+    fetchWeather(city);
   }, [city]);
 
-  return { weather, loading, warning, error };
+  const refreshWeather = (city) => {
+    cache.delete(city);
+    fetchWeather(city);
+  };
+
+  return { weather, loading, warning, error, refreshWeather };
 };
