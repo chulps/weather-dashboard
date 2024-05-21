@@ -117,7 +117,7 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
 }
 
 .warning-bomb {
@@ -126,4 +126,13 @@
   color: var(--background-color);
   margin-right: var(--space-1);
   border-radius: var(--space-0);
+}
+
+.weather-refresh {
+  color: var(--success-600);
+  cursor: pointer;
+}
+
+.weather-refresh:hover {
+  color: var(--success-400);
 }

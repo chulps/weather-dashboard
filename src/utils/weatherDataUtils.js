@@ -1,47 +1,67 @@
-// src/utils/weatherDataUtils.js
+import moment from 'moment-timezone';
+import { getName } from 'country-list';
 
-// Transformation for OpenWeatherMap data
-// This function transforms the data received from the OpenWeatherMap API into a standardized format
+// Function to convert offset to timezone name
+const offsetToTimezone = (offsetInSeconds) => {
+  const offsetInMinutes = offsetInSeconds / 60;
+  const timezones = moment.tz.names();
+
+  for (let i = 0; i < timezones.length; i++) {
+    const timezone = timezones[i];
+    const offset = moment.tz(timezone).utcOffset();
+    if (offset === offsetInMinutes) {
+      return timezone;
+    }
+  }
+
+  return null;
+};
+
+// Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
-  console.log(' ')
-  console.log('transformOpenWeatherAPI')
-  console.log(data)
   return {
-    temperature: data.main.temp, // Extract temperature from the 'main' object
-    humidity: data.main.humidity, // Extract humidity from the 'main' object
-    windSpeed: data.wind.speed, // Extract wind speed from the 'wind' object
-    condition: data.weather[0].description, // Extract weather condition description from the first element of the 'weather' array
-    icon: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`, // Construct the URL for the weather icon
-    city: data.name, // Extract the city name
-    time: data.dt, // Extract the time from the 'dt' object 
-    timezone: data.sys.timezone, // Extract the time zone from the 'timezone' object
-    region: data.region, // Extract the region name from the 'city' object
-    country: data.sys.country, // Extract the country code from the 'sys' object
+    temperature: data.main.temp,
+    humidity: data.main.humidity,
+    windSpeed: data.wind.speed,
+    condition: data.weather[0].description,
+    icon: `https://openweathermap.org/img/w/${data.weather[0].icon}.png`,
+    city: data.name,
+    time: new Date(data.dt * 1000).toLocaleString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    }),
+    timezone: offsetToTimezone(data.timezone),
+    region: "", // Placeholder; requires additional data source
+    country: getName(data.sys.country), // Convert country code to name
   };
 }
 
-// Transformation for WeatherAPI data
-// This function transforms the data received from the WeatherAPI into a standardized format
+// Function to transform WeatherAPI data
 export function transformWeatherMap(data) {
-  console.log(' ')
-  console.log('transformWeatherMap')
-  console.log(data)
   return {
-    temperature: data.current.temp_c, // Extract temperature in Celsius from the 'current' object
-    humidity: data.current.humidity, // Extract humidity from the 'current' object
-    windSpeed: data.current.wind_kph, // Extract wind speed in kilometers per hour from the 'current' object
-    condition: data.current.condition.text, // Extract weather condition description from the 'condition' object
-    icon: `https:${data.current.condition.icon}`, // Construct the URL for the weather icon
-    city: data.location.name, // Extract the city name from the 'location' object
-    time: data.location.localtime, // Extract the local time from the 'location' object
-    timezone: data.location.tz_id, // Extract the time zone from the 'location' object
-    region: data.location.region, // Extract the region name from the 'location' object
-    country: data.location.country, // Extract the country name from the 'location' object
+    temperature: data.current.temp_c,
+    humidity: data.current.humidity,
+    windSpeed: data.current.wind_kph / 3.6, // Convert kph to m/s to match OpenWeatherMap
+    condition: data.current.condition.text,
+    icon: `https:${data.current.condition.icon}`,
+    city: data.location.name,
+    time: new Date(data.location.localtime).toLocaleString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    }),
+    timezone: data.location.tz_id,
+    region: data.location.region,
+    country: data.location.country,
   };
 }
 
-
-// helper function to format time
+// Helper function to format time
 function formatTime(time) {
   const date = typeof time === 'string' ? new Date(time) : new Date(time * 1000);
 
@@ -54,26 +74,35 @@ function formatTime(time) {
   return `${formattedDay}, ${formattedTime}`;
 }
 
-// Merging function
-// This function merges the weather data from two different sources (OpenWeatherMap and WeatherAPI)
+// Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
-  // Check if both data sources are available
-  if (!dataOwm && !dataWa) return null; // If both are unavailable, return null
-  if (!dataOwm) return dataWa; // If OpenWeatherMap data is unavailable, return WeatherAPI data
-  if (!dataWa) return dataOwm; // If WeatherAPI data is unavailable, return OpenWeatherMap data
 
-  // Merge the data from both sources
+  const dataTimeStamp = new Date().toISOString()
+
+  if (!dataOwm && !dataWa) return null;
+  if (!dataOwm) return dataWa;
+  if (!dataWa) return dataOwm;
+
   return {
-    temperature: (dataOwm.temperature + dataWa.temperature) / 2, // Calculate the average temperature
-    humidity: Math.max(dataOwm.humidity, dataWa.humidity), // Take the maximum humidity value
-    windSpeed: (dataOwm.windSpeed + dataWa.windSpeed) / 2, // Calculate the average wind speed
-    condition: dataOwm.condition, // Use the weather condition from OpenWeatherMap
-    icon: dataOwm.icon, // Use the weather icon from OpenWeatherMap
-    city: dataOwm.city, // Use the city name from OpenWeatherMap
+    temperature:
+      dataOwm.temperature && dataWa.temperature
+        ? (dataOwm.temperature + dataWa.temperature) / 2
+        : dataOwm.temperature || dataWa.temperature || null,
+    humidity:
+      dataOwm.humidity || dataWa.humidity
+        ? Math.max(dataOwm.humidity, dataWa.humidity)
+        : null,
+    windSpeed:
+      dataOwm.windSpeed && dataWa.windSpeed
+        ? Math.round((dataOwm.windSpeed + dataWa.windSpeed) / 2)
+        : dataOwm.windSpeed || dataWa.windSpeed || null,
+    condition: dataOwm.condition ? dataOwm.condition : dataWa.condition,
+    icon: dataOwm.icon ? dataOwm.icon : dataWa.icon,
+    city: dataOwm.city ? dataOwm.city : dataWa.city,
     time: dataOwm.time ? formatTime(dataOwm.time) : formatTime(dataWa.time),
-    timezone: dataOwm.timezone, // Use the time zone from OpenWeatherMap
-    region: dataOwm.region, // Use the region name from OpenWeatherMap
-    country: dataOwm.country, // Use the country code from OpenWeatherMap
+    timezone: dataOwm.timezone ? dataOwm.timezone : dataWa.timezone,
+    region: dataOwm.region ? dataOwm.region : dataWa.region,
+    country: dataOwm.country ? dataOwm.country : dataWa.country,
+    timestamp: dataTimeStamp,
   };
 }
-
