@@ -38,7 +38,6 @@ const fetchWeatherData = async (city, baseUrl) => {
 };
 
 const cache = new Map();
-console.log(cache)
 export const useWeatherApi = (city) => {
   const [weather, setWeather] = useState(defaultWeather);
   const [loading, setLoading] = useState(false);

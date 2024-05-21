@@ -19,7 +19,6 @@ const Header = () => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
-    console.log(theme)
   };
 
   useEffect(() => {
