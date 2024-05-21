@@ -8,7 +8,6 @@ import {
   faLocationDot,
   faShuffle,
   faSearch,
-  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
@@ -202,12 +201,12 @@ function CitySelector({ setCity, results, advice }) {
     document.getElementById("weather-content").scrollIntoView();
   };
 
-  const deleteCachedCity = (city) => {
-    setCachedCities((prevCachedCities) =>
-      prevCachedCities.filter((cachedCity) => cachedCity.results.city!== city)
-    );
-  };
-
+  // TODO: Add a function that allows the user to delete a recently searched city
+  // const deleteCachedCity = (city) => {
+  //   setCachedCities((prevCachedCities) =>
+  //     prevCachedCities.filter((cachedCity) => cachedCity.results.city!== city)
+  //   );
+  // };
 
   useEffect(() => {
     if (latLon) {
@@ -376,18 +375,14 @@ function CitySelector({ setCity, results, advice }) {
                         <small className="font-family-data">
                           {city.results.condition}
                         </small>
-                        {/* <button className="delete-recent-city-button" onClick={(event) => {
-                          event.stopPropagation();
-                          deleteCachedCity(city.results.city);
-                        }}>
-                          <FontAwesomeIcon className="fa-icon" icon={faTrash} />
-                        </button> */}
+                        {/* TODO: Add a button that allows the user to delete a recently searched city */}
                       </div>
                     </div>
                   ))}
             </div>
           </div>
         )}
+        {/* TODO: Add a section where users can save their favorite cities */}
       </div>
     </div>
   );

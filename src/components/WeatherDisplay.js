@@ -182,6 +182,8 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           <div className="weather-header">
           <div>
               <label>Last updated:</label>
+              {/* TODO: Add a button that allows users to add a city to their "Favorites" */}
+              {/* TODO: Add a button that refreshes the weather data and advice for the current city. */}
               <small className="weather-refresh font-family-data">
                 <span
                   className="tooltip bottom-right"
