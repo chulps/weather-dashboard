@@ -105,7 +105,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           });
       }
     }
-  }, [weather, loading]);
+  }, [weather, loading, onAdvice]);
 
   useEffect(() => {
     if (weather.city) {
@@ -151,6 +151,26 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
     }
   }, [weather.city]);
 
+  useEffect(() => {
+    if (showWeather) {
+      if (window.innerWidth < 576 || window.innerWidth > 992) {
+        window.scrollTo(0, 0);
+      } else {
+        const weatherContent = document.getElementById("weather-content");
+        if (weatherContent) {
+          const elementPosition = weatherContent.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = elementPosition - 144;
+  
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }
+    }
+  }, [showWeather]);
+
+
   if (loading) return <data className="system-message blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
   if (warning) return <data className="system-message">Oops!: {warning}</data>;
@@ -158,7 +178,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
   return (
     <div className="weather-display">
       {showWeather ? (
-        <div className="weather-content">
+        <div id="weather-content" className="weather-content">
           <div className="weather-header">
             <label>Current conditions</label>
             <span

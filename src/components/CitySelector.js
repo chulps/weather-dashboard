@@ -8,6 +8,7 @@ import {
   faLocationDot,
   faShuffle,
   faSearch,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 
 // Get the current environment (production or development)
@@ -125,14 +126,10 @@ function CitySelector({ setCity, results, advice }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [results, advice]);
 
-  console.log(cachedCities)
-  
-
   const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
     setSuggestions([]);
     setCity(suggestion.description.split(",")[0]);
-    window.scrollTo(0, 0);
   };
 
   const handleClickOutside = (event) => {
@@ -187,7 +184,6 @@ function CitySelector({ setCity, results, advice }) {
         setCity(input);
       }
       setInput("");
-      window.scrollTo(0, 0);
     },
     [latLon, baseUrl, input, setCity]
   );
@@ -197,16 +193,21 @@ function CitySelector({ setCity, results, advice }) {
     setRandomButtonDisabled(true);
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
-    window.scrollTo(0, 0);
-
     // Increment the random button click count
     setRandomButtonClicks((prevClicks) => prevClicks + 1);
   };
 
   const handleCachedCity = (city) => {
     setCity(city);
-    window.scrollTo(0, 0);
+    document.getElementById("weather-content").scrollIntoView();
   };
+
+  const deleteCachedCity = (city) => {
+    setCachedCities((prevCachedCities) =>
+      prevCachedCities.filter((cachedCity) => cachedCity.results.city!== city)
+    );
+  };
+
 
   useEffect(() => {
     if (latLon) {
@@ -256,10 +257,10 @@ function CitySelector({ setCity, results, advice }) {
               and enjoy!
             </p>
           </div>
-          <div 
+          <div
             tooltip="Enter a the name of the city you want to search ↓"
-
-          className="city-input-container  tooltip top-right">
+            className="city-input-container  tooltip top-right"
+          >
             <input
               tooltip="Enter a city name or click the button below to get your location ↓"
               className="city-input"
@@ -345,28 +346,43 @@ function CitySelector({ setCity, results, advice }) {
             </button>
           </div>
         </form>
-        {cachedCities.length > 0 && (
+        {cachedCities.length > 3 && (
           <div className="recent-searches">
             <label>Recent Searches</label>
             <div className="recent-cities-grid">
-              {cachedCities.length >= 4 &&
+              {cachedCities.length >= 3 &&
                 cachedCities
-                  .slice(2, cachedCities.length - 1)
-                  .map((city, index) => (
+                // .slice(2, cachedCities.length - 1)
+                .slice(2, cachedCities.length)
+                .map((city, index) => (
                     <div
-                      className="recent-city"
+                      className="recent-city-card"
                       onClick={() => handleCachedCity(city.results.city)}
                       key={index}
                     >
-                      <h5 className="recent-city-header">
-                        {city.results.city}
-                      </h5>
-                      <small className="font-family-data">
-                        {Math.round(city.results.temperature)}°C
-                      </small>
-                      <small className="font-family-data">
-                        {city.results.time}
-                      </small>
+                      <img
+                        src={city.results.icon}
+                        alt={
+                          city.results.condition + " in " + city.results.city
+                        }
+                      />
+                      <div>
+                          <p className="recent-city-header">
+                            {city.results.city}
+                          </p>
+                          <small className="font-family-data">
+                            {Math.round(city.results.temperature)}°C
+                          </small>
+                        <small className="font-family-data">
+                          {city.results.condition}
+                        </small>
+                        {/* <button className="delete-recent-city-button" onClick={(event) => {
+                          event.stopPropagation();
+                          deleteCachedCity(city.results.city);
+                        }}>
+                          <FontAwesomeIcon className="fa-icon" icon={faTrash} />
+                        </button> */}
+                      </div>
                     </div>
                   ))}
             </div>
