@@ -723,6 +723,10 @@ input:hover {
   position: relative;
 }
 
+.tooltip:hover {
+  z-index: 1;
+}
+
 /* appears bottom center by default */
 /* if used on buttons it will always try to appear center */
 /* any "flex-centered" element will center the tooltip */

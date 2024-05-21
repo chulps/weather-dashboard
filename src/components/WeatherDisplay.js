@@ -1,4 +1,3 @@
-// components/WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
@@ -159,7 +158,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
         const weatherContent = document.getElementById("weather-content");
         if (weatherContent) {
           const elementPosition = weatherContent.getBoundingClientRect().top + window.scrollY;
-          const offsetPosition = elementPosition - 144;
+          const offsetPosition = elementPosition - 72;
   
           window.scrollTo({
             top: offsetPosition,
@@ -182,8 +181,6 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           <div className="weather-header">
           <div>
               <label>Last updated:</label>
-              {/* TODO: Add a button that allows users to add a city to their "Favorites" */}
-              {/* TODO: Add a button that refreshes the weather data and advice for the current city. */}
               <small className="weather-refresh font-family-data">
                 <span
                   className="tooltip bottom-right"
