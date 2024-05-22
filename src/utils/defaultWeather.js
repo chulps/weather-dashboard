@@ -11,6 +11,10 @@ export const defaultWeather = {
     icon: "",        // URL to weather icon image
     time: "",
     timezone: "",    // Time zone
+    sunrise: "", // string
+    sunset: "null", // string
+    high: 0, // degrees in celcius
+    low: 0, // degrees in celcius
     city: "",        // Name of the city
     region: "",      // Region name
     country: "",     // Country name

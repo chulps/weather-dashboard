@@ -17,6 +17,14 @@ const offsetToTimezone = (offsetInSeconds) => {
   return null;
 };
 
+// Helper function to format UNIX timestamp to HH:mm
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp * 1000); // Convert to milliseconds
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+};
+
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
   return {
@@ -34,8 +42,12 @@ export function transformOpenWeatherAPI(data) {
       minute: "numeric",
     }),
     timezone: offsetToTimezone(data.timezone),
+    sunrise: formatTime(data.sys.sunrise), // Format to HH:mm
+    sunset: formatTime(data.sys.sunset), // Format to HH:mm
+    high: Math.round(data.main.temp_max), // Round to nearest whole number
+    low: Math.round(data.main.temp_min), // Round to nearest whole number
     region: "", // Placeholder; requires additional data source
-    country: getName(data.sys.country), // Convert country code to name
+    country: getName(data.sys.country), // Converts country code to name
   };
 }
 
@@ -56,13 +68,17 @@ export function transformWeatherMap(data) {
       minute: "numeric",
     }),
     timezone: data.location.tz_id,
+    sunrise: null, // Not available
+    sunset: null, // Not available
+    high: null, // Not available
+    low: null, // Not available
     region: data.location.region,
     country: data.location.country,
   };
 }
 
 // Helper function to format time
-function formatTime(time) {
+function formatTimeDisplay(time) {
   const date = typeof time === 'string' ? new Date(time) : new Date(time * 1000);
 
   const dayOptions = { weekday: 'short', month: 'short', day: 'numeric' };
@@ -76,8 +92,9 @@ function formatTime(time) {
 
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
+  console.log('dataOwm.high' + dataOwm.high)
 
-  const dataTimeStamp = new Date().toISOString()
+  const dataTimeStamp = new Date().toISOString();
 
   if (!dataOwm && !dataWa) return null;
   if (!dataOwm) return dataWa;
@@ -102,11 +119,14 @@ export function mergeWeatherData(dataWa, dataOwm) {
           ? dataOwm.condition
           : dataWa.condition
         : dataOwm.condition || dataWa.condition,
-
     icon: dataOwm.icon ? dataOwm.icon : dataWa.icon,
     city: dataOwm.city ? dataOwm.city : dataWa.city,
-    time: dataOwm.time ? formatTime(dataOwm.time) : formatTime(dataWa.time),
+    time: dataOwm.time ? formatTimeDisplay(dataOwm.time) : formatTimeDisplay(dataWa.time),
     timezone: dataOwm.timezone ? dataOwm.timezone : dataWa.timezone,
+    sunrise: dataWa.sunrise ? dataWa.sunrise : "--", // Use dataWa sunrise
+    sunset: dataWa.sunset ? dataWa.sunset : "--", // Use dataWa sunset
+    high: dataWa.high ? dataWa.high : "--", // Use dataWa high
+    low: dataWa.low ? dataWa.low : "--", // Use dataWa low
     region: dataOwm.region ? dataOwm.region : dataWa.region,
     country: dataOwm.country ? dataOwm.country : dataWa.country,
     timestamp: dataTimeStamp,
