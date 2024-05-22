@@ -6,7 +6,7 @@ import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faQuoteLeft, faQuoteRight, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faQuoteLeft, faQuoteRight, faClock, faCaretUp, faCaretDown, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import moment from 'moment-timezone';
 import useTimePassed from "../hooks/useTimePassed";
 
@@ -231,17 +231,46 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           </div>
           <div className="weather-top">
             <div className="weather-temperature">
-              <h1>{Math.round(weather.temperature)}°C</h1>
-              <small>
-                <data>{currentTime}</data>
-              </small>
+            <div>
+                {/* <label>Low</label> */}
+                <data style={{color: 'var(--royal-300)'}}>
+                  <FontAwesomeIcon icon={faCaretDown} />&nbsp;
+
+                  {weather.low}°
+                </data>
+             </div>
+              <span>
+                <h1>{Math.round(weather.temperature)}°C</h1>
+                <small>
+                  <data>{currentTime}</data>
+                </small>
+              </span>
+             <div>
+                {/* <label>High</label> */}
+                <data style={{color: 'var(--danger-300)'}}>
+                  <FontAwesomeIcon icon={faCaretUp} />&nbsp;
+                  {weather.high}°
+                  </data>
+             </div>
             </div>
 
-            <img
-              className="weather-icon"
-              src={weather.icon}
-              alt={weather.condition}
-            />
+            <div className="weather-conditions">
+              <div>
+                <data className="sun-data">
+                  <FontAwesomeIcon style={{color: 'var(--warning-500)'}} icon={faSun} />
+                  {weather.sunrise}
+                  </data></div>
+              <img
+                className="weather-icon"
+                src={weather.icon}
+                alt={weather.condition}
+              />
+              <data className="sun-data">
+                <FontAwesomeIcon style={{color: 'var(--royal-200)'}} icon={faMoon} />
+                {weather.sunset}
+              </data>
+             
+            </div>
 
             <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
