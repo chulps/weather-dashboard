@@ -6,12 +6,22 @@ import { aiQuote } from "../utils/aiQuoteUtils";
 import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faQuoteLeft, faQuoteRight, faClock, faCaretUp, faCaretDown, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import moment from 'moment-timezone';
+import {
+  faArrowsRotate,
+  faQuoteLeft,
+  faQuoteRight,
+  faClock,
+  faCaretUp,
+  faCaretDown,
+  faSun,
+  faMoon,
+} from "@fortawesome/free-solid-svg-icons";
+import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
 
-function WeatherDisplay({ city, onResults, onAdvice}) {
-  const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
+function WeatherDisplay({ city, onResults, onAdvice }) {
+  const { weather, loading, warning, error, refreshWeather } =
+    useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
@@ -95,7 +105,8 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
   useEffect(() => {
     if (weather.city) {
       if (loading) {
-        const loadingMessage = '<data class="system-message info blink">Please wait...</data>';
+        const loadingMessage =
+          '<data class="system-message info blink">Please wait...</data>';
         const sanitizedMessage = DOMPurify.sanitize(loadingMessage);
         setAdvice(sanitizedMessage);
       } else {
@@ -111,7 +122,7 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           });
       }
     }
-  }, [weather, loading, onAdvice ]);
+  }, [weather, loading, onAdvice]);
 
   useEffect(() => {
     if (weather.city) {
@@ -121,7 +132,9 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
       setCurrentTime(formatTime(initialTime));
 
       const updateCurrentTime = () => {
-        const newTime = moment().tz(weather.timezone).format("ddd, D MMMM H:mm:ss");
+        const newTime = moment()
+          .tz(weather.timezone)
+          .format("ddd, D MMMM H:mm:ss");
         setCurrentTime(formatTime(newTime));
       };
 
@@ -160,12 +173,13 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
       } else {
         const weatherContent = document.getElementById("weather-content");
         if (weatherContent) {
-          const elementPosition = weatherContent.getBoundingClientRect().top + window.scrollY;
+          const elementPosition =
+            weatherContent.getBoundingClientRect().top + window.scrollY;
           const offsetPosition = elementPosition - 72;
-  
+
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       }
@@ -179,16 +193,18 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
     }
   };
 
-  if (loading) return <data className="system-message info blink">Loading...</data>;
+  if (loading)
+    return <data className="system-message info blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
-  if (warning) return <data className="system-message warning">Oops!: {warning}</data>;
+  if (warning)
+    return <data className="system-message warning">Oops!: {warning}</data>;
 
   return (
     <div className="weather-display">
       {showWeather ? (
         <div id="weather-content" className="weather-content">
           <div className="weather-header">
-          <div>
+            <div>
               <label>Last updated:</label>
               {/* Click event to refresh the data for the city */}
               <small
@@ -231,52 +247,59 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           </div>
           <div className="weather-top">
             <div className="weather-temperature">
-            <div>
+              <div>
                 {/* <label>Low</label> */}
-                <data style={{color: 'var(--royal-300)'}}>
-                  <FontAwesomeIcon icon={faCaretDown} />&nbsp;
-
+                <data style={{ color: "var(--royal-300)" }}>
+                  <FontAwesomeIcon icon={faCaretDown} />
+                  &nbsp;
                   {weather.low}°
                 </data>
-             </div>
+              </div>
               <span>
                 <h1>{Math.round(weather.temperature)}°C</h1>
                 <small>
                   <data>{currentTime}</data>
                 </small>
               </span>
-             <div>
+              <div>
                 {/* <label>High</label> */}
-                <data style={{color: 'var(--danger-300)'}}>
-                  <FontAwesomeIcon icon={faCaretUp} />&nbsp;
+                <data style={{ color: "var(--danger-300)" }}>
+                  <FontAwesomeIcon icon={faCaretUp} />
+                  &nbsp;
                   {weather.high}°
-                  </data>
-             </div>
+                </data>
+              </div>
             </div>
 
             <div className="weather-conditions">
-              <div>
+              {/* <div>
                 <data className="sun-data">
-                  <FontAwesomeIcon style={{color: 'var(--warning-500)'}} icon={faSun} />
+                  <FontAwesomeIcon
+                    style={{ color: "var(--warning-500)" }}
+                    icon={faSun}
+                  />
                   {weather.sunrise}
-                  </data></div>
+                </data>
+              </div> */}
               <img
                 className="weather-icon"
                 src={weather.icon}
                 alt={weather.condition}
               />
-              <data className="sun-data">
-                <FontAwesomeIcon style={{color: 'var(--royal-200)'}} icon={faMoon} />
+              {/* <data className="sun-data">
+                <FontAwesomeIcon
+                  style={{ color: "var(--royal-200)" }}
+                  icon={faMoon}
+                />
                 {weather.sunset}
-              </data>
-             
+              </data> */}
             </div>
 
             <div className="weather-location">
               <h3 className="weather-city">{weather.city}</h3>
               <p>
                 {weather.region}
-                {weather.region ? ", " : ""}  
+                {weather.region ? ", " : ""}
                 {weather.country}
               </p>
             </div>
@@ -338,7 +361,9 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
                 </p>
               </>
             ) : (
-              <data className="blink">Thinking of a quote about the weather...</data>
+              <data className="blink">
+                Thinking of a quote about the weather...
+              </data>
             )}
           </div>
           {quote && (
