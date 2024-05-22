@@ -17,16 +17,18 @@ const offsetToTimezone = (offsetInSeconds) => {
   return null;
 };
 
-// Helper function to format UNIX timestamp to HH:mm
+// Helper function to format UNIX timestamp to HH:mm without timezone adjustment
 const formatTime = (timestamp) => {
   const date = new Date(timestamp * 1000); // Convert to milliseconds
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
 };
 
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
+  const timezone = offsetToTimezone(data.timezone);
+
   return {
     temperature: data.main.temp,
     humidity: data.main.humidity,
@@ -41,9 +43,9 @@ export function transformOpenWeatherAPI(data) {
       hour: "numeric",
       minute: "numeric",
     }),
-    timezone: offsetToTimezone(data.timezone),
-    sunrise: formatTime(data.sys.sunrise), // Format to HH:mm
-    sunset: formatTime(data.sys.sunset), // Format to HH:mm
+    timezone: timezone,
+    sunrise: formatTime(data.sys.sunrise), // Format to HH:mm without timezone adjustment
+    sunset: formatTime(data.sys.sunset), // Format to HH:mm without timezone adjustment
     high: Math.round(data.main.temp_max), // Round to nearest whole number
     low: Math.round(data.main.temp_min), // Round to nearest whole number
     region: "", // Placeholder; requires additional data source
@@ -77,7 +79,7 @@ export function transformWeatherMap(data) {
   };
 }
 
-// Helper function to format time
+// Helper function to format time for display
 function formatTimeDisplay(time) {
   const date = typeof time === 'string' ? new Date(time) : new Date(time * 1000);
 
@@ -92,8 +94,6 @@ function formatTimeDisplay(time) {
 
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
-  console.log('dataOwm.high' + dataOwm.high)
-
   const dataTimeStamp = new Date().toISOString();
 
   if (!dataOwm && !dataWa) return null;
