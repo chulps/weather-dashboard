@@ -892,6 +892,15 @@ html.light .tooltip:hover::after {
   color: var(--warning);
 }
 
+.system-message.danger {
+  color: var(--danger-400);
+}
+
+.system-message.info {
+  color: var(--info-500);
+
+}
+
 .system-message .icon {
   background: var(--warning);
   color: var(--background-color);

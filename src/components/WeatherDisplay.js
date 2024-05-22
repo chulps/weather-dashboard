@@ -95,7 +95,9 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
   useEffect(() => {
     if (weather.city) {
       if (loading) {
-        setAdvice("Please wait...");
+        const loadingMessage = '<data class="system-message info blink">Please wait...</data>';
+        const sanitizedMessage = DOMPurify.sanitize(loadingMessage);
+        setAdvice(sanitizedMessage);
       } else {
         getWeatherAdviceFromGPT(weather)
           .then((advice) => {
@@ -109,7 +111,7 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           });
       }
     }
-  }, [weather, loading, onAdvice]);
+  }, [weather, loading, onAdvice ]);
 
   useEffect(() => {
     if (weather.city) {
@@ -177,9 +179,9 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
     }
   };
 
-  if (loading) return <data className="system-message blink">Loading...</data>;
+  if (loading) return <data className="system-message info blink">Loading...</data>;
   if (error) return <data className="system-message">Error: {error}</data>;
-  if (warning) return <data className="system-message">Oops!: {warning}</data>;
+  if (warning) return <data className="system-message warning">Oops!: {warning}</data>;
 
   return (
     <div className="weather-display">
@@ -189,10 +191,27 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           <div>
               <label>Last updated:</label>
               {/* Click event to refresh the data for the city */}
-              <small tooltip="Update weather data" className="weather-refresh font-family-data tooltip bottom-right" onClick={handleRefreshWeather}>
-                  <FontAwesomeIcon className="weather-refresh-clock" icon={faClock} />
-                  <FontAwesomeIcon className="weather-refresh-arrows" icon={faArrowsRotate} />
-                  &nbsp;{timePassed}
+              <small
+                tooltip="Update weather data"
+                className={`weather-refresh font-family-data tooltip bottom-right${
+                  timePassed.endsWith("minutes ago") ||
+                  timePassed.endsWith("minute ago") ||
+                  timePassed.endsWith("seconds ago") ||
+                  timePassed.endsWith("second ago")
+                    ? ""
+                    : " blink"
+                }`}
+                onClick={handleRefreshWeather}
+              >
+                <FontAwesomeIcon
+                  className="weather-refresh-clock"
+                  icon={faClock}
+                />
+                <FontAwesomeIcon
+                  className="weather-refresh-arrows"
+                  icon={faArrowsRotate}
+                />
+                 {timePassed}
               </small>
             </div>
             <span
