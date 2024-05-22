@@ -189,14 +189,10 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
           <div>
               <label>Last updated:</label>
               {/* Click event to refresh the data for the city */}
-              <small className="weather-refresh font-family-data" onClick={handleRefreshWeather}>
-                <span
-                  className="tooltip bottom-right"
-                  tooltip="Update weather data"
-                >
-                  <FontAwesomeIcon icon={faClock} />
-                </span>
-                &nbsp;{timePassed}
+              <small tooltip="Update weather data" className="weather-refresh font-family-data tooltip bottom-right" onClick={handleRefreshWeather}>
+                  <FontAwesomeIcon className="weather-refresh-clock" icon={faClock} />
+                  <FontAwesomeIcon className="weather-refresh-arrows" icon={faArrowsRotate} />
+                  &nbsp;{timePassed}
               </small>
             </div>
             <span
@@ -294,7 +290,7 @@ function WeatherDisplay({ city, onResults, onAdvice}) {
                 </p>
               </>
             ) : (
-              <data>Thinking of a quote about the weather...</data>
+              <data className="blink">Thinking of a quote about the weather...</data>
             )}
           </div>
           {quote && (
