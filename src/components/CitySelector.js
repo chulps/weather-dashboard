@@ -5,6 +5,7 @@ import getEnv from "../utils/getEnv";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faShuffle, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { setGeoLocation } from "../utils/geoLocation";
 
 const currentEnv = getEnv();
 
@@ -108,7 +109,9 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
         )
       );
     }
-  }, [results, advice]);
+  }, [results, advice, cachedCities]);
+
+  console.log(cachedCities)
 
   const trimmedCachedCities = useMemo(() => cachedCities.slice(2), [cachedCities]);
 
@@ -131,23 +134,24 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
     };
   }, []);
 
-  const handleLocation = () => {
+  const handleLocation = async () => {
     setFetchingLocation(true);
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        const { latitude, longitude } = position.coords;
-        setLatLon({ latitude, longitude });
-        setFetchingLocation(false);
-        setLocationFound(true);
-        setTimeout(() => {
-          setLocationFound(false);
-        }, 3000); // Reset "Found!" text after 3 seconds
-      },
-      error => {
-        console.error("Error getting location:", error);
-        setFetchingLocation(false);
-      }
-    );
+    try {
+      const position = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject)
+      );
+      const { latitude, longitude } = position.coords;
+      setLatLon({ latitude, longitude });
+      setGeoLocation(latitude, longitude); // Set the geoLocation values
+      setLocationFound(true);
+      setTimeout(() => {
+        setLocationFound(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Error getting location:", error);
+    } finally {
+      setFetchingLocation(false);
+    }
   };
 
   const handleSubmit = useCallback(
@@ -159,7 +163,6 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
             params: { lat: latLon.latitude, lon: latLon.longitude }
           });
           setCity(data.city);
-          setLatLon(null);
         } catch (error) {
           console.error("Error fetching city from coordinates:", error);
         }

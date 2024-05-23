@@ -11,29 +11,34 @@ const baseUrl =
 const cache = new Map();
 
 export const getWeatherAdviceFromGPT = async (weather) => {
+
   const cacheKey = JSON.stringify(weather);
   if (cache.has(cacheKey)) {
     return cache.get(cacheKey);
   }
+const prompt = [
+{
+role: "system",
+content: `
+You are a weather advice generator for "AI Weather Dashboard".
+Here is some weather data for ${weather.city}, 
+current time: ${weather.time},
+user's current latitude: ${weather.latitude},
+user's current longitude: ${weather.longitude},
+Temperature: ${Math.round(weather.temperature)}°C, 
+Condition: ${weather.condition}, 
+Humidity: ${Math.round(weather.humidity)}%, 
+Wind Speed: ${Math.round(weather.windSpeed)} km/h.
 
-  const prompt = [
-    {
-      role: "system",
-      content: `You are a weather advice generator for "AI Weather Dashboard".
-      Based on the current weather in ${weather.city} at ${weather.time}: 
-      Temperature: ${Math.round(weather.temperature)}°C, 
-      Condition: ${weather.condition}, 
-      Humidity: ${Math.round(weather.humidity)}%, 
-      Wind Speed: ${Math.round(weather.windSpeed)} km/h.
-      
-      Consider the time of day before giving practical advice on local activities, food, precautions, or clothing using emojis.
-      If it's late at night suggest an indoor activity or nighttime activities instead of outdoor activities.
-      Make the users laugh. Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
-      Use <label> to separate topics. No <b>, <i>, or <u> tags within a <label>. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
-      Perhaps add a link to do a google search for some attraction or event in the city encased in an <a href="EXAMPLE" target="_blank" > tag.
-      Keep sections concise for easy reading.`,
-    },
-  ];
+If the user's coordinates are known, and the coordinates match the current city, offer suggestions for what to wear, where to go and what to do. Be mindful of the time of day.
+If the user's coordinates are unknown, or the coordinates don't match the current city, give general information about what people are doing in the area. Interesting facts. Local climate and wildlife. Don't give suggestions or advice.
+Make the users laugh. 
+Use HTML without headers. Use <b> for bold, <i> for italics, and <u> for underline to emphasize certain words or phrases. 
+Use <label> to separate topics. No <b>, <i>, or <u> tags within a <label>. No <br> tags. Don't mention weather details in the advice, but it's ok to mention the city and the local time.
+Perhaps add a link to do a google search for some attraction or event in the city encased in an <a href="EXAMPLE" target="_blank" > tag.
+Keep sections concise for easy reading.`,
+},
+];
 
   try {
     const response = await axios.post(`${baseUrl}/api/openai`, {
