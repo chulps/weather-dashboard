@@ -1,20 +1,14 @@
+// utils/weatherDataUtils.js
 import moment from 'moment-timezone';
 import { getName } from 'country-list';
+import { getGeoLocationLatitude, getGeoLocationLongitude } from "./geoLocation";
 
+// Now you can use geoLocationLatitude and geoLocationLongitude in your functions
 // Function to convert offset to timezone name
 const offsetToTimezone = (offsetInSeconds) => {
   const offsetInMinutes = offsetInSeconds / 60;
-  const timezones = moment.tz.names();
-
-  for (let i = 0; i < timezones.length; i++) {
-    const timezone = timezones[i];
-    const offset = moment.tz(timezone).utcOffset();
-    if (offset === offsetInMinutes) {
-      return timezone;
-    }
-  }
-
-  return null;
+  const guessedTimezone = moment.tz.guess(offsetInMinutes);
+  return guessedTimezone || null;
 };
 
 // Inline function to convert Unix timestamp to HH:mm format in a specific timezone
@@ -29,10 +23,8 @@ const toTimeString = (timestamp, timeZone) => {
 };
 
 // Function to transform OpenWeatherMap data
-// dataOwm
 export function transformOpenWeatherAPI(data) {
   const timezone = offsetToTimezone(data.timezone);
-
   return {
     temperature: data.main.temp,
     humidity: data.main.humidity,
@@ -49,12 +41,14 @@ export function transformOpenWeatherAPI(data) {
       timeZone: timezone,
     }),
     timezone: timezone,
-    sunrise: toTimeString(data.sys.sunrise, timezone), // Format to HH:mm with timezone adjustment
-    sunset: toTimeString(data.sys.sunset, timezone), // Format to HH:mm with timezone adjustment
-    high: Math.round(data.main.temp_max), // Round to nearest whole number
-    low: Math.round(data.main.temp_min), // Round to nearest whole number
+    latitude: data.coord.lat,
+    longitude: data.coord.lon,
+    sunrise: toTimeString(data.sys.sunrise, timezone),
+    sunset: toTimeString(data.sys.sunset, timezone),
+    high: Math.round(data.main.temp_max),
+    low: Math.round(data.main.temp_min),
     region: "", // Placeholder; requires additional data source
-    country: getName(data.sys.country), // Converts country code to name
+    country: getName(data.sys.country),
   };
 }
 
@@ -75,6 +69,8 @@ export function transformWeatherMap(data) {
       minute: "numeric",
       timeZone: data.location.tz_id,
     }),
+    latitude: data.location.lat,
+    longitude: data.location.lon,
     timezone: data.location.tz_id,
     sunrise: 0, // Not available
     sunset: 0, // Not available
@@ -100,6 +96,7 @@ function formatTimeDisplay(time) {
 
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
+
   const dataTimeStamp = new Date().toISOString();
 
   if (!dataOwm && !dataWa) return null;
@@ -129,10 +126,12 @@ export function mergeWeatherData(dataWa, dataOwm) {
     city: dataOwm.city ? dataOwm.city : dataWa.city,
     time: dataOwm.time ? formatTimeDisplay(dataOwm.time) : formatTimeDisplay(dataWa.time),
     timezone: dataOwm.timezone ? dataOwm.timezone : dataWa.timezone,
-    sunrise: dataWa.sunrise ? dataWa.sunrise : "--", // Use dataWa sunrise
-    sunset: dataWa.sunset ? dataWa.sunset : "--", // Use dataWa sunset
-    high: dataWa.high ? dataWa.high : "--", // Use dataWa high
-    low: dataWa.low ? dataWa.low : "--", // Use dataWa low
+    latitude: getGeoLocationLatitude() ? getGeoLocationLatitude() : "unknown",
+    longitude: getGeoLocationLongitude() ? getGeoLocationLongitude() : "unknown",
+    sunrise: dataWa.sunrise ? dataWa.sunrise : "--",
+    sunset: dataWa.sunset ? dataWa.sunset : "--",
+    high: dataWa.high ? dataWa.high : "--",
+    low: dataWa.low ? dataWa.low : "--",
     region: dataOwm.region ? dataOwm.region : dataWa.region,
     country: dataOwm.country ? dataOwm.country : dataWa.country,
     timestamp: dataTimeStamp,

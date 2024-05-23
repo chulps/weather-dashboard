@@ -9,7 +9,9 @@ export const defaultWeather = {
     windSpeed: 0,    // km/h
     condition: "",   // Description of weather conditions
     icon: "",        // URL to weather icon image
-    time: "",
+    time: "",        // Date and time in local time
+    latitude: 0,     // Latitude
+    longitude: 0,    // Longitude
     timezone: "",    // Time zone
     sunrise: "", // string
     sunset: "null", // string
