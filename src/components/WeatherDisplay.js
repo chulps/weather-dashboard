@@ -272,7 +272,6 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
             </div>
 
             <div className="weather-conditions">
-              {/* <div>
                 <data className="sun-data">
                   <FontAwesomeIcon
                     style={{ color: "var(--warning-500)" }}
@@ -280,19 +279,18 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                   />
                   {weather.sunrise}
                 </data>
-              </div> */}
               <img
                 className="weather-icon"
                 src={weather.icon}
                 alt={weather.condition}
               />
-              {/* <data className="sun-data">
+              <data className="sun-data">
                 <FontAwesomeIcon
                   style={{ color: "var(--royal-200)" }}
                   icon={faMoon}
                 />
                 {weather.sunset}
-              </data> */}
+              </data>
             </div>
 
             <div className="weather-location">

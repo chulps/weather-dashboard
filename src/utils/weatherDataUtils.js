@@ -17,15 +17,19 @@ const offsetToTimezone = (offsetInSeconds) => {
   return null;
 };
 
-// Helper function to format UNIX timestamp to HH:mm without timezone adjustment
-const formatTime = (timestamp) => {
-  const date = new Date(timestamp * 1000); // Convert to milliseconds
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
+// Inline function to convert Unix timestamp to HH:mm format in a specific timezone
+const toTimeString = (timestamp, timeZone) => {
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: timeZone,
+  };
+  return new Date(timestamp * 1000).toLocaleTimeString('en-GB', options);
 };
 
 // Function to transform OpenWeatherMap data
+// dataOwm
 export function transformOpenWeatherAPI(data) {
   const timezone = offsetToTimezone(data.timezone);
 
@@ -42,10 +46,11 @@ export function transformOpenWeatherAPI(data) {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
+      timeZone: timezone,
     }),
     timezone: timezone,
-    sunrise: formatTime(data.sys.sunrise), // Format to HH:mm without timezone adjustment
-    sunset: formatTime(data.sys.sunset), // Format to HH:mm without timezone adjustment
+    sunrise: toTimeString(data.sys.sunrise, timezone), // Format to HH:mm with timezone adjustment
+    sunset: toTimeString(data.sys.sunset, timezone), // Format to HH:mm with timezone adjustment
     high: Math.round(data.main.temp_max), // Round to nearest whole number
     low: Math.round(data.main.temp_min), // Round to nearest whole number
     region: "", // Placeholder; requires additional data source
@@ -68,12 +73,13 @@ export function transformWeatherMap(data) {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
+      timeZone: data.location.tz_id,
     }),
     timezone: data.location.tz_id,
-    sunrise: null, // Not available
-    sunset: null, // Not available
-    high: null, // Not available
-    low: null, // Not available
+    sunrise: 0, // Not available
+    sunset: 0, // Not available
+    high: 0, // Not available
+    low: 0, // Not available
     region: data.location.region,
     country: data.location.country,
   };
