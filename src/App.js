@@ -5,7 +5,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./App.css";
 import "./global.css";
-
 function App() {
   const [city, setCity] = useState("");
   const [results, setResults] = useState([]);
@@ -20,14 +19,14 @@ function App() {
           <CitySelector 
             setCity={setCity} 
             results={results} 
-            advice={advice} 
+            advice={advice}
             setShowWeather={setShowWeather}  // Pass setShowWeather here
           />
           <WeatherDisplay
             city={city}
             onResults={setResults}
             onAdvice={setAdvice}
-            showWeather={showWeather}        // Pass showWeather here
+            showWeather={showWeather}
             setShowWeather={setShowWeather}  // Pass setShowWeather here
           />
         </div>

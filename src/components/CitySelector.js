@@ -1,15 +1,26 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
 import debounce from "lodash/debounce";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faShuffle, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationDot,
+  faShuffle,
+  faSearch,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { setGeoLocation } from "../utils/geoLocation";
 
 const currentEnv = getEnv();
 
-function CitySelector({ setCity, results, advice, setShowWeather }) {
+function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [latLon, setLatLon] = useState(null);
@@ -59,7 +70,10 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
     "Vienna",
   ];
 
-  const baseUrl = currentEnv === "production" ? "https://limitless-lake-38337.herokuapp.com" : "http://localhost:3001";
+  const baseUrl =
+    currentEnv === "production"
+      ? "https://limitless-lake-38337.herokuapp.com"
+      : "http://localhost:3001";
 
   useEffect(() => {
     let debounceSearch = null;
@@ -98,31 +112,39 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
   useEffect(() => {
     setRandomButtonDisabled(false);
     const mergedData = { results, advice };
-    const existingCity = cachedCities.find(city => city.results.city === results.city);
+    const existingCity = cachedCities.find(
+      (city) => city.results.city === results.city
+    );
     if (!existingCity) {
-      setCachedCities(prevCachedCities =>
+      setCachedCities((prevCachedCities) =>
         [...prevCachedCities, mergedData].filter(
           (city, index, self) =>
-            index === self.findIndex(
-              c => c.results.city === city.results.city && c.advice === city.advice
+            index ===
+            self.findIndex(
+              (c) =>
+                c.results.city === city.results.city && c.advice === city.advice
             )
         )
       );
     }
   }, [results, advice, cachedCities]);
 
-  console.log(cachedCities)
+  const trimmedCachedCities = useMemo(
+    () => cachedCities.slice(2),
+    [cachedCities]
+  );
 
-  const trimmedCachedCities = useMemo(() => cachedCities.slice(2), [cachedCities]);
-
-  const handleSuggestionClick = suggestion => {
+  const handleSuggestionClick = (suggestion) => {
     setInput(suggestion.description.split(",")[0]);
     setSuggestions([]);
     setCity(suggestion.description.split(",")[0]);
   };
 
-  const handleClickOutside = event => {
-    if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+  const handleClickOutside = (event) => {
+    if (
+      suggestionsRef.current &&
+      !suggestionsRef.current.contains(event.target)
+    ) {
       setSuggestions([]);
     }
   };
@@ -148,19 +170,25 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
         setLocationFound(false);
       }, 3000);
     } catch (error) {
-      console.error("Error getting location:", error);
+      if (error.code === error.PERMISSION_DENIED) {
+        alert(
+          "Your browser settings are preventing the AI Weather Dashboard from finding your location. Please change your settings to enable this feature."
+        );
+      } else {
+        console.error("Error getting location:", error);
+      }
     } finally {
       setFetchingLocation(false);
     }
   };
 
   const handleSubmit = useCallback(
-    async event => {
+    async (event) => {
       event.preventDefault();
       if (latLon) {
         try {
           const { data } = await axios.get(`${baseUrl}/api/location`, {
-            params: { lat: latLon.latitude, lon: latLon.longitude }
+            params: { lat: latLon.latitude, lon: latLon.longitude },
           });
           setCity(data.city);
         } catch (error) {
@@ -174,14 +202,14 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
     [latLon, baseUrl, input, setCity]
   );
 
-  const handleRandomCity = event => {
+  const handleRandomCity = (event) => {
     event.preventDefault();
     if (randomButtonDisabled) return;
 
     setRandomButtonDisabled(true);
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
-    setRandomButtonClicks(prevClicks => prevClicks + 1);
+    setRandomButtonClicks((prevClicks) => prevClicks + 1);
 
     if (randomButtonClicks >= 4) {
       const timeoutDuration = 300000; // 5 minutes in milliseconds
@@ -197,7 +225,7 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
     }
   };
 
-  const handleCachedCity = city => {
+  const handleCachedCity = (city) => {
     setCity(city);
     setShowWeather(true); // Ensure showWeather is set to true
     setTimeout(() => {
@@ -208,10 +236,12 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
     }, 0); // Ensure DOM is updated before scrolling
   };
 
-  const handleDeleteCachedCity = cityToDelete => {
-    setHiddenCities(prevHiddenCities => {
+  const handleDeleteCachedCity = (cityToDelete) => {
+    setHiddenCities((prevHiddenCities) => {
       const newHiddenCities = [...prevHiddenCities, cityToDelete];
-      const visibleCities = trimmedCachedCities.filter(city => !newHiddenCities.includes(city.results.city));
+      const visibleCities = trimmedCachedCities.filter(
+        (city) => !newHiddenCities.includes(city.results.city)
+      );
       if (visibleCities.length < 1) {
         setShowWeather(false);
         setHasRecentCityCards(false);
@@ -229,7 +259,7 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
   useEffect(() => {
     const countdownInterval = setInterval(() => {
       if (countdownTime > 0 && randomButtonDisabled) {
-        setCountdownTime(prevTime => prevTime - 1);
+        setCountdownTime((prevTime) => prevTime - 1);
       }
     }, 1000); // Update countdown every second
 
@@ -262,11 +292,11 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
               name="city"
               placeholder="Enter city"
               value={input}
-              onChange={event => setInput(event.target.value)}
+              onChange={(event) => setInput(event.target.value)}
             />
             {input.length > 0 && suggestions.length > 0 && (
               <ul className="suggestions" ref={suggestionsRef}>
-                {suggestions.map(suggestion => (
+                {suggestions.map((suggestion) => (
                   <li
                     key={suggestion.description}
                     onClick={() => handleSuggestionClick(suggestion)}
@@ -293,7 +323,9 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
           <div className="button-wrapper">
             <div className="options-wrapper">
               <button
-                className={`random-city-button tooltip bottom-right ${input === "" ? "hollow" : "hollow disabled"} ${randomButtonDisabled ? "disabled" : ""}`}
+                className={`random-city-button tooltip bottom-right ${
+                  input === "" ? "hollow" : "hollow disabled"
+                } ${randomButtonDisabled ? "disabled" : ""}`}
                 tooltip="🎲 Roll the dice and see what happens!"
                 type="button"
                 onClick={handleRandomCity}
@@ -304,7 +336,9 @@ function CitySelector({ setCity, results, advice, setShowWeather }) {
               </button>
 
               <button
-                className={`hollow tooltip bottom ${fetchingLocation ? "disabled" : ""}`}
+                className={`hollow tooltip bottom ${
+                  fetchingLocation ? "disabled" : ""
+                }`}
                 tooltip="Get weather data for your current location."
                 type="button"
                 onClick={handleLocation}
