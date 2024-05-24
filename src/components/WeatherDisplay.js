@@ -111,18 +111,18 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
         setAdvice(sanitizedMessage);
       } else {
         getWeatherAdviceFromGPT(weather)
-          .then((advice) => {
-            const sanitizedAdvice = DOMPurify.sanitize(advice);
-            setAdvice(sanitizedAdvice);
-            onAdvice(sanitizedAdvice);
-          })
-          .catch((error) => {
-            console.error("Error fetching advice from OpenAI:", error);
-            setAdvice("Error fetching advice. Please try again later.");
-          });
-      }
+        .then((advice) => {
+          const sanitizedAdvice = DOMPurify.sanitize(advice);
+          setAdvice(sanitizedAdvice);
+          onAdvice(sanitizedAdvice);
+        })
+        .catch((error) => {
+          console.error("Error fetching advice from OpenAI:", error);
+          setAdvice("Error fetching advice. Please try again later.");
+        });
     }
-  }, [weather, loading, onAdvice]);
+  }
+}, [weather, loading, onAdvice]);
 
   useEffect(() => {
     if (weather.city) {
@@ -206,7 +206,6 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           <div className="weather-header">
             <div>
               <label>Last updated:</label>
-              {/* Click event to refresh the data for the city */}
               <small
                 tooltip="Update weather data"
                 className={`weather-refresh font-family-data tooltip bottom-right${
@@ -215,7 +214,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                   timePassed.endsWith("seconds ago") ||
                   timePassed.endsWith("second ago")
                     ? ""
-                    : " blink"
+                    : "system-message warning blink"
                 }`}
                 onClick={handleRefreshWeather}
               >
@@ -272,25 +271,25 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
             </div>
 
             <div className="weather-conditions">
-                <data className="sun-data">
+                {/* <data className="sun-data">
                   <FontAwesomeIcon
                     style={{ color: "var(--warning-500)" }}
                     icon={faSun}
                   />
                   {weather.sunrise}
-                </data>
+                </data> */}
               <img
                 className="weather-icon"
                 src={weather.icon}
                 alt={weather.condition}
               />
-              <data className="sun-data">
+              {/* <data className="sun-data">
                 <FontAwesomeIcon
                   style={{ color: "var(--royal-200)" }}
                   icon={faMoon}
                 />
                 {weather.sunset}
-              </data>
+              </data> */}
             </div>
 
             <div className="weather-location">
@@ -323,7 +322,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
           <div className="weather-advice">
             <div
               dangerouslySetInnerHTML={{
-                __html: advice || advice ? advice : "Please wait...",
+                __html: advice || advice ? advice : "<data className='system-message blink info'>Please wait...</data>",
               }}
             />
           </div>
@@ -343,7 +342,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                 <small>Getting fresh quote...</small>
               )}
               {refreshTimeout && (
-                <small>Please wait {remainingTime} seconds</small>
+                <small className="system-message warning">Please wait {remainingTime} seconds</small>
               )}
               <FontAwesomeIcon
                 className={refreshingQuote ? "spin" : ""}
