@@ -135,9 +135,10 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   );
 
   const handleSuggestionClick = (suggestion) => {
-    setInput(suggestion.description.split(",")[0]);
+    const formattedDescription = suggestion.description.replace(/, \s*/g, ',');
+    setInput(formattedDescription);
     setSuggestions([]);
-    setCity(suggestion.description.split(",")[0]);
+    setCity(formattedDescription);
   };
 
   const handleClickOutside = (event) => {
@@ -169,6 +170,8 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
       setTimeout(() => {
         setLocationFound(false);
       }, 3000);
+      // Call handleSubmit with the new latLon values
+      handleSubmit(latitude, longitude);
     } catch (error) {
       if (error.code === error.PERMISSION_DENIED) {
         alert(
@@ -182,25 +185,73 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
     }
   };
 
-  const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
-      if (latLon) {
+  const handleSubmit = async (latitude, longitude) => {
+    if (latitude && longitude) {
+      console.log("Coordinates detected:", { latitude, longitude });
+      try {
+        const { data: locationData } = await axios.get(`${baseUrl}/api/location`, {
+          params: { lat: latitude, lon: longitude },
+        });
+        console.log("Data fetched for coordinates:", locationData);
+        const cityName = locationData.city;
+        setCity(cityName);
+  
+        // Fetch weather data for the detected city
+        const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
+          params: { city: cityName },
+        });
+        console.log("Weather data fetched for city:", weatherData);
+        setShowWeather(true); // Ensure the weather data is shown
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        console.error("Error response:", error.response);
+      }
+    } else {
+      const coordinatePattern = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
+      if (coordinatePattern.test(input.trim())) {
+        const [lat, lon] = input.trim().split(",").map(Number);
+        console.log("Coordinates detected from input:", { lat, lon });
+  
         try {
-          const { data } = await axios.get(`${baseUrl}/api/location`, {
-            params: { lat: latLon.latitude, lon: latLon.longitude },
+          const { data: locationData } = await axios.get(`${baseUrl}/api/location`, {
+            params: { lat, lon },
           });
-          setCity(data.city);
+          console.log("Data fetched for coordinates:", locationData);
+          const cityName = locationData.city;
+          setCity(cityName);
+  
+          // Fetch weather data for the detected city
+          const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
+            params: { city: cityName },
+          });
+          console.log("Weather data fetched for city:", weatherData);
+          setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
-          console.error("Error fetching city from coordinates:", error);
+          console.error("Error fetching data:", error);
+          console.error("Error response:", error.response);
         }
       } else {
         setCity(input);
+  
+        try {
+          const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
+            params: { city: input },
+          });
+          console.log("Weather data fetched for city:", weatherData);
+          setShowWeather(true); // Ensure the weather data is shown
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          console.error("Error response:", error.response);
+        }
       }
-      setInput("");
-    },
-    [latLon, baseUrl, input, setCity]
-  );
+    }
+    setInput("");
+  };  
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    handleSubmit();
+  };
 
   const handleRandomCity = (event) => {
     event.preventDefault();
@@ -209,6 +260,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
     setRandomButtonDisabled(true);
     const randomCity = cities[Math.floor(Math.random() * cities.length)];
     setCity(randomCity);
+    setShowWeather(true); // Ensure the weather data is shown
     setRandomButtonClicks((prevClicks) => prevClicks + 1);
 
     if (randomButtonClicks >= 4) {
@@ -251,12 +303,6 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   };
 
   useEffect(() => {
-    if (latLon) {
-      handleSubmit(new Event("submit"));
-    }
-  }, [latLon, handleSubmit]);
-
-  useEffect(() => {
     const countdownInterval = setInterval(() => {
       if (countdownTime > 0 && randomButtonDisabled) {
         setCountdownTime((prevTime) => prevTime - 1);
@@ -271,7 +317,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   return (
     <div className="city-selector-container">
       <div className="city-selector">
-        <form className="city-selector-form" onSubmit={handleSubmit}>
+        <form className="city-selector-form" onSubmit={handleFormSubmit}>
           <div>
             <label>about this app...</label>
             <h1 className="site-header">AI Weather Dashboard</h1>

@@ -23,8 +23,8 @@ content: `
 You are a weather advice generator for "AI Weather Dashboard".
 Here is some weather data for ${weather.city}, 
 current local time: ${weather.time},
-user's current latitude: ${weather.latitude},
-user's current longitude: ${weather.longitude},
+user's current latitude: ${weather.user_latitude},
+user's current longitude: ${weather.user_longitude},
 Temperature: ${Math.round(weather.temperature)}°C, 
 Condition: ${weather.condition}, 
 Humidity: ${Math.round(weather.humidity)}%, 

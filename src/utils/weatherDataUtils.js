@@ -24,6 +24,8 @@ const toTimeString = (timestamp, timeZone) => {
 
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
+  console.log('owm')
+  console.log(data)
   const timezone = offsetToTimezone(data.timezone);
   return {
     temperature: data.main.temp,
@@ -54,6 +56,8 @@ export function transformOpenWeatherAPI(data) {
 
 // Function to transform WeatherAPI data
 export function transformWeatherMap(data) {
+  console.log('wmap')
+  console.log(data)
   return {
     temperature: data.current.temp_c,
     humidity: data.current.humidity,
@@ -126,8 +130,10 @@ export function mergeWeatherData(dataWa, dataOwm) {
     city: dataOwm.city ? dataOwm.city : dataWa.city,
     time: dataOwm.time ? formatTimeDisplay(dataOwm.time) : formatTimeDisplay(dataWa.time),
     timezone: dataOwm.timezone ? dataOwm.timezone : dataWa.timezone,
-    latitude: getGeoLocationLatitude() ? getGeoLocationLatitude() : "unknown",
-    longitude: getGeoLocationLongitude() ? getGeoLocationLongitude() : "unknown",
+    user_latitude: getGeoLocationLatitude() ? getGeoLocationLatitude() : "unknown",
+    user_longitude: getGeoLocationLongitude() ? getGeoLocationLongitude() : "unknown",
+    latitude: dataOwm.latitude ? dataOwm.latitude : dataWa.latitude,
+    longitude: dataOwm.longitude ? dataOwm.longitude : dataWa.longitude,
     sunrise: dataWa.sunrise ? dataWa.sunrise : "--",
     sunset: dataWa.sunset ? dataWa.sunset : "--",
     high: dataWa.high ? dataWa.high : "--",

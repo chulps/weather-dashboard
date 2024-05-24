@@ -10,6 +10,8 @@ export const defaultWeather = {
     condition: "",   // Description of weather conditions
     icon: "",        // URL to weather icon image
     time: "",        // Date and time in local time
+    user_latitude: 0,     // Latitude
+    user_longitude: 0,    // Longitude
     latitude: 0,     // Latitude
     longitude: 0,    // Longitude
     timezone: "",    // Time zone
