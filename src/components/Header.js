@@ -26,10 +26,6 @@ const Header = ({ setUnit, unit }) => {
     }
   }, []);
 
-  const handleUnitToggle = () => {
-    setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
-  };
-
   return (
     <header>
       <a href="https://chulps.github.io/react-gh-pages/" className="logo-container">
