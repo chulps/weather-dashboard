@@ -898,7 +898,10 @@ html.light .tooltip:hover::after {
 
 .system-message.info {
   color: var(--info-500);
+}
 
+.system-message.success {
+  color: var(--success-400);
 }
 
 .system-message .icon {

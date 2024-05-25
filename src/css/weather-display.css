@@ -145,14 +145,14 @@
 }
 
 .weather-refresh {
-  color: var(--success-600);
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
-.weather-refresh:hover {
+.weather-refresh.warning:hover {
   color: var(--success-400);
+  animation: none;
 }
 
 .weather-refresh-arrows {

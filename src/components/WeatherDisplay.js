@@ -1,4 +1,3 @@
-// Inside WeatherDisplay.js
 import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
@@ -8,8 +7,6 @@ import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowsRotate,
-  faQuoteLeft,
-  faQuoteRight,
   faClock,
   faCaretUp,
   faCaretDown,
@@ -18,10 +15,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
+import ToggleSwitch from "./ToggleSwitch";
+import { faFlagUsa, faGlobe } from "@fortawesome/free-solid-svg-icons";
 
-function WeatherDisplay({ city, onResults, onAdvice }) {
-  const { weather, loading, warning, error, refreshWeather } =
-    useWeatherApi(city);
+function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
+  const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
@@ -111,48 +109,48 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
         setAdvice(sanitizedMessage);
       } else {
         getWeatherAdviceFromGPT(weather)
-        .then((advice) => {
-          const sanitizedAdvice = DOMPurify.sanitize(advice);
-          setAdvice(sanitizedAdvice);
-          onAdvice(sanitizedAdvice);
-        })
-        .catch((error) => {
-          console.error("Error fetching advice from OpenAI:", error);
-          setAdvice("Error fetching advice. Please try again later.");
-        });
+          .then((advice) => {
+            const sanitizedAdvice = DOMPurify.sanitize(advice);
+            setAdvice(sanitizedAdvice);
+            onAdvice(sanitizedAdvice);
+          })
+          .catch((error) => {
+            console.error("Error fetching advice from OpenAI:", error);
+            setAdvice("Error fetching advice. Please try again later.");
+          });
+      }
     }
-  }
-}, [weather, loading, onAdvice]);
+  }, [weather, loading, onAdvice]);
 
   useEffect(() => {
     if (weather.city) {
       const initialTime = moment()
         .tz(weather.timezone)
         .format("ddd, D MMMM H:mm:ss");
-      setCurrentTime(formatTime(initialTime));
+      setCurrentTime(formatTime(initialTime, unit));
 
       const updateCurrentTime = () => {
         const newTime = moment()
           .tz(weather.timezone)
           .format("ddd, D MMMM H:mm:ss");
-        setCurrentTime(formatTime(newTime));
+        setCurrentTime(formatTime(newTime, unit));
       };
 
       const intervalId = setInterval(updateCurrentTime, 1000);
 
       return () => clearInterval(intervalId);
     }
-  }, [weather.city, weather.timezone, weather]);
+  }, [weather.city, weather.timezone, weather, unit]);
 
-  const formatTime = (date) => {
-    return date.toLocaleString("en-US", {
+  const formatTime = (date, unit) => {
+    return new Date(date).toLocaleString("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
       second: "numeric",
-      hour12: false,
+      hour12: unit === "imperial",
     });
   };
 
@@ -186,12 +184,36 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
     }
   }, [showWeather]);
 
-  // New function to refresh weather data
   const handleRefreshWeather = () => {
     if (city) {
       refreshWeather(city);
     }
   };
+
+  const handleUnitToggle = () => {
+    setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
+  };
+
+  const convertTemperature = (temp, toUnit) => {
+    if (toUnit === "imperial") {
+      return (temp * 9 / 5) + 32; // Celsius to Fahrenheit
+    } else {
+      return (temp - 32) * 5 / 9; // Fahrenheit to Celsius
+    }
+  };
+
+  const convertWindSpeed = (speed, toUnit) => {
+    if (toUnit === "imperial") {
+      return speed * 2.237; // m/s to mph
+    } else {
+      return speed / 2.237; // mph to m/s
+    }
+  };
+
+  const displayedTemperature = unit === "metric" ? weather.temperature : convertTemperature(weather.temperature, "imperial");
+  const displayedLow = unit === "metric" ? weather.low : convertTemperature(weather.low, "imperial");
+  const displayedHigh = unit === "metric" ? weather.high : convertTemperature(weather.high, "imperial");
+  const displayedWindSpeed = unit === "metric" ? weather.windSpeed : convertWindSpeed(weather.windSpeed, "imperial");
 
   if (loading)
     return <data className="system-message info blink">Loading...</data>;
@@ -208,13 +230,13 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
               <label>Last updated:</label>
               <small
                 tooltip="Update weather data"
-                className={`weather-refresh font-family-data tooltip bottom-right${
+                className={`weather-refresh font-family-data tooltip bottom-right system-message ${
                   timePassed.endsWith("minutes ago") ||
                   timePassed.endsWith("minute ago") ||
                   timePassed.endsWith("seconds ago") ||
                   timePassed.endsWith("second ago")
-                    ? ""
-                    : "system-message warning blink"
+                    ? "success"
+                    : "warning blink"
                 }`}
                 onClick={handleRefreshWeather}
               >
@@ -226,10 +248,18 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                   className="weather-refresh-arrows"
                   icon={faArrowsRotate}
                 />
-                 {timePassed}
+                {timePassed}
               </small>
             </div>
-            <span
+            <ToggleSwitch
+              label="Units"
+              isOn={unit === "imperial"}
+              handleToggle={handleUnitToggle}
+              onIcon={<span>🇺🇸</span>}
+              offIcon={<FontAwesomeIcon icon={faGlobe} />}
+            />
+            {/* Hide the back to quotes button */}
+            {/* <span
               tooltip="← Back to quotes"
               className="toggle-view-button tooltip left"
               onClick={toggleView}
@@ -242,54 +272,38 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                 className={refreshingQuote ? "spin" : ""}
                 icon={faQuoteRight}
               />
-            </span>
+            </span> */}
           </div>
           <div className="weather-top">
             <div className="weather-temperature">
               <div>
-                {/* <label>Low</label> */}
                 <data style={{ color: "var(--royal-300)" }}>
                   <FontAwesomeIcon icon={faCaretDown} />
                   &nbsp;
-                  {weather.low}°
+                  {Math.round(displayedLow)}°
                 </data>
               </div>
               <span>
-                <h1>{Math.round(weather.temperature)}°C</h1>
+                <h1>{Math.round(displayedTemperature)}°{unit === "metric" ? "C" : "F"}</h1>
                 <small>
                   <data>{currentTime}</data>
                 </small>
               </span>
               <div>
-                {/* <label>High</label> */}
                 <data style={{ color: "var(--danger-300)" }}>
                   <FontAwesomeIcon icon={faCaretUp} />
                   &nbsp;
-                  {weather.high}°
+                  {Math.round(displayedHigh)}°
                 </data>
               </div>
             </div>
 
             <div className="weather-conditions">
-                {/* <data className="sun-data">
-                  <FontAwesomeIcon
-                    style={{ color: "var(--warning-500)" }}
-                    icon={faSun}
-                  />
-                  {weather.sunrise}
-                </data> */}
               <img
                 className="weather-icon"
                 src={weather.icon}
                 alt={weather.condition}
               />
-              {/* <data className="sun-data">
-                <FontAwesomeIcon
-                  style={{ color: "var(--royal-200)" }}
-                  icon={faMoon}
-                />
-                {weather.sunset}
-              </data> */}
             </div>
 
             <div className="weather-location">
@@ -315,7 +329,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
               </div>
               <div>
                 <label>Wind Speed:</label>{" "}
-                <data>{Math.round(weather.windSpeed)} km/h</data>
+                <data>{Math.round(displayedWindSpeed)} {unit === "metric" ? "km/h" : "mph"}</data>
               </div>
             </div>
           </div>
@@ -358,7 +372,7 @@ function WeatherDisplay({ city, onResults, onAdvice }) {
                 </p>
               </>
             ) : (
-              <data className="blink">
+              <data className="system-message info blink">
                 Thinking of a quote about the weather...
               </data>
             )}
