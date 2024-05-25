@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useCallback,
   useMemo,
 } from "react";
 import "../css/city-selector.css";
@@ -23,7 +22,6 @@ const currentEnv = getEnv();
 function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [latLon, setLatLon] = useState(null);
   const [fetchingLocation, setFetchingLocation] = useState(false);
   const [locationFound, setLocationFound] = useState(false);
   const suggestionsRef = useRef(null);
@@ -164,13 +162,11 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
         navigator.geolocation.getCurrentPosition(resolve, reject)
       );
       const { latitude, longitude } = position.coords;
-      setLatLon({ latitude, longitude });
       setGeoLocation(latitude, longitude); // Set the geoLocation values
       setLocationFound(true);
       setTimeout(() => {
         setLocationFound(false);
       }, 3000);
-      // Call handleSubmit with the new latLon values
       handleSubmit(latitude, longitude);
     } catch (error) {
       if (error.code === error.PERMISSION_DENIED) {

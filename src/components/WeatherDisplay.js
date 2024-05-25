@@ -10,13 +10,12 @@ import {
   faClock,
   faCaretUp,
   faCaretDown,
-  faSun,
-  faMoon,
-} from "@fortawesome/free-solid-svg-icons";
+  faGlobe
+} 
+from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
-import ToggleSwitch from "./ToggleSwitch";
-import { faFlagUsa, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import ToggleSwitch from "../components/ToggleSwitch";
 
 function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
   const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
@@ -154,10 +153,6 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
     });
   };
 
-  const toggleView = () => {
-    setShowWeather(!showWeather);
-  };
-
   useEffect(() => {
     if (weather.city) {
       setShowWeather(true);
@@ -258,21 +253,6 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
               onIcon={<span>🇺🇸</span>}
               offIcon={<FontAwesomeIcon icon={faGlobe} />}
             />
-            {/* Hide the back to quotes button */}
-            {/* <span
-              tooltip="← Back to quotes"
-              className="toggle-view-button tooltip left"
-              onClick={toggleView}
-            >
-              <FontAwesomeIcon
-                className={refreshingQuote ? "spin" : ""}
-                icon={faQuoteLeft}
-              />
-              <FontAwesomeIcon
-                className={refreshingQuote ? "spin" : ""}
-                icon={faQuoteRight}
-              />
-            </span> */}
           </div>
           <div className="weather-top">
             <div className="weather-temperature">
