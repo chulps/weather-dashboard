@@ -5,11 +5,9 @@ import "../css/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSun,
-  faMoon
+  faMoon,
 } from "@fortawesome/free-solid-svg-icons";
-
-
-const Header = () => {
+const Header = ({ setUnit, unit }) => {
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
@@ -28,6 +26,10 @@ const Header = () => {
     }
   }, []);
 
+  const handleUnitToggle = () => {
+    setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
+  };
+
   return (
     <header>
       <a href="https://chulps.github.io/react-gh-pages/" className="logo-container">
@@ -36,7 +38,6 @@ const Header = () => {
       </a>
       <div className="header-right">
         <button onClick={toggleTheme} className="theme-toggle tooltip left" tooltip={theme === 'dark' ? "Switch to light mode" : "Switch to dark mode"}>
-
           {theme === "dark" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
         </button>
       </div>

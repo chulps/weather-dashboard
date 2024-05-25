@@ -144,7 +144,7 @@
 }
 
 .recent-city-card {
-  border: 1px solid var(--secondary);
+  outline: 1px solid var(--secondary);
   padding: var(--space-1);
   border-radius: var(--space-1);
   cursor: pointer;
@@ -183,14 +183,23 @@
 .delete-recent-city-button {
   color: var(--danger-400);
   position: absolute;
-  top: var(--space-1);
-  right: var(--space-1);
+  top: 0;
+  right: 0;
   display: none;
   cursor: pointer;
+  background: var(--danger-800);
+  aspect-ratio: 1/1;
+  height: calc(var(--space-1) + var(--space-2));
+  width: calc(var(--space-1) + var(--space-2));
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 var(--space-1) 0 var(--space-1);
 }
 
 .delete-recent-city-button:hover {
-  color: var(--danger-300);
+  color: var(--white);
+  background: var(--danger-500);
   transform: scale(1.1);
 }
 
@@ -209,4 +218,3 @@
     display: flex;
   }
 }
-

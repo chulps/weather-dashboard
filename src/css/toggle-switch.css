@@ -1,0 +1,67 @@
+/* ToggleSwitch.css */
+.toggle-switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+    height: fit-content;
+    padding:
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: calc(var(--space-3) + var(--space-2));
+    height: calc(var(--space-2) + var(--space-1));
+  }
+  
+  .toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .toggle-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: inherit;
+    border-radius: var(--space-3);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    outline:1px solid var(--secondary);
+  }
+  
+  .toggle-label:before {
+    content: "";
+    position: absolute;
+    left: var(--space-0);
+    top: var(--space-0);
+    width: var(--space-2);
+    height: var(--space-2);
+    background-color: var(--white);
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  
+  /* .toggle-input:checked + .toggle-label {
+    background-color: var(--success-600);
+  } */
+  
+  .toggle-input:checked + .toggle-label:before {
+    transform: translateX(calc(var(--space-2) + var(--space-1)));
+  }
+  
+  .toggle-switch .on-icon {
+    position: absolute;
+    left: var(--space-1);
+  }
+
+  .toggle-switch .off-icon {
+    position: absolute;
+    right: var(--space-1);
+  }

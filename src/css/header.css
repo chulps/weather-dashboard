@@ -5,13 +5,6 @@ header {
     align-items: center;
 }
 
-/* @media screen and (min-width: 992px) {
-    header {
-        position: sticky;
-        top: var(--space-3);
-    }
-} */
-
 header .logo {
     aspect-ratio: 1/1;
     height: var(--space-4);
@@ -33,4 +26,10 @@ header .logo-container:hover {
 .theme-toggle {
     padding: 1em;
     min-width: calc(var(--space-3) + var(--space-2));
+}
+
+.header-right {
+    display: flex;
+    gap: var(--space-1);
+    align-items: center;
 }

@@ -456,7 +456,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
                     >
                       <small
                         tooltip="Remove this city from your recent searches"
-                        className="tooltip"
+                        className="delete-cached-city tooltip"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </small>
