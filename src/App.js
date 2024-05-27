@@ -19,7 +19,7 @@ function App() {
   const [advice, setAdvice] = useState("");
   const [showWeather, setShowWeather] = useState(false);
   const [unit, setUnit] = useState("metric");
-  const [targetLanguage, setTargetLanguage] = useState(navigator.language.split('-')[0]);
+  const [targetLanguage, setTargetLanguage] = useState(navigator.language);
   const [content, setContent] = useState({
     aboutTheWeather: "About the weather...",
     aboutThisApp: "About this app...",
@@ -60,11 +60,9 @@ function App() {
     minutesAgo: "minutes ago",
     secondAgo: "second ago", 
     secondsAgo: "seconds ago",
-    unitsTooltip: "Choose between metric and imperial units",
-    refreshWeatherTooltip: 'Refresh weather data'
   });
 
-  const hasFetchedTranslations = useRef(false);
+  const translationsFetched = useRef({});
 
   const translateContent = async (content, targetLanguage) => {
     const translations = await Promise.all(
@@ -86,10 +84,11 @@ function App() {
   const fetchContent = useCallback(
     async (language) => {
       const userLanguage = language || navigator.language.split("-")[0];
-      if (userLanguage !== "en" && !hasFetchedTranslations.current) {
+      console.log("Fetching content for language:", userLanguage);
+      if (!translationsFetched.current[userLanguage]) {
         const translatedContent = await translateContent(content, userLanguage);
         setContent(translatedContent);
-        hasFetchedTranslations.current = true;
+        translationsFetched.current[userLanguage] = true;
       }
     },
     [content]
@@ -97,20 +96,7 @@ function App() {
 
   useEffect(() => {
     fetchContent(targetLanguage);
-  }, [fetchContent, targetLanguage]);
-
-  // Add this function to set the target language to Japanese and refresh the page
-  useEffect(() => {
-    window.setJapaneseLanguage = () => {
-      localStorage.setItem("preferredLanguage", "ja");
-      window.location.reload();
-    };
-
-    const preferredLanguage = localStorage.getItem("preferredLanguage");
-    if (preferredLanguage) {
-      setTargetLanguage(preferredLanguage);
-    }
-  }, []);
+  }, [targetLanguage, fetchContent]);
 
   return (
     <>

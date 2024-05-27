@@ -83,7 +83,9 @@ function CitySelector({
     const loadSuggestions = async () => {
       if (input.length > 1) {
         try {
-          const citiesUrl = `${baseUrl}/api/cities?city=${encodeURIComponent(input)}`;
+          const citiesUrl = `${baseUrl}/api/cities?city=${encodeURIComponent(
+            input
+          )}`;
           const responseCities = await axios.get(citiesUrl);
           setSuggestions(responseCities.data);
         } catch (error) {
@@ -198,8 +200,14 @@ function CitySelector({
         setCity(cityName);
         setShowWeather(true); // Ensure the weather data is shown
       } catch (error) {
-        if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
-          setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+        if (
+          error.response &&
+          error.response.data.message &&
+          error.response.data.message.includes("language")
+        ) {
+          setErrorMessage(
+            "The city's data is not available in your language. Please try another city or change the language."
+          );
         } else {
           console.error("Error fetching data:", error);
           console.error("Error response:", error.response);
@@ -228,8 +236,14 @@ function CitySelector({
           );
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
-          if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
-            setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+          if (
+            error.response &&
+            error.response.data.message &&
+            error.response.data.message.includes("language")
+          ) {
+            setErrorMessage(
+              "The city's data is not available in your language. Please try another city or change the language."
+            );
           } else {
             console.error("Error fetching data:", error);
             console.error("Error response:", error.response);
@@ -250,12 +264,12 @@ function CitySelector({
 
           // Translate the input city name to English if it's not already in English
           let translatedCity = input;
-          if (detectedLanguage !== 'en') {
+          if (detectedLanguage !== "en") {
             const { data: translationData } = await axios.post(
               `${baseUrl}/api/translate-city`,
               {
                 text: input,
-                targetLanguage: 'en',
+                targetLanguage: "en",
               }
             );
             translatedCity = translationData.translatedText;
@@ -271,8 +285,14 @@ function CitySelector({
           setCity(translatedCity);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
-          if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
-            setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+          if (
+            error.response &&
+            error.response.data.message &&
+            error.response.data.message.includes("language")
+          ) {
+            setErrorMessage(
+              "The city's data is not available in your language. Please try another city or change the language."
+            );
           } else {
             console.error("Error fetching data:", error);
             console.error("Error response:", error.response);
@@ -352,7 +372,10 @@ function CitySelector({
   return (
     <div className="city-selector-container">
       <div className="city-selector">
-        <form className="city-selector-form" onSubmit={handleFormSubmit}>
+        <form
+          className="city-selector-form"
+          onSubmit={handleFormSubmit}
+        >
           <div>
             <label htmlFor="city-search">{content.aboutThisApp}</label>
             <h1 className="site-header">{content.header}</h1>
@@ -379,7 +402,7 @@ function CitySelector({
                     key={suggestion.description}
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    <TranslationWrapper targetLanguage={targetLanguage} >
+                    <TranslationWrapper targetLanguage={targetLanguage}>
                       {suggestion.description}
                     </TranslationWrapper>
                   </li>
@@ -395,8 +418,8 @@ function CitySelector({
                   setSuggestions([]);
                 }}
               >
-                <TranslationWrapper targetLanguage={targetLanguage} >
-                Clear
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  Clear
                 </TranslationWrapper>
               </button>
             )}
@@ -414,7 +437,11 @@ function CitySelector({
                 disabled={randomButtonDisabled}
               >
                 <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
-                <span>{content.randomButton}</span>
+                <span>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Random
+                  </TranslationWrapper>
+                </span>
               </button>
 
               <button
@@ -452,7 +479,8 @@ function CitySelector({
             </button>
           </div>
         </form>
-        {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
+        {/* Display error message */}
         {trimmedCachedCities.length > 0 && hasRecentCityCards && (
           <div className="recent-searches">
             <label>{content.recentSearches}</label>
