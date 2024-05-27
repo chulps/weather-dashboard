@@ -95,8 +95,6 @@ function formatTimeDisplay(time) {
 
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
-  console.log('mergeWeatherData')
-  console.log(dataWa.city, dataOwm.city);
 
   const dataTimeStamp = new Date().toISOString();
 

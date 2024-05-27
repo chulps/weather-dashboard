@@ -28,8 +28,6 @@ const translateCityName = async (city, baseUrl) => {
 };
 
 const fetchWeatherData = async (city, baseUrl) => {
-  console.log('fetchWeatherData');
-  console.log(city);
 
   try {
     const encodedCity = encodeURIComponent(city);
@@ -79,7 +77,6 @@ export const useWeatherApi = (city) => {
       const weatherData = await fetchWeatherData(translatedCity, baseUrl);
       cache.set(city, weatherData);
       setWeather(weatherData);
-      console.log(weatherData); // Added log to check data
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 400) {

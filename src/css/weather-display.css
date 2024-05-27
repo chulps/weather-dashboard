@@ -17,7 +17,7 @@
   display: flex;
   justify-content: space-between;
   gap: var(--space-2);
-  margin-top: var(--space-3);
+  margin-block-start: var(--space-3);
 }
 
 .weather-data > * {
@@ -74,7 +74,7 @@
 .weather-quote {
   border-left: 1px solid var(--secondary);
   padding-inline: var(--space-2);
-  margin-top: var(--space-1);
+  margin-block-start: var(--space-1);
   font-size: var(--font-size-h3);
   line-height: calc(1 * 4 / 3);
 }
@@ -86,12 +86,12 @@
 }
 
 .weather-quote-author {
-  margin-top: var(--space-2);
+  margin-block-start: var(--space-2);
   text-align: right;
 }
 
 .weather-advice label:not(:first-child) {
-  margin-top: var(--space-2);
+  margin-block-start: var(--space-2);
 }
 
 .warning {
@@ -140,7 +140,7 @@
   background: var(--warning);
   padding: var(--space-0) var(--space-1);
   color: var(--background-color);
-  margin-right: var(--space-1);
+  margin-inline-end: var(--space-1);
   border-radius: var(--space-0);
 }
 

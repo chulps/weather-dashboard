@@ -1,12 +1,17 @@
-import axios from 'axios';
-import getEnv from './getEnv';
+import axios from "axios";
+import getEnv from "./getEnv";
 
 const currentEnv = getEnv();
-const baseUrl = currentEnv === 'production'
-  ? 'https://limitless-lake-38337.herokuapp.com'
-  : 'http://localhost:3001';
+const baseUrl =
+  currentEnv === "production"
+    ? "https://limitless-lake-38337.herokuapp.com"
+    : "http://localhost:3001";
 
 export const translateText = async (text, targetLanguage) => {
+  if (targetLanguage === "en" || targetLanguage.startsWith("en-")) {
+    return text; // Return the original text if the target language is English
+  }
+
   try {
     const response = await axios.post(`${baseUrl}/api/translate`, {
       text,
