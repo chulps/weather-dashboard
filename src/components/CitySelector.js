@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import "../css/city-selector.css";
 import axios from "axios";
 import getEnv from "../utils/getEnv";
@@ -16,10 +11,19 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { setGeoLocation } from "../utils/geoLocation";
+import TranslationWrapper from "./TranslationWrapper";
 
 const currentEnv = getEnv();
 
-function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
+function CitySelector({
+  setCity,
+  results,
+  advice,
+  setShowWeather,
+  loading,
+  content,
+  targetLanguage,
+}) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [fetchingLocation, setFetchingLocation] = useState(false);
@@ -82,7 +86,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
           const responseCities = await axios.get(citiesUrl);
           setSuggestions(responseCities.data);
         } catch (error) {
-          console.error("Failed to fetch suggestions:", error);
+          console.error(`${content.failedToFetchSuggestions}`, error);
         }
       } else {
         setSuggestions([]);
@@ -101,7 +105,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
         debounceSearch = null;
       }
     };
-  }, [input, baseUrl]);
+  }, [input, baseUrl, content.failedToFetchSuggestions]);
 
   const [cachedCities, setCachedCities] = useState([]);
   const [hiddenCities, setHiddenCities] = useState([]);
@@ -133,7 +137,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   );
 
   const handleSuggestionClick = (suggestion) => {
-    const formattedDescription = suggestion.description.replace(/, \s*/g, ',');
+    const formattedDescription = suggestion.description.replace(/, \s*/g, ",");
     setInput(formattedDescription);
     setSuggestions([]);
     setCity(formattedDescription);
@@ -170,9 +174,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
       handleSubmit(latitude, longitude);
     } catch (error) {
       if (error.code === error.PERMISSION_DENIED) {
-        alert(
-          "Your browser settings are preventing the AI Weather Dashboard from finding your location. Please change your settings to enable this feature."
-        );
+        alert(content.locationBlocked);
       } else {
         console.error("Error getting location:", error);
       }
@@ -182,20 +184,27 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
   };
 
   const handleSubmit = async (latitude, longitude) => {
+    const userLang = navigator.language.split("-")[0];
     if (latitude && longitude) {
       console.log("Coordinates detected:", { latitude, longitude });
       try {
-        const { data: locationData } = await axios.get(`${baseUrl}/api/location`, {
-          params: { lat: latitude, lon: longitude },
-        });
+        const { data: locationData } = await axios.get(
+          `${baseUrl}/api/location`,
+          {
+            params: { lat: latitude, lon: longitude },
+          }
+        );
         console.log("Data fetched for coordinates:", locationData);
         const cityName = locationData.city;
         setCity(cityName);
-  
-        // Fetch weather data for the detected city
-        const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
-          params: { city: cityName },
-        });
+
+        // Fetch weather data for the detected city with user's language
+        const { data: weatherData } = await axios.get(
+          `${baseUrl}/api/openweather`,
+          {
+            params: { city: cityName, lang: userLang },
+          }
+        );
         console.log("Weather data fetched for city:", weatherData);
         setShowWeather(true); // Ensure the weather data is shown
       } catch (error) {
@@ -207,19 +216,25 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
       if (coordinatePattern.test(input.trim())) {
         const [lat, lon] = input.trim().split(",").map(Number);
         console.log("Coordinates detected from input:", { lat, lon });
-  
+
         try {
-          const { data: locationData } = await axios.get(`${baseUrl}/api/location`, {
-            params: { lat, lon },
-          });
+          const { data: locationData } = await axios.get(
+            `${baseUrl}/api/location`,
+            {
+              params: { lat, lon },
+            }
+          );
           console.log("Data fetched for coordinates:", locationData);
           const cityName = locationData.city;
           setCity(cityName);
-  
-          // Fetch weather data for the detected city
-          const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
-            params: { city: cityName },
-          });
+
+          // Fetch weather data for the detected city with user's language
+          const { data: weatherData } = await axios.get(
+            `${baseUrl}/api/openweather`,
+            {
+              params: { city: cityName, lang: userLang },
+            }
+          );
           console.log("Weather data fetched for city:", weatherData);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
@@ -228,11 +243,14 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
         }
       } else {
         setCity(input);
-  
+
         try {
-          const { data: weatherData } = await axios.get(`${baseUrl}/api/openweather`, {
-            params: { city: input },
-          });
+          const { data: weatherData } = await axios.get(
+            `${baseUrl}/api/openweather`,
+            {
+              params: { city: input, lang: userLang },
+            }
+          );
           console.log("Weather data fetched for city:", weatherData);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
@@ -242,7 +260,7 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
       }
     }
     setInput("");
-  };  
+  };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -315,26 +333,23 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
       <div className="city-selector">
         <form className="city-selector-form" onSubmit={handleFormSubmit}>
           <div>
-            <label>about this app...</label>
-            <h1 className="site-header">AI Weather Dashboard</h1>
-            <p className="app-description">
-              This app provides weather data and uses Artificial Intelligence to
-              make useful suggestions based on that data. Play around with it
-              and enjoy!
-            </p>
+            <label htmlFor="city-search">{content.aboutThisApp}</label>
+            <h1 className="site-header">{content.header}</h1>
+            <p className="app-description">{content.description}</p>
           </div>
           <div
             tooltip="Enter the name of the city you want to search ↓"
             className="city-input-container tooltip top-right"
           >
             <input
-              tooltip="Enter a city name or click the button below to get your location ↓"
+              tooltip={content.inputTooltip}
               className="city-input"
               type="text"
               name="city"
-              placeholder="Enter city"
+              placeholder={content.searchPlaceholder}
               value={input}
               onChange={(event) => setInput(event.target.value)}
+              id="city-search"
             />
             {input.length > 0 && suggestions.length > 0 && (
               <ul className="suggestions" ref={suggestionsRef}>
@@ -368,13 +383,13 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
                 className={`random-city-button tooltip bottom-right ${
                   input === "" ? "hollow" : "hollow disabled"
                 } ${randomButtonDisabled ? "disabled" : ""}`}
-                tooltip="🎲 Roll the dice and see what happens!"
+                tooltip={content.randomTooltip}
                 type="button"
                 onClick={handleRandomCity}
                 disabled={randomButtonDisabled}
               >
                 <FontAwesomeIcon className="fa-icon" icon={faShuffle} />
-                <span>Random</span>
+                <span>{content.randomButton}</span>
               </button>
 
               <button
@@ -391,11 +406,11 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
                 </span>
                 <span>
                   {fetchingLocation ? (
-                    <span className="blink">Locating...</span>
+                    <span className="blink">{content.locating}</span>
                   ) : locationFound ? (
-                    <span className="blink">Found!</span>
+                    <span className="blink">{content.found}</span>
                   ) : (
-                    "My Location"
+                    content.myLocationButton
                   )}
                 </span>
               </button>
@@ -405,16 +420,16 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
               style={{ padding: "1em" }}
               className={`tooltip top-left ${input === "" ? "disabled" : ""}`}
               type="submit"
-              tooltip="↖︎ Enter a city into the input field above"
+              tooltip={content.searchTooltip}
             >
               <FontAwesomeIcon className="fa-icon" icon={faSearch} />
-              Search
+              {content.searchButton}
             </button>
           </div>
         </form>
         {trimmedCachedCities.length > 0 && hasRecentCityCards && (
           <div className="recent-searches">
-            <label>Recent Searches</label>
+            <label>{content.recentSearches}</label>
             <div className="recent-cities-grid">
               {trimmedCachedCities.map((city, index) => {
                 if (hiddenCities.includes(city.results.city)) {
@@ -432,14 +447,20 @@ function CitySelector({ setCity, results, advice, setShowWeather, loading }) {
                       alt={city.results.condition + " in " + city.results.city}
                     />
                     <div>
-                      <p className="recent-city-header">{city.results.city}</p>
+                      <p className="recent-city-header">
+                        <TranslationWrapper targetLanguage={targetLanguage}>
+                          {city.results.city}
+                        </TranslationWrapper>
+                      </p>
                       <div className="recent-city-data">
                         <small className="font-family-data">
                           {Math.round(city.results.temperature)}°C
                         </small>
                         <small className="font-family-data">
-                          {city.results.condition.charAt(0).toUpperCase() +
-                            city.results.condition.slice(1).toLowerCase()}
+                          <TranslationWrapper targetLanguage={targetLanguage}>
+                            {city.results.condition.charAt(0).toUpperCase() +
+                              city.results.condition.slice(1).toLowerCase()}
+                          </TranslationWrapper>
                         </small>
                       </div>
                     </div>

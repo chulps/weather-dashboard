@@ -7,7 +7,8 @@ import {
   faSun,
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
-const Header = ({ setUnit, unit }) => {
+
+const Header = ({ content }) => {
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const Header = ({ setUnit, unit }) => {
         <img className="logo" src={logo} alt="Chuck Howard" />
       </a>
       <div className="header-right">
-        <button onClick={toggleTheme} className="theme-toggle tooltip left" tooltip={theme === 'dark' ? "Switch to light mode" : "Switch to dark mode"}>
+        <button onClick={toggleTheme} className="theme-toggle tooltip left" tooltip={theme === 'dark' ? `${content.switchToLightMode}` : `${content.switchToDarkMode}`}>
           {theme === "dark" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
         </button>
       </div>
