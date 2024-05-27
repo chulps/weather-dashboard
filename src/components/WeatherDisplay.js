@@ -17,7 +17,7 @@ import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
 import ToggleSwitch from "../components/ToggleSwitch";
 
-function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
+function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
   const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
@@ -32,8 +32,8 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
 
   const timePassed = useTimePassed(weather.timestamp);
 
-  const errorMessage = "Error fetching quote.";
-  const refreshMessage = "Try refreshing the page.";
+  const errorMessage = `${content.errorFetchingQuote}`;
+  const refreshMessage = `${content.tryRefreshing}`;
 
   useEffect(() => {
     aiQuote()
@@ -103,7 +103,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
     if (weather.city) {
       if (loading) {
         const loadingMessage =
-          '<data class="system-message info blink">Please wait...</data>';
+          `<data class="system-message info blink">${content.loadingMessagePleaseWait}</data>`;
         const sanitizedMessage = DOMPurify.sanitize(loadingMessage);
         setAdvice(sanitizedMessage);
       } else {
@@ -114,8 +114,8 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
             onAdvice(sanitizedAdvice);
           })
           .catch((error) => {
-            console.error("Error fetching advice from OpenAI:", error);
-            setAdvice("Error fetching advice. Please try again later.");
+            console.error(content.errorFetchingAdviceFromOpenAi, error);
+            setAdvice(content.errorFetchingAdviceFromOpenAi);
           });
       }
     }
@@ -142,7 +142,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
   }, [weather.city, weather.timezone, weather, unit]);
 
   const formatTime = (date, unit) => {
-    return new Date(date).toLocaleString("en-US", {
+    return new Date(date).toLocaleString(navigator.language, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -211,10 +211,10 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
   const displayedWindSpeed = unit === "metric" ? weather.windSpeed : convertWindSpeed(weather.windSpeed, "imperial");
 
   if (loading)
-    return <data className="system-message info blink">Loading...</data>;
-  if (error) return <data className="system-message">Error: {error}</data>;
+    return <data className="system-message info blink">{content.loading}</data>;
+  if (error) return <data className="system-message">{content.error} {error}</data>;
   if (warning)
-    return <data className="system-message warning">Oops!: {warning}</data>;
+    return <data className="system-message warning">{content.warning} {warning}</data>;
 
   return (
     <div className="weather-display">
@@ -222,7 +222,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
         <div id="weather-content" className="weather-content">
           <div className="weather-header">
             <div>
-              <label>Last updated:</label>
+              <label>{content.lastUpdated}</label>
               <small
                 tooltip="Update weather data"
                 className={`weather-refresh font-family-data tooltip bottom-right system-message ${
@@ -247,7 +247,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
               </small>
             </div>
             <ToggleSwitch
-              label="Units"
+              label={content.units}
               isOn={unit === "imperial"}
               handleToggle={handleUnitToggle}
               onIcon={<span>🇺🇸</span>}
@@ -297,18 +297,18 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
 
             <div className="weather-data">
               <div>
-                <label>Condition:</label>
+                <label>{content.weatherCondition}</label>
                 <data className="sentence-case">
                   {weather.condition.charAt(0).toUpperCase() +
                     weather.condition.slice(1).toLowerCase()}
                 </data>
               </div>
               <div>
-                <label>Humidity:</label>{" "}
+                <label>{content.weatherHumidity}</label>{" "}
                 <data>{Math.round(weather.humidity)}%</data>
               </div>
               <div>
-                <label>Wind Speed:</label>{" "}
+                <label>{content.weatherWindSpeed}</label>{" "}
                 <data>{Math.round(displayedWindSpeed)} {unit === "metric" ? "km/h" : "mph"}</data>
               </div>
             </div>
@@ -316,7 +316,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
           <div className="weather-advice">
             <div
               dangerouslySetInnerHTML={{
-                __html: advice || advice ? advice : "<data className='system-message blink info'>Please wait...</data>",
+                __html: advice || advice ? advice : `<data className='system-message blink info'>${content.pleaseWait}</data>`,
               }}
             />
           </div>
@@ -324,7 +324,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
       ) : (
         <div className="quote-container">
           <div className="quote-header">
-            <label>About the weather...</label>
+            <label>{content.aboutTheWeather}</label>
             <span
               tooltip="Get a fresh quote"
               className={`refresh-quote tooltip left ${
@@ -368,7 +368,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit }) {
                   rel="noreferrer"
                   href={quote ? link : "/"}
                 >
-                  {quote !== errorMessage ? "Who?" : "Refresh"}
+                  {quote !== errorMessage ? `${content.who}` : "Refresh"}
                 </a>
               )}
             </div>
