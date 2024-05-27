@@ -8,7 +8,7 @@ import {
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
 
-const Header = ({ setUnit, unit, content }) => {
+const Header = ({ content }) => {
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {

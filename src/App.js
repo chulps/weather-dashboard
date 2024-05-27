@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import CitySelector from "./components/CitySelector";
 import WeatherDisplay from "./components/WeatherDisplay";
 import Header from "./components/Header";
@@ -19,37 +19,48 @@ function App() {
   const [advice, setAdvice] = useState("");
   const [showWeather, setShowWeather] = useState(false);
   const [unit, setUnit] = useState("metric");
+  const [targetLanguage, setTargetLanguage] = useState(navigator.language.split('-')[0]);
   const [content, setContent] = useState({
-    header: "AI Weather Dashboard",
+    aboutTheWeather: "About the weather...",
+    aboutThisApp: "About this app...",
     description: "This app provides weather data and uses Artificial Intelligence to make useful suggestions based on that data. Play around with it and enjoy!",
-    searchPlaceholder: "Enter city",
-    randomButton: "Random",
-    myLocationButton: "My Location",
-    searchButton: "Search",
-    recentSearches: "Recent Searches",
+    error: "Error:",
+    errorFetchingAdviceFromOpenAi: "Error fetching advice from OpenAI.",
+    errorFetchingQuote: "Error fetching quote.",
+    failedToFetchSuggestions: "Failed to fetch suggestions:",
+    found: "Found!",
+    header: "AI Weather Dashboard",
+    inputTooltip: "Enter a city name or click the button below to get your location ↓",
     lastUpdated: "Last updated:",
     loading: "Loading...",
-    pleaseWait: "Please wait...",
-    error: "Error:",
-    warning: "Oops!:",
-    aboutThisApp: "About this app...",
-    aboutTheWeather: "About the weather...",
-    errorFetchingQuote: "Error fetching quote.",
-    tryRefreshing: "Try refreshing the page.",
     loadingMessagePleaseWait: "Please wait...",
-    errorFetchingAdviceFromOpenAi: "Error fetching advice from OpenAI.",
+    locating: "Locating...",
+    locationBlocked: "Your browser settings are preventing the AI Weather Dashboard from finding your location. Please change your settings to enable this feature.",
+    minuteAgo: "Minute ago",
+    minutesAgo: "Minutes ago",
+    myLocationButton: "My Location",
+    pleaseWait: "Please wait...",
+    randomButton: "Random",
+    randomTooltip: "🎲 Roll the dice and see what happens!",
+    recentSearches: "Recent Searches",
+    refreshQuoteTooltip: "↻ Refresh the quote",
+    searchButton: "Search",
+    searchPlaceholder: "Enter city",
+    searchTooltip: "↖︎ Enter a city into the input field above",
+    secondAgo: "Second ago",
+    secondsAgo: "Seconds ago",
+    switchToDarkMode: "Switch to dark mode",
+    switchToLightMode: "Switch to light mode",
+    tryRefreshing: "Try refreshing the page.",
+    units: "Units",
+    warning: "Oops!:",
     weatherCondition: "Condition",
     weatherHumidity: "Humidity",
     weatherWindSpeed: "Wind speed",
-    units: "Units",
-    secondAgo: "Second ago",  
-    secondsAgo: "Seconds ago",
-    minuteAgo: "Minute ago",
-    minutesAgo: "Minutes ago",
     who: "Who?",
-    switchToLightMode: "Switch to light mode",
-    switchToDarkMode: "Switch to dark mode",
   });
+
+  const hasFetchedTranslations = useRef(false);
 
   const translateContent = async (content, targetLanguage) => {
     const translations = await Promise.all(
@@ -68,34 +79,52 @@ function App() {
     return Object.fromEntries(translations);
   };
 
-  const fetchContent = async (language) => {
-    const userLanguage = language || navigator.language.split('-')[0];
-    if (userLanguage !== "en") {
-      const translatedContent = await translateContent(content, userLanguage);
-      setContent(translatedContent);
-    }
-  };
+  const fetchContent = useCallback(
+    async (language) => {
+      const userLanguage = language || navigator.language.split("-")[0];
+      if (userLanguage !== "en" && !hasFetchedTranslations.current) {
+        const translatedContent = await translateContent(content, userLanguage);
+        setContent(translatedContent);
+        hasFetchedTranslations.current = true;
+      }
+    },
+    [content]
+  );
 
   useEffect(() => {
-    fetchContent();
-  }, []);
+    fetchContent(targetLanguage);
+  }, [fetchContent, targetLanguage]);
 
-  // Function to simulate language change
-  const simulateLanguageChange = (language) => {
-    fetchContent(language);
-  };
+  // const simulateLanguageChange = (language) => {
+  //   hasFetchedTranslations.current = false; // Allow refetching for testing
+  //   setTargetLanguage(language);
+  // };
+
+  // Add this function to set the target language to Japanese and refresh the page
+  // useEffect(() => {
+  //   window.setJapaneseLanguage = () => {
+  //     localStorage.setItem("preferredLanguage", "ja");
+  //     window.location.reload();
+  //   };
+
+  //   const preferredLanguage = localStorage.getItem("preferredLanguage");
+  //   if (preferredLanguage) {
+  //     setTargetLanguage(preferredLanguage);
+  //   }
+  // }, []);
 
   return (
     <>
       <Header setUnit={setUnit} unit={unit} content={content} />
       <main className="App">
         <div className="content">
-          <CitySelector 
-            setCity={setCity} 
-            results={results} 
+          <CitySelector
+            setCity={setCity}
+            results={results}
             advice={advice}
             setShowWeather={setShowWeather}
             content={content}
+            targetLanguage={targetLanguage}
           />
           <WeatherDisplay
             city={city}
@@ -106,8 +135,8 @@ function App() {
             unit={unit}
             setUnit={setUnit}
             content={content}
+            targetLanguage={targetLanguage}
           />
-          {/* Button to simulate language change for testing */}
           {/* <button onClick={() => simulateLanguageChange('ja')}>Simulate Japanese</button> */}
           {/* <button onClick={() => simulateLanguageChange('en')}>Simulate English</button> */}
         </div>

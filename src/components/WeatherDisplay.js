@@ -16,8 +16,9 @@ from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
 import ToggleSwitch from "../components/ToggleSwitch";
+import TranslationWrapper from "./TranslationWrapper";
 
-function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
+function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, targetLanguage }) {
   const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
@@ -49,7 +50,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
         setAuthor(refreshMessage);
         setLink("");
       });
-  }, []);
+  }, [errorMessage, refreshMessage]);
 
   useEffect(() => {
     onResults(weather);
@@ -119,7 +120,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
           });
       }
     }
-  }, [weather, loading, onAdvice]);
+  }, [weather, loading, onAdvice, content.loadingMessagePleaseWait, content.errorFetchingAdviceFromOpenAi]);
 
   useEffect(() => {
     if (weather.city) {
@@ -287,11 +288,15 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
             </div>
 
             <div className="weather-location">
-              <h3 className="weather-city">{weather.city}</h3>
+              <h3 className="weather-city"><TranslationWrapper targetLanguage={targetLanguage}>{weather.city}</TranslationWrapper></h3>
               <p>
-                {weather.region}
-                {weather.region ? ", " : ""}
+                <TranslationWrapper targetLanguage={targetLanguage}>
                 {weather.country}
+                </TranslationWrapper>
+                {weather.region ? ", " : ""}
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                {weather.region}
+                </TranslationWrapper>
               </p>
             </div>
 
@@ -299,8 +304,10 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
               <div>
                 <label>{content.weatherCondition}</label>
                 <data className="sentence-case">
+                  <TranslationWrapper targetLanguage={targetLanguage}>
                   {weather.condition.charAt(0).toUpperCase() +
                     weather.condition.slice(1).toLowerCase()}
+                    </TranslationWrapper>
                 </data>
               </div>
               <div>
@@ -326,17 +333,21 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
           <div className="quote-header">
             <label>{content.aboutTheWeather}</label>
             <span
-              tooltip="Get a fresh quote"
+              tooltip={content.refreshQuoteTooltip}
               className={`refresh-quote tooltip left ${
                 refreshingQuote ? "disabled" : ""
               } ${refreshTimeout ? "disabled" : ""}`}
               onClick={handleRefreshQuote}
             >
               {!refreshTimeout && refreshingQuote && (
-                <small>Getting fresh quote...</small>
+                <small><TranslationWrapper targetLanguage={targetLanguage}>Getting fresh quote...</TranslationWrapper></small>
               )}
               {refreshTimeout && (
-                <small className="system-message warning">Please wait {remainingTime} seconds</small>
+                <small className="system-message warning">
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Please wait {remainingTime} seconds
+                  </TranslationWrapper>
+                </small>
               )}
               <FontAwesomeIcon
                 className={refreshingQuote ? "spin" : ""}
@@ -348,18 +359,28 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
             {quote ? (
               <>
                 <p className="weather-quote">
-                  <i>"{quote}"</i>
+                  <i>"
+                    <TranslationWrapper targetLanguage={targetLanguage}>
+                    {quote}
+                    </TranslationWrapper>
+                  "</i>
                 </p>
               </>
             ) : (
               <data className="system-message info blink">
-                Thinking of a quote about the weather...
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  Thinking of a quote about the weather...
+                </TranslationWrapper>
               </data>
             )}
           </div>
           {quote && (
             <div className="weather-quote-author">
-              {"- " + author + " | "}
+              <TranslationWrapper targetLanguage={targetLanguage}> 
+              {"- " + 
+              author
+               + " | "}
+               </TranslationWrapper>
               {author && author !== "Unknown" && (
                 <a
                   className="tooltip bottom-left"
@@ -368,7 +389,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content }) {
                   rel="noreferrer"
                   href={quote ? link : "/"}
                 >
+                <TranslationWrapper targetLanguage={targetLanguage}>
                   {quote !== errorMessage ? `${content.who}` : "Refresh"}
+                </TranslationWrapper>
                 </a>
               )}
             </div>
