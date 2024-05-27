@@ -362,8 +362,10 @@ function WeatherDisplay({
               <div>
                 <label>{content.weatherWindSpeed}</label>{" "}
                 <data>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
                   {Math.round(displayedWindSpeed)}{" "}
                   {unit === "metric" ? "km/h" : "mph"}
+                  </TranslationWrapper>
                 </data>
               </div>
             </div>
