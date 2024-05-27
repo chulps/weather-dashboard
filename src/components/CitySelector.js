@@ -187,7 +187,6 @@ function CitySelector({
   };
 
   const handleSubmit = async (latitude, longitude) => {
-    const userLang = navigator.language.split("-")[0];
     if (latitude && longitude) {
       try {
         const { data: locationData } = await axios.get(
@@ -227,13 +226,6 @@ function CitySelector({
           const cityName = locationData.city;
           setCity(cityName);
 
-          // Fetch weather data for the detected city with user's language
-          const { data: weatherData } = await axios.get(
-            `${baseUrl}/api/openweather`,
-            {
-              params: { city: cityName, lang: userLang },
-            }
-          );
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
           if (
@@ -275,13 +267,6 @@ function CitySelector({
             translatedCity = translationData.translatedText;
           }
 
-          // Now use the translated city name in the API call
-          const { data: weatherData } = await axios.get(
-            `${baseUrl}/api/openweather`,
-            {
-              params: { city: translatedCity, lang: userLang },
-            }
-          );
           setCity(translatedCity);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
@@ -372,10 +357,7 @@ function CitySelector({
   return (
     <div className="city-selector-container">
       <div className="city-selector">
-        <form
-          className="city-selector-form"
-          onSubmit={handleFormSubmit}
-        >
+        <form className="city-selector-form" onSubmit={handleFormSubmit}>
           <div>
             <label htmlFor="city-search">{content.aboutThisApp}</label>
             <h1 className="site-header">{content.header}</h1>
@@ -385,6 +367,10 @@ function CitySelector({
             tooltip="Enter the name of the city you want to search ↓"
             className="city-input-container tooltip top-right"
           >
+            <label htmlFor="city-input" style={{ display: "none" }}>
+              City
+            </label>{" "}
+            {/* Added this line */}
             <input
               tooltip={content.inputTooltip}
               className="city-input"
@@ -393,7 +379,7 @@ function CitySelector({
               placeholder={content.searchPlaceholder}
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              id="city-search"
+              id="city-input"
             />
             {input.length > 0 && suggestions.length > 0 && (
               <ul className="suggestions" ref={suggestionsRef}>

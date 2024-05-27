@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import CitySelector from "./components/CitySelector";
 import WeatherDisplay from "./components/WeatherDisplay";
@@ -100,7 +101,7 @@ function App() {
 
   return (
     <>
-      <Header setUnit={setUnit} unit={unit} content={content} />
+      <Header setUnit={setUnit} unit={unit} content={content} setTargetLanguage={setTargetLanguage} />
       <main className="App">
         <div className="content">
           <CitySelector

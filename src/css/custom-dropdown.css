@@ -1,0 +1,94 @@
+/* custom-dropdown.css */
+.custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+    max-width: calc(var(--space-5) + var(--space-2));
+    padding: 0.7em 1em;
+    background-color: inherit;
+    outline: 1px solid var(--secondary);
+    outline-offset: -1px;
+    border-radius: 1em;
+    cursor: pointer;
+    font-size: var(--font-size-default);
+  }
+  
+  .custom-dropdown-selected {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    position: relative;
+}
+
+.custom-dropdown-selected .icon {
+    position: absolute;
+    right: 0;
+}
+
+.custom-dropdown-selected .selected-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 14ch;
+    margin-inline-end: var(--space-3);
+  }
+
+  .custom-dropdown-options-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      background-color: var(--dark);
+      width: calc(100vw - var(--space-3));
+      width: calc(100dvw - var(--space-3));
+      max-width: var(--space-7);
+      max-height: calc(100dvh - var(--space-5));
+      right: 0;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      transform: translate(-50%, calc(-50% + 2em));
+      z-index: 2;
+      border-radius: 1em;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overflow-y: overlay;
+  }
+  
+  .custom-dropdown-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
+    gap: var(--space-1);
+    padding: var(--space-2);
+  }
+  
+  .custom-dropdown-option {
+    padding: 1em;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+    width: 100%;
+    white-space: nowrap;
+
+  }
+  
+  .custom-dropdown-option:hover {
+    background-color: var(--neutral-800);
+    transition: none;
+  }
+  
+  .custom-dropdown-search {
+    margin: 1em;
+    margin-block-start: 0;
+    display: flex;
+    gap: var(--space-1);
+    flex-direction: column;
+    background: var(--dark);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding-block-start: var(--space-2);
+  }
+  
+  .custom-dropdown-search input {
+    width: 100%;
+    border-radius: 0.5em;
+    border: 1px solid var(--secondary);
+    outline: none;
+  }

@@ -168,6 +168,8 @@
 
 html {
   overflow-x: hidden;
+  overflow-y: auto;
+  overflow-y: overlay;
 }
 
 @media screen and (min-width: 576px) {
@@ -470,7 +472,8 @@ input:focus {
 
 hr {
   border: none;
-  border-bottom: 1px solid var(--dark);
+  border-bottom: 1px solid var(--secondary);
+  width: 100%;
 }
 
 /* Checkbox */
@@ -877,3 +880,15 @@ html.light .tooltip:hover::after {
 .sentence-case {
   text-transform: math-auto;
 }
+
+select {
+  -webkit-appearance: none;
+  padding: 1em;
+  border-radius: 1em;
+  font-size: var(--font-size-default);
+  background: inherit;
+  outline: 1px solid var(--secondary);
+  color: var(--white);
+  border: none;
+}
+

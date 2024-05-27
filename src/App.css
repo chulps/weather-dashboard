@@ -2,6 +2,7 @@
   display: grid;
   justify-content: space-between;
   min-height: calc(100vh - 20rem);
+  min-height: calc(100dvh - 20rem);
   margin: var(--space-3) auto;
   gap: var(--space-3);
   width: 100%;

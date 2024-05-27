@@ -1,3 +1,4 @@
+// TranslationWrapper.js
 import React, { useEffect, useState } from 'react';
 import { translateText } from '../utils/translate';
 
