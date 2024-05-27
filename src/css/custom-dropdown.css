@@ -1,7 +1,6 @@
 /* custom-dropdown.css */
 .custom-dropdown {
     position: relative;
-    display: inline-block;
     width: fit-content;
     max-width: calc(var(--space-5) + var(--space-2));
     padding: 0.7em 1em;
@@ -50,6 +49,17 @@
       overflow-x: hidden;
       overflow-y: auto;
       overflow-y: overlay;
+  }
+
+  @media screen and (min-width: 992px) {
+
+   .custom-dropdown-options-container {
+      position: absolute;
+      transform: translate(0, 0);
+      top: calc(100% + 1em);
+      right: 0;
+      left: unset;      
+    }
   }
   
   .custom-dropdown-options {

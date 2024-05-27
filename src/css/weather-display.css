@@ -91,7 +91,20 @@
 }
 
 .weather-advice label:not(:first-child) {
-  margin-block-start: var(--space-2);
+  margin-block-start: var(--space-3);
+}
+
+.weather-advice div:has( > a) {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.weather-advice div > a {
+  padding: .5em 1em;
+  outline: 1px solid var(--secondary);
+  border-radius: var(--space-2);
 }
 
 .warning {
