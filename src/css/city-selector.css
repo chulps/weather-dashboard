@@ -76,7 +76,7 @@
 .clear-button {
   position: absolute;
   right: 0;
-  margin-right: 1em;
+  margin-inline-end: 1em;
 }
 
 .suggestions {
@@ -139,7 +139,7 @@
   display: grid;
   gap: var(--space-2);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
-  margin-top: var(--space-1);
+  margin-block-start: var(--space-1);
   place-content: center;
 }
 

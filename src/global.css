@@ -336,7 +336,7 @@ h3 + small,
 h4 + small,
 h5 + small,
 h6 + small {
-  margin-top: var(--font-scale-ratio);
+  margin-block-start: var(--font-scale-ratio);
 }
 
 label {
@@ -346,7 +346,6 @@ label {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--secondary);
-  /* margin-bottom: 1em; */
 }
 
 small {

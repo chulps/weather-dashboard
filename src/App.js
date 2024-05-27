@@ -60,6 +60,8 @@ function App() {
     minutesAgo: "minutes ago",
     secondAgo: "second ago", 
     secondsAgo: "seconds ago",
+    unitsTooltip: "Choose between metric and imperial units",
+    refreshWeatherTooltip: 'Refresh weather data'
   });
 
   const hasFetchedTranslations = useRef(false);
@@ -97,23 +99,18 @@ function App() {
     fetchContent(targetLanguage);
   }, [fetchContent, targetLanguage]);
 
-  // const simulateLanguageChange = (language) => {
-  //   hasFetchedTranslations.current = false; // Allow refetching for testing
-  //   setTargetLanguage(language);
-  // };
+  // Add this function to set the target language to Japanese and refresh the page
+  useEffect(() => {
+    window.setJapaneseLanguage = () => {
+      localStorage.setItem("preferredLanguage", "ja");
+      window.location.reload();
+    };
 
-  // // Add this function to set the target language to Japanese and refresh the page
-  // useEffect(() => {
-  //   window.setJapaneseLanguage = () => {
-  //     localStorage.setItem("preferredLanguage", "ja");
-  //     window.location.reload();
-  //   };
-
-  //   const preferredLanguage = localStorage.getItem("preferredLanguage");
-  //   if (preferredLanguage) {
-  //     setTargetLanguage(preferredLanguage);
-  //   }
-  // }, []);
+    const preferredLanguage = localStorage.getItem("preferredLanguage");
+    if (preferredLanguage) {
+      setTargetLanguage(preferredLanguage);
+    }
+  }, []);
 
   return (
     <>

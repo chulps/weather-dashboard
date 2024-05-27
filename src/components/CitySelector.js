@@ -81,7 +81,7 @@ function CitySelector({
   useEffect(() => {
     let debounceSearch = null;
     const loadSuggestions = async () => {
-      if (input.length > 2) {
+      if (input.length > 1) {
         try {
           const citiesUrl = `${baseUrl}/api/cities?city=${encodeURIComponent(input)}`;
           const responseCities = await axios.get(citiesUrl);
@@ -196,14 +196,6 @@ function CitySelector({
         );
         const cityName = locationData.city;
         setCity(cityName);
-
-        // Fetch weather data for the detected city with user's language
-        const { data: weatherData } = await axios.get(
-          `${baseUrl}/api/openweather`,
-          {
-            params: { city: cityName, lang: userLang },
-          }
-        );
         setShowWeather(true); // Ensure the weather data is shown
       } catch (error) {
         if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
@@ -387,7 +379,9 @@ function CitySelector({
                     key={suggestion.description}
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    {suggestion.description}
+                    <TranslationWrapper targetLanguage={targetLanguage} >
+                      {suggestion.description}
+                    </TranslationWrapper>
                   </li>
                 ))}
               </ul>
@@ -401,7 +395,9 @@ function CitySelector({
                   setSuggestions([]);
                 }}
               >
+                <TranslationWrapper targetLanguage={targetLanguage} >
                 Clear
+                </TranslationWrapper>
               </button>
             )}
           </div>

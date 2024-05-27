@@ -10,15 +10,24 @@ import {
   faClock,
   faCaretUp,
   faCaretDown,
-  faGlobe
+  faGlobe,
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
 import ToggleSwitch from "../components/ToggleSwitch";
 import TranslationWrapper from "./TranslationWrapper";
 
-function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, targetLanguage }) {
-  const { weather, loading, warning, error, refreshWeather } = useWeatherApi(city);
+function WeatherDisplay({
+  city,
+  onResults,
+  onAdvice,
+  unit,
+  setUnit,
+  content,
+  targetLanguage,
+}) {
+  const { weather, loading, warning, error, refreshWeather } =
+    useWeatherApi(city);
   const [advice, setAdvice] = useState("");
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
@@ -102,8 +111,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
   useEffect(() => {
     if (weather.city) {
       if (loading) {
-        const loadingMessage =
-          `<data class="system-message info blink">${content.loadingMessagePleaseWait}</data>`;
+        const loadingMessage = `<data class="system-message info blink">${content.loadingMessagePleaseWait}</data>`;
         const sanitizedMessage = DOMPurify.sanitize(loadingMessage);
         setAdvice(sanitizedMessage);
       } else {
@@ -119,7 +127,13 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
           });
       }
     }
-  }, [weather, loading, onAdvice, content.loadingMessagePleaseWait, content.errorFetchingAdviceFromOpenAi]);
+  }, [
+    weather,
+    loading,
+    onAdvice,
+    content.loadingMessagePleaseWait,
+    content.errorFetchingAdviceFromOpenAi,
+  ]);
 
   useEffect(() => {
     if (weather.city) {
@@ -191,9 +205,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
 
   const convertTemperature = (temp, toUnit) => {
     if (toUnit === "imperial") {
-      return (temp * 9 / 5) + 32; // Celsius to Fahrenheit
+      return (temp * 9) / 5 + 32; // Celsius to Fahrenheit
     } else {
-      return (temp - 32) * 5 / 9; // Fahrenheit to Celsius
+      return ((temp - 32) * 5) / 9; // Fahrenheit to Celsius
     }
   };
 
@@ -205,16 +219,37 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
     }
   };
 
-  const displayedTemperature = unit === "metric" ? weather.temperature : convertTemperature(weather.temperature, "imperial");
-  const displayedLow = unit === "metric" ? weather.low : convertTemperature(weather.low, "imperial");
-  const displayedHigh = unit === "metric" ? weather.high : convertTemperature(weather.high, "imperial");
-  const displayedWindSpeed = unit === "metric" ? weather.windSpeed : convertWindSpeed(weather.windSpeed, "imperial");
+  const displayedTemperature =
+    unit === "metric"
+      ? weather.temperature
+      : convertTemperature(weather.temperature, "imperial");
+  const displayedLow =
+    unit === "metric"
+      ? weather.low
+      : convertTemperature(weather.low, "imperial");
+  const displayedHigh =
+    unit === "metric"
+      ? weather.high
+      : convertTemperature(weather.high, "imperial");
+  const displayedWindSpeed =
+    unit === "metric"
+      ? weather.windSpeed
+      : convertWindSpeed(weather.windSpeed, "imperial");
 
   if (loading)
     return <data className="system-message info blink">{content.loading}</data>;
-  if (error) return <data className="system-message">{content.error} {error}</data>;
+  if (error)
+    return (
+      <data className="system-message">
+        {content.error} {error}
+      </data>
+    );
   if (warning)
-    return <data className="system-message warning">{content.warning} {warning}</data>;
+    return (
+      <data className="system-message warning">
+        {content.warning} {warning}
+      </data>
+    );
 
   return (
     <div className="weather-display">
@@ -224,7 +259,7 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
             <div>
               <label>{content.lastUpdated}</label>
               <small
-                tooltip="Update weather data"
+                tooltip={content.refreshWeatherTooltip}
                 className={`weather-refresh font-family-data tooltip bottom-right system-message ${
                   timePassed.endsWith("minutes ago") ||
                   timePassed.endsWith("minute ago") ||
@@ -243,7 +278,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
                   className="weather-refresh-arrows"
                   icon={faArrowsRotate}
                 />
-                {timePassed}
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  {timePassed}
+                </TranslationWrapper>
               </small>
             </div>
             <ToggleSwitch
@@ -252,6 +289,8 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
               handleToggle={handleUnitToggle}
               onIcon={<span>🇺🇸</span>}
               offIcon={<FontAwesomeIcon icon={faGlobe} />}
+              className="tooltip bottom-left"
+              tooltip={content.unitsTooltip}
             />
           </div>
           <div className="weather-top">
@@ -264,7 +303,10 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
                 </data>
               </div>
               <span>
-                <h1>{Math.round(displayedTemperature)}°{unit === "metric" ? "C" : "F"}</h1>
+                <h1>
+                  {Math.round(displayedTemperature)}°
+                  {unit === "metric" ? "C" : "F"}
+                </h1>
                 <small>
                   <data>{currentTime}</data>
                 </small>
@@ -287,14 +329,18 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
             </div>
 
             <div className="weather-location">
-              <h3 className="weather-city"><TranslationWrapper targetLanguage={targetLanguage}>{weather.city}</TranslationWrapper></h3>
+              <h3 className="weather-city">
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  {weather.city}
+                </TranslationWrapper>
+              </h3>
               <p>
                 <TranslationWrapper targetLanguage={targetLanguage}>
-                {weather.country}
+                  {weather.country}
                 </TranslationWrapper>
                 {weather.region ? ", " : ""}
                 <TranslationWrapper targetLanguage={targetLanguage}>
-                {weather.region}
+                  {weather.region}
                 </TranslationWrapper>
               </p>
             </div>
@@ -304,9 +350,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
                 <label>{content.weatherCondition}</label>
                 <data className="sentence-case">
                   <TranslationWrapper targetLanguage={targetLanguage}>
-                  {weather.condition.charAt(0).toUpperCase() +
-                    weather.condition.slice(1).toLowerCase()}
-                    </TranslationWrapper>
+                    {weather.condition.charAt(0).toUpperCase() +
+                      weather.condition.slice(1).toLowerCase()}
+                  </TranslationWrapper>
                 </data>
               </div>
               <div>
@@ -315,14 +361,20 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
               </div>
               <div>
                 <label>{content.weatherWindSpeed}</label>{" "}
-                <data>{Math.round(displayedWindSpeed)} {unit === "metric" ? "km/h" : "mph"}</data>
+                <data>
+                  {Math.round(displayedWindSpeed)}{" "}
+                  {unit === "metric" ? "km/h" : "mph"}
+                </data>
               </div>
             </div>
           </div>
           <div className="weather-advice">
             <div
               dangerouslySetInnerHTML={{
-                __html: advice || advice ? advice : `<data className='system-message blink info'>${content.pleaseWait}</data>`,
+                __html:
+                  advice || advice
+                    ? advice
+                    : `<data className='system-message blink info'>${content.pleaseWait}</data>`,
               }}
             />
           </div>
@@ -339,7 +391,11 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
               onClick={handleRefreshQuote}
             >
               {!refreshTimeout && refreshingQuote && (
-                <small><TranslationWrapper targetLanguage={targetLanguage}>Getting fresh quote...</TranslationWrapper></small>
+                <small>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Getting fresh quote...
+                  </TranslationWrapper>
+                </small>
               )}
               {refreshTimeout && (
                 <small className="system-message warning">
@@ -358,11 +414,13 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
             {quote ? (
               <>
                 <p className="weather-quote">
-                  <i>"
+                  <i>
+                    "
                     <TranslationWrapper targetLanguage={targetLanguage}>
-                    {quote}
+                      {quote}
                     </TranslationWrapper>
-                  "</i>
+                    "
+                  </i>
                 </p>
               </>
             ) : (
@@ -375,11 +433,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
           </div>
           {quote && (
             <div className="weather-quote-author">
-              <TranslationWrapper targetLanguage={targetLanguage}> 
-              {"- " + 
-              author
-               + " | "}
-               </TranslationWrapper>
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                {"- " + author + " | "}
+              </TranslationWrapper>
               {author && author !== "Unknown" && (
                 <a
                   className="tooltip bottom-left"
@@ -388,9 +444,9 @@ function WeatherDisplay({ city, onResults, onAdvice, unit, setUnit, content, tar
                   rel="noreferrer"
                   href={quote ? link : "/"}
                 >
-                <TranslationWrapper targetLanguage={targetLanguage}>
-                  {quote !== errorMessage ? `${content.who}` : "Refresh"}
-                </TranslationWrapper>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    {quote !== errorMessage ? `${content.who}` : "Refresh"}
+                  </TranslationWrapper>
                 </a>
               )}
             </div>
