@@ -8,8 +8,8 @@ const baseUrl =
     : "http://localhost:3001";
 
 export const translateText = async (text, targetLanguage) => {
-  if (targetLanguage === "en" || targetLanguage.startsWith("en-")) {
-    return text; // Return the original text if the target language is English
+  if (targetLanguage === "en" || targetLanguage === "en-US") {
+    return text; 
   }
 
   try {

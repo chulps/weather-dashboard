@@ -35,41 +35,49 @@ export const aiQuote = async (weather) => {
     },
   ];
 
-  try {
-    // Send a POST request to the OpenAI API endpoint
-    const response = await axios.post(`${baseUrl}/api/openai`, {
-      model: "gpt-3.5-turbo",
-      messages: prompt,
-      max_tokens: 100,
-      temperature: 0.9,
-      top_p: 1,
-      frequency_penalty: 0.2,
-      presence_penalty: 0.1,
-    });
+  // Throttle the API call to once every 5 seconds
+  const now = Date.now();
+  if (!aiQuote.lastCall || now - aiQuote.lastCall >= 5000) {
+    aiQuote.lastCall = now;
+    try {
+      // Send a POST request to the OpenAI API endpoint
+      const response = await axios.post(`${baseUrl}/api/openai`, {
+        model: "gpt-3.5-turbo",
+        messages: prompt,
+        max_tokens: 100,
+        temperature: 0.9,
+        top_p: 1,
+        frequency_penalty: 0.2,
+        presence_penalty: 0.1,
+      });
 
-    // Return the response from GPT
-    return response.data.choices[0].message.content;
-  } catch (error) {
-    // Log the error if the request fails
-    console.error("Failed to fetch AI-generated advice:", error);
-    // Return a thoughtful error message if the request fails
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      if (error.response.status === 400) {
-        return "Bad request. Please check your input and try again.";
-      } else if (error.response.status === 500) {
-        return "Couldn't get quote because of a problem with OpenAI API. Perhaps Chuck needs to top up his API credits? Please check back later.";
+      // Return the response from GPT
+      return response.data.choices[0].message.content;
+    } catch (error) {
+      // Log the error if the request fails
+      console.error("Failed to fetch AI-generated advice:", error);
+      // Return a thoughtful error message if the request fails
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (error.response.status === 400) {
+          return "Bad request. Please check your input and try again.";
+        } else if (error.response.status === 500) {
+          return "Couldn't get quote because of a problem with OpenAI API. Perhaps Chuck needs to top up his API credits? Please check back later.";
+        } else {
+          return `Error ${error.response.status}: ${error.response.data}`;
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        return "No response received from the server. Please try again later.";
       } else {
-        return `Error ${error.response.status}: ${error.response.data}`;
+        // Something happened in setting up the request that triggered an Error
+        return "An error occurred while processing your request. Please try again later.";
       }
-    } else if (error.request) {
-      // The request was made but no response was received
-      return "No response received from the server. Please try again later.";
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      return "An error occurred while processing your request. Please try again later.";
     }
+  } else {
+    console.log("Duplicate API call prevented");
+    return "API call throttled. Please wait a few seconds and try again.";
   }
 };
 
