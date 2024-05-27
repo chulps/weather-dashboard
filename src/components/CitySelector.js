@@ -28,6 +28,7 @@ function CitySelector({
   const [suggestions, setSuggestions] = useState([]);
   const [fetchingLocation, setFetchingLocation] = useState(false);
   const [locationFound, setLocationFound] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // State to manage error messages
   const suggestionsRef = useRef(null);
   const [randomButtonClicks, setRandomButtonClicks] = useState(0);
   const [randomButtonDisabled, setRandomButtonDisabled] = useState(false);
@@ -82,7 +83,7 @@ function CitySelector({
     const loadSuggestions = async () => {
       if (input.length > 2) {
         try {
-          const citiesUrl = `${baseUrl}/api/cities?city=${input}`;
+          const citiesUrl = `${baseUrl}/api/cities?city=${encodeURIComponent(input)}`;
           const responseCities = await axios.get(citiesUrl);
           setSuggestions(responseCities.data);
         } catch (error) {
@@ -186,7 +187,6 @@ function CitySelector({
   const handleSubmit = async (latitude, longitude) => {
     const userLang = navigator.language.split("-")[0];
     if (latitude && longitude) {
-      console.log("Coordinates detected:", { latitude, longitude });
       try {
         const { data: locationData } = await axios.get(
           `${baseUrl}/api/location`,
@@ -194,7 +194,6 @@ function CitySelector({
             params: { lat: latitude, lon: longitude },
           }
         );
-        console.log("Data fetched for coordinates:", locationData);
         const cityName = locationData.city;
         setCity(cityName);
 
@@ -205,18 +204,19 @@ function CitySelector({
             params: { city: cityName, lang: userLang },
           }
         );
-        console.log("Weather data fetched for city:", weatherData);
         setShowWeather(true); // Ensure the weather data is shown
       } catch (error) {
-        console.error("Error fetching data:", error);
-        console.error("Error response:", error.response);
+        if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
+          setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+        } else {
+          console.error("Error fetching data:", error);
+          console.error("Error response:", error.response);
+        }
       }
     } else {
       const coordinatePattern = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
       if (coordinatePattern.test(input.trim())) {
         const [lat, lon] = input.trim().split(",").map(Number);
-        console.log("Coordinates detected from input:", { lat, lon });
-
         try {
           const { data: locationData } = await axios.get(
             `${baseUrl}/api/location`,
@@ -224,7 +224,6 @@ function CitySelector({
               params: { lat, lon },
             }
           );
-          console.log("Data fetched for coordinates:", locationData);
           const cityName = locationData.city;
           setCity(cityName);
 
@@ -235,27 +234,57 @@ function CitySelector({
               params: { city: cityName, lang: userLang },
             }
           );
-          console.log("Weather data fetched for city:", weatherData);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
-          console.error("Error fetching data:", error);
-          console.error("Error response:", error.response);
+          if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
+            setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+          } else {
+            console.error("Error fetching data:", error);
+            console.error("Error response:", error.response);
+          }
         }
       } else {
         setCity(input);
 
         try {
+          // Detect the language of the input city name
+          const { data: detectionData } = await axios.post(
+            `${baseUrl}/api/detect-language`,
+            {
+              text: input,
+            }
+          );
+          const detectedLanguage = detectionData.language;
+
+          // Translate the input city name to English if it's not already in English
+          let translatedCity = input;
+          if (detectedLanguage !== 'en') {
+            const { data: translationData } = await axios.post(
+              `${baseUrl}/api/translate-city`,
+              {
+                text: input,
+                targetLanguage: 'en',
+              }
+            );
+            translatedCity = translationData.translatedText;
+          }
+
+          // Now use the translated city name in the API call
           const { data: weatherData } = await axios.get(
             `${baseUrl}/api/openweather`,
             {
-              params: { city: input, lang: userLang },
+              params: { city: translatedCity, lang: userLang },
             }
           );
-          console.log("Weather data fetched for city:", weatherData);
+          setCity(translatedCity);
           setShowWeather(true); // Ensure the weather data is shown
         } catch (error) {
-          console.error("Error fetching data:", error);
-          console.error("Error response:", error.response);
+          if (error.response && error.response.data.message && error.response.data.message.includes("language")) {
+            setErrorMessage("The city's data is not available in your language. Please try another city or change the language.");
+          } else {
+            console.error("Error fetching data:", error);
+            console.error("Error response:", error.response);
+          }
         }
       }
     }
@@ -427,6 +456,7 @@ function CitySelector({
             </button>
           </div>
         </form>
+        {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
         {trimmedCachedCities.length > 0 && hasRecentCityCards && (
           <div className="recent-searches">
             <label>{content.recentSearches}</label>

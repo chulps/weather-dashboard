@@ -11,8 +11,7 @@ import {
   faCaretUp,
   faCaretDown,
   faGlobe
-} 
-from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
 import ToggleSwitch from "../components/ToggleSwitch";

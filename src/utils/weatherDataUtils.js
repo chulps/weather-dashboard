@@ -1,4 +1,3 @@
-// utils/weatherDataUtils.js
 import moment from 'moment-timezone';
 import { getName } from 'country-list';
 import { getGeoLocationLatitude, getGeoLocationLongitude } from "./geoLocation";
@@ -24,8 +23,6 @@ const toTimeString = (timestamp, timeZone) => {
 
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
-  console.log('owm')
-  console.log(data)
   const timezone = offsetToTimezone(data.timezone);
   return {
     temperature: data.main.temp,
@@ -56,8 +53,6 @@ export function transformOpenWeatherAPI(data) {
 
 // Function to transform WeatherAPI data
 export function transformWeatherMap(data) {
-  console.log('wmap')
-  console.log(data)
   return {
     temperature: data.current.temp_c,
     humidity: data.current.humidity,
@@ -100,6 +95,8 @@ function formatTimeDisplay(time) {
 
 // Function to merge weather data from two sources
 export function mergeWeatherData(dataWa, dataOwm) {
+  console.log('mergeWeatherData')
+  console.log(dataWa.city, dataOwm.city);
 
   const dataTimeStamp = new Date().toISOString();
 

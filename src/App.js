@@ -36,8 +36,6 @@ function App() {
     loadingMessagePleaseWait: "Please wait...",
     locating: "Locating...",
     locationBlocked: "Your browser settings are preventing the AI Weather Dashboard from finding your location. Please change your settings to enable this feature.",
-    minuteAgo: "Minute ago",
-    minutesAgo: "Minutes ago",
     myLocationButton: "My Location",
     pleaseWait: "Please wait...",
     randomButton: "Random",
@@ -47,8 +45,6 @@ function App() {
     searchButton: "Search",
     searchPlaceholder: "Enter city",
     searchTooltip: "↖︎ Enter a city into the input field above",
-    secondAgo: "Second ago",
-    secondsAgo: "Seconds ago",
     switchToDarkMode: "Switch to dark mode",
     switchToLightMode: "Switch to light mode",
     tryRefreshing: "Try refreshing the page.",
@@ -58,6 +54,12 @@ function App() {
     weatherHumidity: "Humidity",
     weatherWindSpeed: "Wind speed",
     who: "Who?",
+    kmh: "km/h",
+    mph: "mph",
+    minuteAgo: "minute ago",
+    minutesAgo: "minutes ago",
+    secondAgo: "second ago", 
+    secondsAgo: "seconds ago",
   });
 
   const hasFetchedTranslations = useRef(false);
@@ -95,23 +97,23 @@ function App() {
     fetchContent(targetLanguage);
   }, [fetchContent, targetLanguage]);
 
-  // const simulateLanguageChange = (language) => {
-  //   hasFetchedTranslations.current = false; // Allow refetching for testing
-  //   setTargetLanguage(language);
-  // };
+  const simulateLanguageChange = (language) => {
+    hasFetchedTranslations.current = false; // Allow refetching for testing
+    setTargetLanguage(language);
+  };
 
   // Add this function to set the target language to Japanese and refresh the page
-  // useEffect(() => {
-  //   window.setJapaneseLanguage = () => {
-  //     localStorage.setItem("preferredLanguage", "ja");
-  //     window.location.reload();
-  //   };
+  useEffect(() => {
+    window.setJapaneseLanguage = () => {
+      localStorage.setItem("preferredLanguage", "ja");
+      window.location.reload();
+    };
 
-  //   const preferredLanguage = localStorage.getItem("preferredLanguage");
-  //   if (preferredLanguage) {
-  //     setTargetLanguage(preferredLanguage);
-  //   }
-  // }, []);
+    const preferredLanguage = localStorage.getItem("preferredLanguage");
+    if (preferredLanguage) {
+      setTargetLanguage(preferredLanguage);
+    }
+  }, []);
 
   return (
     <>
@@ -137,8 +139,6 @@ function App() {
             content={content}
             targetLanguage={targetLanguage}
           />
-          {/* <button onClick={() => simulateLanguageChange('ja')}>Simulate Japanese</button> */}
-          {/* <button onClick={() => simulateLanguageChange('en')}>Simulate English</button> */}
         </div>
       </main>
       <Footer content={content} />
