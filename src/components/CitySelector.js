@@ -431,7 +431,7 @@ function CitySelector({
               </button>
 
               <button
-                className={`hollow tooltip bottom ${
+                className={`hollow tooltip bottom-left ${
                   fetchingLocation ? "disabled" : ""
                 }`}
                 tooltip="Get weather data for your current location."

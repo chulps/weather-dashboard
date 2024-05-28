@@ -47,8 +47,12 @@ const Header = ({ content, setTargetLanguage }) => {
         />
         <button
           onClick={toggleTheme}
-          className="theme-toggle tooltip left"
+          className="theme-toggle tooltip bottom-left"
           tooltip={theme === "dark" ? `${content.switchToLightMode}` : `${content.switchToDarkMode}`}
+          style={{
+            background: theme === "dark" ? "" : "var(--white)",
+            color: theme === "dark" ? "" : "var(--royal-200)",
+          }}
         >
           {theme === "dark" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
         </button>
