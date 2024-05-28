@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useWeatherApi } from "../hooks/useWeatherApi";
 import { getWeatherAdviceFromGPT } from "../utils/openAiUtils";
 import { aiQuote } from "../utils/aiQuoteUtils";
-import DOMPurify from "dompurify";
 import "../css/weather-display.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,7 +27,7 @@ function WeatherDisplay({
 }) {
   const { weather, loading, warning, error, refreshWeather } =
     useWeatherApi(city);
-  const [advice, setAdvice] = useState("");
+  const [advice, setAdvice] = useState([]);
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
   const [link, setLink] = useState("");
@@ -108,32 +107,77 @@ function WeatherDisplay({
     }
   }, [refreshTimeout]);
 
+  const validateAndCorrectJSON = (jsonString) => {
+    try {
+      JSON.parse(jsonString);
+      return jsonString; // If valid, return as is
+    } catch (e) {
+      // If invalid, attempt to correct it
+      let correctedJSON = jsonString.trim();
+
+      // Ensure the JSON string starts with the first [
+      const firstBracketIndex = correctedJSON.indexOf("[");
+      if (firstBracketIndex !== -1) {
+        correctedJSON = correctedJSON.slice(firstBracketIndex);
+      } else {
+        correctedJSON = "[]"; // If no [ is found, return an empty array
+      }
+
+      // Ensure the JSON string ends with ]
+      if (!correctedJSON.endsWith("]")) {
+        correctedJSON = correctedJSON + "]";
+      }
+
+      // Balance braces, brackets, and quotation marks
+      const openBraces = (correctedJSON.match(/{/g) || []).length;
+      const closeBraces = (correctedJSON.match(/}/g) || []).length;
+      const openBrackets = (correctedJSON.match(/\[/g) || []).length;
+      const closeBrackets = (correctedJSON.match(/]/g) || []).length;
+      const quotes = (correctedJSON.match(/"/g) || []).length;
+
+      if (openBraces > closeBraces) {
+        correctedJSON += "}".repeat(openBraces - closeBraces);
+      }
+      if (openBrackets > closeBrackets) {
+        correctedJSON += "]".repeat(openBrackets - closeBrackets);
+      }
+      if (quotes % 2 !== 0) {
+        correctedJSON += '"';
+      }
+
+      // Attempt to parse the corrected JSON string
+      try {
+        JSON.parse(correctedJSON);
+        return correctedJSON;
+      } catch (e) {
+        console.error("Failed to correct JSON string:", e);
+        // Fallback: extract valid JSON parts
+        const validJSON = correctedJSON.match(/\{(?:[^{}])*}/g) || [];
+        return "[" + validJSON.join(",") + "]";
+      }
+    }
+  };
+
   useEffect(() => {
     if (weather.city) {
       if (loading) {
-        const loadingMessage = `<data class="system-message info blink">${content.loadingMessagePleaseWait}</data>`;
-        const sanitizedMessage = DOMPurify.sanitize(loadingMessage);
-        setAdvice(sanitizedMessage);
+        setAdvice([]);
       } else {
         getWeatherAdviceFromGPT(weather)
           .then((advice) => {
-            const sanitizedAdvice = DOMPurify.sanitize(advice);
-            setAdvice(sanitizedAdvice);
-            onAdvice(sanitizedAdvice);
+            const validatedAdvice = validateAndCorrectJSON(advice);
+            const parsedAdvice = JSON.parse(validatedAdvice);
+            const adviceData = parsedAdvice.advice || [];
+            setAdvice(adviceData);
+            onAdvice(adviceData);
           })
           .catch((error) => {
             console.error(content.errorFetchingAdviceFromOpenAi, error);
-            setAdvice(content.errorFetchingAdviceFromOpenAi);
+            setAdvice([]);
           });
       }
     }
-  }, [
-    weather,
-    loading,
-    onAdvice,
-    content.loadingMessagePleaseWait,
-    content.errorFetchingAdviceFromOpenAi,
-  ]);
+  }, [weather, loading, onAdvice, content.errorFetchingAdviceFromOpenAi]);
 
   useEffect(() => {
     if (weather.city) {
@@ -363,22 +407,49 @@ function WeatherDisplay({
                 <label>{content.weatherWindSpeed}</label>{" "}
                 <data>
                   <TranslationWrapper targetLanguage={targetLanguage}>
-                  {Math.round(displayedWindSpeed)}{" "}
-                  {unit === "metric" ? "km/h" : "mph"}
+                    {Math.round(displayedWindSpeed)}{" "}
+                    {unit === "metric" ? "km/h" : "mph"}
                   </TranslationWrapper>
                 </data>
               </div>
             </div>
           </div>
           <div className="weather-advice">
-            <div
-              dangerouslySetInnerHTML={{
-                __html:
-                  advice || advice
-                    ? advice
-                    : `<data className='system-message blink info'>${content.pleaseWait}</data>`,
-              }}
-            />
+            {advice.length > 0 ? (
+              advice.map((item, index) => (
+                <div key={index} className="advice-item">
+                  <label>
+                    <TranslationWrapper targetLanguage={targetLanguage}>
+                      {item.label}
+                    </TranslationWrapper>
+                  </label>
+                  <p>
+                    <TranslationWrapper targetLanguage={targetLanguage}>
+                      {item.p}
+                    </TranslationWrapper>
+                  </p>
+                  <div className="weather-advice-links">
+                    {item.links.map((link, idx) => (
+                      <a
+                        className="link"
+                        key={idx}
+                        href={`https://www.google.com/search?q=${link.href}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <TranslationWrapper targetLanguage={targetLanguage}>
+                          {link.text}
+                        </TranslationWrapper>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <data className="system-message blink info">
+                {content.pleaseWait}
+              </data>
+            )}
           </div>
         </div>
       ) : (

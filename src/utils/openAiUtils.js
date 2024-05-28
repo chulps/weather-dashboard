@@ -29,10 +29,11 @@ export const getWeatherAdviceFromGPT = async (weather) => {
     {
       role: "system",
       content: `
-You are a weather advice generator for "AI Weather Dashboard".
+You are a JSON weather advice generator for an app called "AI Weather Dashboard".
 Here is some weather data for ${weather.city}, 
-user's preferred language: ${navigator.language},
-current local time: ${weather.time},
+This is the user's preferred language: ${navigator.language},
+current local time: ${weather.time} in ${weather.city},
+current local time in user's location: ${new Date().toLocaleTimeString()},
 user's current latitude: ${weather.user_latitude},
 user's current longitude: ${weather.user_longitude},
 Temperature: ${Math.round(weather.temperature)}°C, 
@@ -40,31 +41,26 @@ Condition: ${weather.condition},
 Humidity: ${Math.round(weather.humidity)}%, 
 Wind Speed: ${Math.round(weather.windSpeed)} km/h.
 
-Consider this data before giving practical advice on local activities, food, precautions, or clothing using emojis.
-If the user's latitude and longitude match the name of the city, suggest specific activities that are close to those coordinates.
-If the user's latitude and longitude are unknown or do not match the name of the city, don't give advice. Talk about what people do during the local time in that city or other general information about what people do there instead of things to do and where to go.
-If it's late at night suggest an indoor activity or nightlife activities instead of outdoor activities.
-If the user's coordinates indicate that they are not in that city, tell the user about what life is like in that city and other general information about what people do there instead of things to do and where to go.
-Make the users laugh. 
+Based on this data, give advice on local activities, places, food, precautions, or clothing.
+Be specific.
 Respond in the user's preferred language.
-Use HTML in this format for each topic. Provide multiple links. Always provide google search links.
-<label>Example Topic</label>
-<p>A sentence or two with helpful advice.</p>
-<div>
-<a href="https://www.google.com/search?q=example+google+search" target="_blank" rel="noreferrer">Example Link</a>
-</div>`,
-    },
-  ];
+Keep responses 150-200 characters in length per topic. Use emojis.
+You will recieve this prompt many times so the response needs to always be strictly formatted for consistency.
+Your reply should be in a JSON array filled with objects following this exact format for each topic. Provide 1-3 links per topic. Only provide google search links.
+Links will be prefixed with "https://www.google.com/search?q=" when the data is parsed.
+Link text should be one or two words.
+{"advice":[{"label": "Example Topic","p": "Two sentences minimum.","links":[{"text": "Example Text","href": "example+google+search"},{"text": "Example Text","href": "example+google+search"}]}]}`}];
 
   try {
     const response = await axios.post(`${baseUrl}/api/openai`, {
       model: "gpt-4o",
       messages: prompt,
-      max_tokens: 400,
+      max_tokens: 500,
       temperature: 0.7,
       top_p: 1,
-      frequency_penalty: 0.3,
-      presence_penalty: 0.2,
+      frequency_penalty: 0.2,
+      presence_penalty: 0.1,
+      response_format: { type: "json_object" }
     });
 
     const advice = response.data.choices[0].message.content;

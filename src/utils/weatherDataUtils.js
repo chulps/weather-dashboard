@@ -23,7 +23,6 @@ const toTimeString = (timestamp, timeZone) => {
 
 // Function to transform OpenWeatherMap data
 export function transformOpenWeatherAPI(data) {
-  console.log(data)
   const timezone = offsetToTimezone(data.timezone);
   return {
     temperature: data.main.temp,
