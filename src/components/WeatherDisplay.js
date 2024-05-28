@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment-timezone";
 import useTimePassed from "../hooks/useTimePassed";
-import ToggleSwitch from "../components/ToggleSwitch";
+import ToggleSwitch from "./ToggleSwitch";
 import TranslationWrapper from "./TranslationWrapper";
 
 function WeatherDisplay({
@@ -112,23 +112,19 @@ function WeatherDisplay({
       JSON.parse(jsonString);
       return jsonString; // If valid, return as is
     } catch (e) {
-      // If invalid, attempt to correct it
       let correctedJSON = jsonString.trim();
 
-      // Ensure the JSON string starts with the first [
       const firstBracketIndex = correctedJSON.indexOf("[");
       if (firstBracketIndex !== -1) {
         correctedJSON = correctedJSON.slice(firstBracketIndex);
       } else {
-        correctedJSON = "[]"; // If no [ is found, return an empty array
+        correctedJSON = "[]";
       }
 
-      // Ensure the JSON string ends with ]
       if (!correctedJSON.endsWith("]")) {
         correctedJSON = correctedJSON + "]";
       }
 
-      // Balance braces, brackets, and quotation marks
       const openBraces = (correctedJSON.match(/{/g) || []).length;
       const closeBraces = (correctedJSON.match(/}/g) || []).length;
       const openBrackets = (correctedJSON.match(/\[/g) || []).length;
@@ -145,13 +141,11 @@ function WeatherDisplay({
         correctedJSON += '"';
       }
 
-      // Attempt to parse the corrected JSON string
       try {
         JSON.parse(correctedJSON);
         return correctedJSON;
       } catch (e) {
         console.error("Failed to correct JSON string:", e);
-        // Fallback: extract valid JSON parts
         const validJSON = correctedJSON.match(/\{(?:[^{}])*}/g) || [];
         return "[" + validJSON.join(",") + "]";
       }
@@ -244,6 +238,7 @@ function WeatherDisplay({
   };
 
   const handleUnitToggle = () => {
+    console.log('Toggle unit');
     setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
   };
 
@@ -406,10 +401,10 @@ function WeatherDisplay({
               <div>
                 <label>{content.weatherWindSpeed}</label>{" "}
                 <data>
-                  <TranslationWrapper targetLanguage={targetLanguage}>
+                  {/* <TranslationWrapper targetLanguage={targetLanguage}> */}
                     {Math.round(displayedWindSpeed)}{" "}
                     {unit === "metric" ? "km/h" : "mph"}
-                  </TranslationWrapper>
+                  {/* </TranslationWrapper> */}
                 </data>
               </div>
             </div>
