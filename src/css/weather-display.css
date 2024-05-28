@@ -90,19 +90,28 @@
   text-align: right;
 }
 
-.weather-advice label:not(:first-child) {
-  margin-block-start: var(--space-3);
+.weather-advice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
 }
 
-.weather-advice div:has( > a) {
+.weather-advice .advice-item {
   display: flex;
-  gap: var(--space-1);
-  margin-top: var(--space-1);
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
-.weather-advice div > a {
-  padding: .5em 1em;
+.weather-advice .weather-advice-links {
+  display: flex;
+  gap: var(--space-1);
+  margin-block-start: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.weather-advice-links .link {
+  padding: 0.25em 0.75em;
   outline: 1px solid var(--secondary);
   border-radius: var(--space-2);
 }
