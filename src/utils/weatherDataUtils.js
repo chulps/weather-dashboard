@@ -53,6 +53,7 @@ export function transformOpenWeatherAPI(data) {
 
 // Function to transform WeatherAPI data
 export function transformWeatherMap(data) {
+  console.log(data);
   return {
     temperature: data.current.temp_c,
     humidity: data.current.humidity,
