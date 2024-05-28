@@ -43,7 +43,7 @@ const Header = ({ content, setTargetLanguage }) => {
           description="Select a language to translate to. Search by keyword, language name,  IETF language tags, or emoji."
           options={languages.sort()}
           onChange={handleLanguageChange}
-          defaultOption="en"
+          defaultOption={navigator.language}
         />
         <button
           onClick={toggleTheme}
