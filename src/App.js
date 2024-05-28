@@ -27,7 +27,7 @@ function App() {
     description: "This app provides weather data and uses Artificial Intelligence to make useful suggestions based on that data. Play around with it and enjoy!",
     error: "Error:",
     errorFetchingAdviceFromOpenAi: "Error fetching advice from OpenAI.",
-    errorFetchingQuote: "Error fetching quote.",
+    errorFetchingQuote: "Error fetching quote999.",
     failedToFetchSuggestions: "Failed to fetch suggestions:",
     found: "Found!",
     header: "AI Weather Dashboard",

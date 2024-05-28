@@ -252,9 +252,9 @@ function WeatherDisplay({
 
   const convertWindSpeed = (speed, toUnit) => {
     if (toUnit === "imperial") {
-      return speed * 2.237; // m/s to mph
+      return speed * 0.621371; // m/s to mph
     } else {
-      return speed / 2.237; // mph to m/s
+      return speed / 0.621371; // mph to m/s
     }
   };
 
