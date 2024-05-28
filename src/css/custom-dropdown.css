@@ -67,6 +67,7 @@
     grid-template-columns: repeat(auto-fill, minmax(var(--space-5), 1fr));
     gap: var(--space-1);
     padding: var(--space-2);
+    padding-block-start: 0;
   }
   
   .custom-dropdown-option {
