@@ -1,5 +1,5 @@
 // RecentSearches.js
-import React from 'react';
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import TranslationWrapper from "./TranslationWrapper";
@@ -12,9 +12,17 @@ const RecentSearches = ({
   content,
   targetLanguage,
 }) => {
+  if (cachedCities.length <= 2) {
+    return null;
+  }
+
   return (
     <div className="recent-searches">
-      <label>{content.recentSearches}</label>
+      <label>
+        <TranslationWrapper targetLanguage={targetLanguage}>
+          Recent Searches
+        </TranslationWrapper>
+      </label>
       <div className="recent-cities-grid">
         {cachedCities.slice(2).map((city, index) => {
           if (hiddenCities.includes(city.results.city)) {
@@ -62,7 +70,7 @@ const RecentSearches = ({
               >
                 <small
                   tooltip="Remove this city from your recent searches"
-                  className="delete-cached-city tooltip"
+                  className="delete-cached-city tooltip top-right"
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </small>

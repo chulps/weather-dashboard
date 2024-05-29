@@ -42,6 +42,7 @@ function App() {
     unitsTooltip: "Toggle metric or imperial units",
     kmh: "km/h",
     mph: "mph",
+    searchBarTip: 'Hold "shift" + "backspace" to clear',
     searchLanguage: "Search languages",
     searchLanguageDescription: "Select a language to translate to. Search by keyword, language name, IETF language tags, or emoji.",
     minuteAgo: "minute ago",

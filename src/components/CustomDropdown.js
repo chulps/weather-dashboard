@@ -85,9 +85,7 @@ const CustomDropdown = ({
 
               {searchTerm ? (
                 <small className="system-message info">
-                  <TranslationWrapper targetLanguage={targetLanguage}>
-                    Hold "shift" + "backspace" to clear
-                  </TranslationWrapper>
+                  {content.searchBarTip}
                 </small>
               ) : null}
             </div>
