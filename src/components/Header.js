@@ -7,8 +7,9 @@ import { languages } from "../utils/languages";
 import "../css/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
+import TranslationWrapper from "./TranslationWrapper";
 
-const Header = ({ content, setTargetLanguage }) => {
+const Header = ({ content, setTargetLanguage, targetLanguage }) => {
   const [theme, setTheme] = useState("dark");
 
   useEffect(() => {
@@ -33,28 +34,41 @@ const Header = ({ content, setTargetLanguage }) => {
 
   return (
     <header>
-      <a href="https://chulps.github.io/react-gh-pages/" className="logo-container">
+      <a
+        href="https://chulps.github.io/react-gh-pages/"
+        className="logo-container"
+      >
         <RotatingText />
         <img className="logo" src={logo} alt="Chuck Howard" />
       </a>
       <div className="header-right">
         <CustomDropdown
-          label={"Search languages"}
-          description="Select a language to translate to. Search by keyword, language name,  IETF language tags, or emoji."
+          content={content}
+          label={content.searchLanguage}
+          description={content.searchLanguageDescription}
           options={languages.sort()}
           onChange={handleLanguageChange}
           defaultOption={navigator.language}
+          targetLanguage={targetLanguage}
         />
         <button
           onClick={toggleTheme}
           className="theme-toggle tooltip bottom-left"
-          tooltip={theme === "dark" ? `${content.switchToLightMode}` : `${content.switchToDarkMode}`}
+          tooltip={
+            theme === "dark"
+              ? `${content.switchToLightMode}`
+              : `${content.switchToDarkMode}`
+          }
           style={{
             background: theme === "dark" ? "" : "var(--white)",
             color: theme === "dark" ? "" : "var(--royal-200)",
           }}
         >
-          {theme === "dark" ? <FontAwesomeIcon icon={faSun} /> : <FontAwesomeIcon icon={faMoon} />}
+          {theme === "dark" ? (
+            <FontAwesomeIcon icon={faSun} />
+          ) : (
+            <FontAwesomeIcon icon={faMoon} />
+          )}
         </button>
       </div>
     </header>

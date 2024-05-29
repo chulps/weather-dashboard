@@ -51,6 +51,7 @@ export const languages = [
   { value: 'kk', label: '🇰🇿 Қазақ тілі', keywords: ['kazakh', 'kazakhstan', 'қазақ тілі'] },
   { value: 'km', label: '🇰🇭 ខ្មែរ', keywords: ['khmer', 'cambodia', 'ខ្មែរ'] },
   { value: 'rw', label: '🇷🇼 Kinyarwanda', keywords: ['kinyarwanda', 'rwanda'] },
+  { value: "tl", label: "🇵🇭 Tagalog", keywords: ["tagalog", "philippines"] },
   { value: 'ko', label: '🇰🇷 한국어', keywords: ['korean', 'korea', '한국어'] },
   { value: 'ku', label: '🇹🇷 Kurdî', keywords: ['kurdish', 'kurdistan', 'kurdî'] },
   { value: 'ky', label: '🇰🇬 Кыргызча', keywords: ['kyrgyz', 'kyrgyzstan', 'кыргызча'] },

@@ -359,18 +359,33 @@ function CitySelector({
       <div className="city-selector">
         <form className="city-selector-form" onSubmit={handleFormSubmit}>
           <div>
-            <label htmlFor="city-search">{content.aboutThisApp}</label>
-            <h1 className="site-header">{content.header}</h1>
-            <p className="app-description">{content.description}</p>
+            <label htmlFor="city-search">
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                About this app...
+              </TranslationWrapper>
+            </label>
+            <h1 className="site-header">
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                AI Weather Dashboard
+              </TranslationWrapper>
+            </h1>
+            <p className="app-description">
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                This app provides weather data and uses Artificial Intelligence
+                to make useful suggestions based on that data. Play around with
+                it and enjoy!
+              </TranslationWrapper>
+            </p>
           </div>
           <div
             tooltip="Enter the name of the city you want to search ↓"
             className="city-input-container tooltip top-right"
           >
             <label htmlFor="city-input" style={{ display: "none" }}>
-              City
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                City
+              </TranslationWrapper>
             </label>{" "}
-            {/* Added this line */}
             <input
               tooltip={content.inputTooltip}
               className="city-input"
@@ -444,11 +459,21 @@ function CitySelector({
                 </span>
                 <span>
                   {fetchingLocation ? (
-                    <span className="blink">{content.locating}</span>
+                    <span className="blink">
+                      <TranslationWrapper targetLanguage={targetLanguage}>
+                        Locatiing...
+                      </TranslationWrapper>
+                    </span>
                   ) : locationFound ? (
-                    <span className="blink">{content.found}</span>
+                    <span className="blink">
+                      <TranslationWrapper targetLanguage={targetLanguage}>
+                        Found!
+                      </TranslationWrapper>
+                    </span>
                   ) : (
-                    content.myLocationButton
+                    <TranslationWrapper targetLanguage={targetLanguage}>
+                      My Location
+                    </TranslationWrapper>
                   )}
                 </span>
               </button>
@@ -461,7 +486,9 @@ function CitySelector({
               tooltip={content.searchTooltip}
             >
               <FontAwesomeIcon className="fa-icon" icon={faSearch} />
-              {content.searchButton}
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                Search
+              </TranslationWrapper>
             </button>
           </div>
         </form>

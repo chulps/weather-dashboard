@@ -11,11 +11,12 @@ const CustomDropdown = ({
   defaultOption,
   description,
   label,
-  targetLanguage
+  targetLanguage,
+  content
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(defaultOption);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(null);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const dropdownRef = useRef(null);
 
@@ -31,9 +32,12 @@ const CustomDropdown = ({
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
     setFilteredOptions(
-      options.filter((option) => 
-        option.label.toLowerCase().includes(value) || 
-        option.keywords.some(keyword => keyword.toLowerCase().includes(value))
+      options.filter(
+        (option) =>
+          option.label.toLowerCase().includes(value) ||
+          option.keywords.some((keyword) =>
+            keyword.toLowerCase().includes(value)
+          )
       )
     );
   };
@@ -60,30 +64,62 @@ const CustomDropdown = ({
       <div className="custom-dropdown-selected" onClick={toggleDropdown}>
         <span className="selected-label">{selectedOptionLabel}</span>
         <span className="icon">
-            {isOpen ? (
-              <FontAwesomeIcon icon={faChevronUp} />
-            ) : (
-              <FontAwesomeIcon icon={faChevronDown} />
-            )}
+          {isOpen ? (
+            <FontAwesomeIcon icon={faChevronUp} />
+          ) : (
+            <FontAwesomeIcon icon={faChevronDown} />
+          )}
         </span>
       </div>
       {isOpen && (
         <div className="custom-dropdown-options-container">
           <div className="custom-dropdown-search">
-            {label && <label htmlFor="search-input">
-<TranslationWrapper targetLanguage={targetLanguage}>{label}</TranslationWrapper>
+            <div className="menu-header">
+              {label && (
+                <label htmlFor="search-input">
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    {label}
+                  </TranslationWrapper>
+                </label>
+              )}
 
-            </label>}
+              {searchTerm ? (
+                <small className="system-message info">
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Hold "shift" + "backspace" to clear
+                  </TranslationWrapper>
+                </small>
+              ) : null}
+            </div>
 
-            <input
-              id="search-input"
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+            <div className="language-search-input-container">
+              {console.log("searchTerm" + searchTerm)}
+              <input
+                id="search-input"
+                type="text"
+                placeholder={content.searchPlaceholder}
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyDown={(e) => {
+                  if (e.shiftKey && e.key === "Backspace") {
+                    setSearchTerm("");
+                  }
+                }}
+              />
+              {searchTerm !== "" && (
+                <button
+                  className="small secondary language-search-clear-button"
+                  onClick={() => setSearchTerm("")}
+                >
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Clear
+                  </TranslationWrapper>
+                </button>
+              )}
+            </div>
+
             <TranslationWrapper targetLanguage={targetLanguage}>
-            {description && <p>{description}</p>}
+              {description && <p>{description}</p>}
             </TranslationWrapper>
             <hr />
           </div>
@@ -94,7 +130,9 @@ const CustomDropdown = ({
                 className="custom-dropdown-option"
                 onClick={() => handleOptionClick(option)}
               >
-                {option.label}
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  {option.label}
+                </TranslationWrapper>
               </div>
             ))}
           </div>

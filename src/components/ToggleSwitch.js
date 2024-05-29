@@ -1,6 +1,7 @@
 // ToggleSwitch.js
 import React from "react";
 import "../css/toggle-switch.css";
+import TranslationWrapper from "./TranslationWrapper";
 
 const ToggleSwitch = ({
   isOn,
@@ -10,10 +11,15 @@ const ToggleSwitch = ({
   offIcon,
   className,
   tooltip,
+  targetLanguage
 }) => {
   return (
     <div className={`toggle-switch-container ${className}`} tooltip={tooltip}>
-      <label>{label}</label>
+      <label>
+        <TranslationWrapper targetLanguage={targetLanguage}>
+          {label}
+        </TranslationWrapper>
+      </label>
       <div className="toggle-switch">
         <input
           checked={isOn}

@@ -103,3 +103,20 @@
     border: 1px solid var(--secondary);
     outline: none;
   }
+
+  .language-search-input-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    position: relative;
+  }
+
+  .language-search-clear-button {
+    position: absolute;
+    right: 1em;
+  }
+
+  .menu-header {
+    display: flex;
+    justify-content: space-between;
+  }
