@@ -7,7 +7,6 @@ import { languages } from "../utils/languages";
 import "../css/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import TranslationWrapper from "./TranslationWrapper";
 
 const Header = ({ content, setTargetLanguage, targetLanguage }) => {
   const [theme, setTheme] = useState("dark");
