@@ -41,7 +41,8 @@ Condition: ${weather.condition},
 Humidity: ${Math.round(weather.humidity)}%, 
 Wind Speed: ${Math.round(weather.windSpeed)} km/h.
 
-Based on this data, give advice on local activities, places, food, precautions, or clothing.
+Based on this data, give advice on local activities, places, food, precautions, or clothing at the current local time.
+Don't recommend a place that is likely to be closed at the current local time.
 Be specific.
 Respond in the user's preferred language.
 Keep responses 150-200 characters in length per topic. Use emojis.
