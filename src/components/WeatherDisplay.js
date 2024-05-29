@@ -52,7 +52,6 @@ function WeatherDisplay({
         setLink(link);
       })
       .catch((error) => {
-        console.error("Error fetching quote from OpenAI:", error);
         setQuote(errorMessage);
         setAuthor(refreshMessage);
         setLink("");
@@ -167,7 +166,20 @@ function WeatherDisplay({
           })
           .catch((error) => {
             console.error(content.errorFetchingAdviceFromOpenAi, error);
-            setAdvice([]);
+            setTimeout(() => {
+              getWeatherAdviceFromGPT(weather)
+                .then((advice) => {
+                  const validatedAdvice = validateAndCorrectJSON(advice);
+                  const parsedAdvice = JSON.parse(validatedAdvice);
+                  const adviceData = parsedAdvice.advice || [];
+                  setAdvice(adviceData);
+                  onAdvice(adviceData);
+                })
+                .catch((error) => {
+                  console.error(content.errorFetchingAdviceFromOpenAi, error);
+                  setAdvice([]);
+                });
+            }, 10000);
           });
       }
     }
@@ -191,10 +203,11 @@ function WeatherDisplay({
 
       return () => clearInterval(intervalId);
     }
+    /* eslint-disable */
   }, [weather.city, weather.timezone, weather, unit]);
-
+  console.log(targetLanguage);
   const formatTime = (date, unit) => {
-    return new Date(date).toLocaleString(navigator.language, {
+    return new Date(date).toLocaleString(targetLanguage, {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -238,7 +251,7 @@ function WeatherDisplay({
   };
 
   const handleUnitToggle = () => {
-    console.log('Toggle unit');
+    console.log("Toggle unit");
     setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
   };
 
@@ -276,17 +289,27 @@ function WeatherDisplay({
       : convertWindSpeed(weather.windSpeed, "imperial");
 
   if (loading)
-    return <data className="system-message info blink">{content.loading}</data>;
+    return (
+      <data className="system-message info blink">
+        <TranslationWrapper targetLanguage={targetLanguage}>
+          Loading...
+        </TranslationWrapper>
+      </data>
+    );
   if (error)
     return (
       <data className="system-message">
-        {content.error} {error}
+        <TranslationWrapper targetLanguage={targetLanguage}>
+          Error: {error}
+        </TranslationWrapper>
       </data>
     );
   if (warning)
     return (
       <data className="system-message warning">
-        {content.warning} {warning}
+        <TranslationWrapper targetLanguage={targetLanguage}>
+          Oops!: {warning}
+        </TranslationWrapper>
       </data>
     );
 
@@ -296,7 +319,11 @@ function WeatherDisplay({
         <div id="weather-content" className="weather-content">
           <div className="weather-header">
             <div>
-              <label>{content.lastUpdated}</label>
+              <label>
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  Last Updated
+                </TranslationWrapper>
+              </label>
               <small
                 tooltip={content.refreshWeatherTooltip}
                 className={`weather-refresh font-family-data tooltip bottom-right system-message ${
@@ -323,7 +350,7 @@ function WeatherDisplay({
               </small>
             </div>
             <ToggleSwitch
-              label={content.units}
+              label="Units"
               isOn={unit === "imperial"}
               handleToggle={handleUnitToggle}
               onIcon={<span>🇺🇸</span>}
@@ -347,7 +374,11 @@ function WeatherDisplay({
                   {unit === "metric" ? "C" : "F"}
                 </h1>
                 <small>
-                  <data>{currentTime}</data>
+                  <data>
+                    <TranslationWrapper targetLanguage={targetLanguage}>
+                      {currentTime}
+                    </TranslationWrapper>
+                  </data>
                 </small>
               </span>
               <div>
@@ -375,18 +406,22 @@ function WeatherDisplay({
               </h3>
               <p>
                 <TranslationWrapper targetLanguage={targetLanguage}>
-                  {weather.country}
+                  {weather.region}
                 </TranslationWrapper>
                 {weather.region ? ", " : ""}
                 <TranslationWrapper targetLanguage={targetLanguage}>
-                  {weather.region}
+                  {weather.country}
                 </TranslationWrapper>
               </p>
             </div>
 
             <div className="weather-data">
               <div>
-                <label>{content.weatherCondition}</label>
+                <label>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Conditions
+                  </TranslationWrapper>
+                </label>
                 <data className="sentence-case">
                   <TranslationWrapper targetLanguage={targetLanguage}>
                     {weather.condition.charAt(0).toUpperCase() +
@@ -395,15 +430,23 @@ function WeatherDisplay({
                 </data>
               </div>
               <div>
-                <label>{content.weatherHumidity}</label>{" "}
+                <label>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Humidity
+                  </TranslationWrapper>
+                </label>{" "}
                 <data>{Math.round(weather.humidity)}%</data>
               </div>
               <div>
-                <label>{content.weatherWindSpeed}</label>{" "}
+                <label>
+                  <TranslationWrapper targetLanguage={targetLanguage}>
+                    Wind Speed
+                  </TranslationWrapper>
+                </label>{" "}
                 <data>
                   {/* <TranslationWrapper targetLanguage={targetLanguage}> */}
-                    {Math.round(displayedWindSpeed)}{" "}
-                    {unit === "metric" ? "km/h" : "mph"}
+                  {Math.round(displayedWindSpeed)}{" "}
+                  {unit === "metric" ? "km/h" : "mph"}
                   {/* </TranslationWrapper> */}
                 </data>
               </div>
@@ -442,7 +485,9 @@ function WeatherDisplay({
               ))
             ) : (
               <data className="system-message blink info">
-                {content.pleaseWait}
+                <TranslationWrapper targetLanguage={targetLanguage}>
+                  Please wait...
+                </TranslationWrapper>
               </data>
             )}
           </div>
@@ -450,7 +495,11 @@ function WeatherDisplay({
       ) : (
         <div className="quote-container">
           <div className="quote-header">
-            <label>{content.aboutTheWeather}</label>
+            <label>
+              <TranslationWrapper targetLanguage={targetLanguage}>
+                About the weather...
+              </TranslationWrapper>
+            </label>
             <span
               tooltip={content.refreshQuoteTooltip}
               className={`refresh-quote tooltip left ${
@@ -513,7 +562,7 @@ function WeatherDisplay({
                   href={quote ? link : "/"}
                 >
                   <TranslationWrapper targetLanguage={targetLanguage}>
-                    {quote !== errorMessage ? `${content.who}` : "Refresh"}
+                    {quote !== errorMessage ? "Who?" : "Refresh"}
                   </TranslationWrapper>
                 </a>
               )}
