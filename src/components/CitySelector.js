@@ -26,7 +26,11 @@ function CitySelector({
   const [randomButtonClicks, setRandomButtonClicks] = useState(0);
   const [randomButtonDisabled, setRandomButtonDisabled] = useState(false);
   const cities = [
-    /* List of cities */
+    "Amsterdam", "Athens", "Bangkok", "Barcelona", "Beijing", "Berlin", "Buenos Aires", "Cairo", 
+    "Cape Town", "Chicago", "Dubai", "Hong Kong", "Istanbul", "Jakarta", "Kuala Lumpur", "London", 
+    "Los Angeles", "Madrid", "Melbourne", "Mexico City", "Moscow", "Mumbai", "New York", "Paris", 
+    "Rio de Janeiro", "Rome", "San Francisco", "Sapporo", "Seoul", "Shanghai", "Singapore", "Sydney", 
+    "Taipei", "Tokyo", "Toronto", "Vancouver", "Vienna"
   ];
   const baseUrl =
     currentEnv === "production"
